@@ -1,0 +1,23 @@
+{
+  "name": "BLOCXPLORE",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+   //"start": "http-server ./app -a 79.123.177.145 -p 8000 -c-1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "angular": "~1.5.8",
+    "angularjs": "0.0.1",
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "ethereum.js": "~0.2.4",
+    "express": "~4.14.0",
+    "mongodb": "~2.2.9",
+    "multer": "~1.2.0",
+    "web3": "~0.17.0-alpha"
+  }
+}
