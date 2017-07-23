@@ -120,6 +120,7 @@ function getBlockTx(number, endBlockNumber, myaccount)
 {
     web3.eth.getBlock(number, function(error, block) {
 
+    var myFlag=0;
     if (block != null && block.transactions != null) {
       for(var k=0 ; k < block.transactions.length ; k++) {
       // block.transactions.forEach( function(e) {
@@ -142,22 +143,31 @@ function getBlockTx(number, endBlockNumber, myaccount)
           global_j++ ;
         }
         if (global_j == 21) {
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx, null, 3));
+            if(myFlag==0){
+		global_res.setHeader('Content-Type', 'application/json');
+		global_res.send(JSON.stringify(abtx, null, 3));
+		myFlag=1;
+	    }
 	    return ; }
       }
     }
     if (global_j == 21) {
-	global_res.setHeader('Content-Type', 'application/json');
-	global_res.send(JSON.stringify(abtx, null, 3));
+        if(myFlag==0){
+	    global_res.setHeader('Content-Type', 'application/json');
+	    global_res.send(JSON.stringify(abtx, null, 3));
+	    myFlag=1;
+	}
 	return ; }
 
     if(number <= endBlockNumber) {
         getBlockTx(number+1, endBlockNumber);
     }
     else{
-	global_res.setHeader('Content-Type', 'application/json');
-	global_res.send(JSON.stringify(abtx, null, 3));
+        if(myFlag==0){
+	    global_res.setHeader('Content-Type', 'application/json');
+	    global_res.send(JSON.stringify(abtx, null, 3));
+	    myFlag=1;
+	}
 	return;
 	//console.log("ere----------")
     }
@@ -169,7 +179,8 @@ function getTransactionsByAccount(myaccount, howmany, res) {
   endBlockNumber   = web3.eth.blockNumber;
   //startBlockNumber = endBlockNumber - howmany ;
   startBlockNumber = endBlockNumber - 1000;
-  global_j = abtx.length ;
+
+  global_j = 0;   //global_j = abtx.length ;
 
   global_myaccount = myaccount;
   getBlockTx(startBlockNumber, endBlockNumber, myaccount);
@@ -245,6 +256,7 @@ function getBlock(number, endBlockNumber, res)
 {
     web3.eth.getBlock(number, function(error, block) {
 
+    var myFlag=0;
     if (block != null && block.transactions != null) {
       for(var k=0 ; k < block.transactions.length ; k++) {
           e = block.transactions[k] ;
@@ -259,23 +271,32 @@ function getBlock(number, endBlockNumber, res)
 	//console.log( "J:" + global_j )
         if (global_j == 21) {
 	    //console.log( "ended" );
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx));
+            if(myFlag==0){
+		global_res.setHeader('Content-Type', 'application/json');
+		global_res.send(JSON.stringify(abtx));
+		myFlag=1;
+	    }
 	    return ; }
       }
     }
     if (global_j == 21) {
 	//console.log( "ended" );
-	global_res.setHeader('Content-Type', 'application/json');
-	global_res.send(JSON.stringify(abtx));
+        if(myFlag==0){
+	    global_res.setHeader('Content-Type', 'application/json');
+	    global_res.send(JSON.stringify(abtx));
+	    myFlag=1;
+	}
 	return ; }
     if(number <= endBlockNumber) {
 	getBlock(number+1, endBlockNumber);
     }
     else{
 	//console.log( "ended" + global_res);
-	global_res.setHeader('Content-Type', 'application/json');
-	global_res.send(JSON.stringify(abtx));
+        if(myFlag==0){
+	    global_res.setHeader('Content-Type', 'application/json');
+	    global_res.send(JSON.stringify(abtx));
+	    myFlag=1;
+	}
 	return;
     }
   });
@@ -337,10 +358,11 @@ app.get('/stxtabl', function (req, res) {
 }) ;
 
 app.get('/stxtabl2', function (req, res) {
+     global_res = res;
      abtx = [] ;
      getLatestTransactions(2)
-     res.setHeader('Content-Type', 'application/json');
-     res.send(JSON.stringify(abtx));
+     //res.setHeader('Content-Type', 'application/json');
+     //res.send(JSON.stringify(abtx));
 }) ;
 
 app.get('/sbltabl', function (req, res) {
