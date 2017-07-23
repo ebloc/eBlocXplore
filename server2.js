@@ -116,77 +116,7 @@ function retBlock(block) {
     return(dat) ;
 }
 
-function getBlockTx(number, endBlockNumber, myaccount)
-{
-    web3.eth.getBlock(number, function(error, block) {
-
-    var myFlag=0;
-    if (block != null && block.transactions != null) {
-      for(var k=0 ; k < block.transactions.length ; k++) {
-      // block.transactions.forEach( function(e) {
-        e = block.transactions[k] ;
-	//console.log(global_myaccount)
-        if ( ( global_myaccount == web3.eth.getTransaction(block.transactions[k]).to ) && ( global_myaccount == web3.eth.getTransaction(block.transactions[k]).from) ) {
-          var d = new Date(block.timestamp*1000) ;
-          var t = d.toGMTString() ;
-          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-resize-horizontal" style="color:AntiqueWhite2"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
-          global_j++ ;
-        } else if (global_myaccount == web3.eth.getTransaction(block.transactions[k]).from ) {
-          var d = new Date(block.timestamp*1000) ;
-          var t = d.toGMTString() ;
-          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-right" style="color:orange"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " <br></br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
-          global_j++ ;
-        } else if (global_myaccount == web3.eth.getTransaction(block.transactions[k]).to ) {
-          var d = new Date(block.timestamp*1000) ;
-          var t = d.toGMTString() ;
-          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-left" style="color:green"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).from+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
-          global_j++ ;
-        }
-        if (global_j == 21) {
-            if(myFlag==0){
-		global_res.setHeader('Content-Type', 'application/json');
-		global_res.send(JSON.stringify(abtx, null, 3));
-		myFlag=1;
-	    }
-	    return ; }
-      }
-    }
-    if (global_j == 21) {
-        if(myFlag==0){
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx, null, 3));
-	    myFlag=1;
-	}
-	return ; }
-
-    if(number <= endBlockNumber) {
-        getBlockTx(number+1, endBlockNumber);
-    }
-    else{
-        if(myFlag==0){
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx, null, 3));
-	    myFlag=1;
-	}
-	return;
-	//console.log("ere----------")
-    }
-
-  });
-}
-
-function getTransactionsByAccount(myaccount, howmany, res) {
-  endBlockNumber   = web3.eth.blockNumber;
-  //startBlockNumber = endBlockNumber - howmany ;
-  startBlockNumber = endBlockNumber - 1000;
-
-  global_j = 0;   //global_j = abtx.length ;
-
-  global_myaccount = myaccount;
-  getBlockTx(startBlockNumber, endBlockNumber, myaccount);
-
-}
-/*
+/*sync call.
 function getTransactionsByAccount(myaccount, howmany) {
   endBlockNumber   = web3.eth.blockNumber;
   //startBlockNumber = endBlockNumber - howmany ;
@@ -252,6 +182,77 @@ function getLatestTransactions(howmany) {
 */
 
 
+function getBlockTx(number, endBlockNumber, myaccount)
+{
+    web3.eth.getBlock(number, function(error, block) {
+
+    var myFlag=0;
+    if (block != null && block.transactions != null) {
+      for(var k=0 ; k < block.transactions.length ; k++) {
+      // block.transactions.forEach( function(e) {
+        e = block.transactions[k] ;
+	//console.log(global_myaccount)
+        if ( ( global_myaccount == web3.eth.getTransaction(block.transactions[k]).to ) && ( global_myaccount == web3.eth.getTransaction(block.transactions[k]).from) ) {
+          var d = new Date(block.timestamp*1000) ;
+          var t = d.toGMTString() ;
+          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-resize-horizontal" style="color:AntiqueWhite2"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
+          global_j++ ;
+        } else if (global_myaccount == web3.eth.getTransaction(block.transactions[k]).from ) {
+          var d = new Date(block.timestamp*1000) ;
+          var t = d.toGMTString() ;
+          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-right" style="color:orange"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " </br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
+          global_j++ ;
+        } else if (global_myaccount == web3.eth.getTransaction(block.transactions[k]).to ) {
+          var d = new Date(block.timestamp*1000) ;
+          var t = d.toGMTString() ;
+          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-left" style="color:green"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).from+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
+          global_j++ ;
+        }
+        if (global_j == 21) {
+            if(myFlag==0){
+		global_res.setHeader('Content-Type', 'application/json');
+		global_res.send(JSON.stringify(abtx, null, 3));
+		myFlag=1;
+	    }
+	    return ; }
+      }
+    }
+    if (global_j == 21) {
+        if(myFlag==0){
+	    global_res.setHeader('Content-Type', 'application/json');
+	    global_res.send(JSON.stringify(abtx, null, 3));
+	    myFlag=1;
+	}
+	return ; }
+
+    if(number <= endBlockNumber) {
+        getBlockTx(number+1, endBlockNumber);
+    }
+    else{
+        if(myFlag==0){
+	    global_res.setHeader('Content-Type', 'application/json');
+	    global_res.send(JSON.stringify(abtx, null, 3));
+	    myFlag=1;
+	}
+	return;
+    }
+
+  });
+}
+
+function getTransactionsByAccount(myaccount, howmany, res) {
+  endBlockNumber   = web3.eth.blockNumber;
+  //startBlockNumber = endBlockNumber - howmany ;
+  startBlockNumber = endBlockNumber - 1000;
+
+  global_j = 0;   //global_j = abtx.length ;
+
+  global_myaccount = myaccount;
+  getBlockTx(startBlockNumber, endBlockNumber, myaccount);
+
+}
+
+
 function getBlock(number, endBlockNumber, res)
 {
     web3.eth.getBlock(number, function(error, block) {
@@ -266,11 +267,8 @@ function getBlock(number, endBlockNumber, res)
 	  //console.log( web3.eth.getTransaction(block.transactions[k]).from    ) ;
           abtx[global_j] = ['<span class="glyphicon glyphicon-arrow-left" style="color:orange"></span> ' + strarep(web3.eth.getTransaction(block.transactions[k]).from,web3.eth.getTransaction(block.transactions[k]).from) + '<br><span class="glyphicon glyphicon-arrow-right" style="color:green"></span> ' + strarep(web3.eth.getTransaction(block.transactions[k]).to,web3.eth.getTransaction(block.transactions[k]).to), web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether"), '<span class="label label-info"> Tx </span>&nbsp;' + strarep(block.transactions[k], ehash) + ' <br>' + t   ]   ;
 
-	  //console.log( abtx[0] )
 	global_j++;
-	//console.log( "J:" + global_j )
         if (global_j == 21) {
-	    //console.log( "ended" );
             if(myFlag==0){
 		global_res.setHeader('Content-Type', 'application/json');
 		global_res.send(JSON.stringify(abtx));
@@ -280,7 +278,6 @@ function getBlock(number, endBlockNumber, res)
       }
     }
     if (global_j == 21) {
-	//console.log( "ended" );
         if(myFlag==0){
 	    global_res.setHeader('Content-Type', 'application/json');
 	    global_res.send(JSON.stringify(abtx));
@@ -291,7 +288,6 @@ function getBlock(number, endBlockNumber, res)
 	getBlock(number+1, endBlockNumber);
     }
     else{
-	//console.log( "ended" + global_res);
         if(myFlag==0){
 	    global_res.setHeader('Content-Type', 'application/json');
 	    global_res.send(JSON.stringify(abtx));
@@ -304,13 +300,11 @@ function getBlock(number, endBlockNumber, res)
 
 function getLatestTransactions(howmany, res)
 {
-    //var async = require('async');
     endBlockNumber   = web3.eth.blockNumber;
     startBlockNumber = endBlockNumber - howmany ;
 
-    global_j = 0;//global_j
+    global_j = 0;
     getBlock(startBlockNumber, endBlockNumber, res);
-    //console.log("here----------------------------------------" + global_j + global_res)
 }
 
 // ----------------------------------------------------------------------------------
