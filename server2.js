@@ -226,7 +226,7 @@ function getBlockTx(number, endBlockNumber, myaccount)
 	return ; }
 
     if(number <= endBlockNumber) {
-        getBlockTx(number+1, endBlockNumber);
+        getBlockTx(number+1, endBlockNumber); //makes async call.
     }
     else{
         if(myFlag==0){
@@ -285,7 +285,7 @@ function getBlock(number, endBlockNumber, res)
 	}
 	return ; }
     if(number <= endBlockNumber) {
-	getBlock(number+1, endBlockNumber);
+	getBlock(number+1, endBlockNumber); //makes async call.
     }
     else{
         if(myFlag==0){
