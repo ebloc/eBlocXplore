@@ -31,9 +31,8 @@ function retBtabl() {
 
 
 var dat ;
-var abtx = [] ;
-var global_j;
-var global_res;
+//var abtx;
+//var global_res;
 var global_myaccount;
 
 function  strarep(str1,str2) {
@@ -182,10 +181,10 @@ function getLatestTransactions(howmany) {
 */
 
 
-function getBlockTx(number, endBlockNumber, myaccount)
+function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res)
 {
+    //console.log(abx)
     web3.eth.getBlock(number, function(error, block) {
-
     var myFlag=0;
     if (block != null && block.transactions != null) {
       for(var k=0 ; k < block.transactions.length ; k++) {
@@ -195,44 +194,58 @@ function getBlockTx(number, endBlockNumber, myaccount)
         if ( ( global_myaccount == web3.eth.getTransaction(block.transactions[k]).to ) && ( global_myaccount == web3.eth.getTransaction(block.transactions[k]).from) ) {
           var d = new Date(block.timestamp*1000) ;
           var t = d.toGMTString() ;
-          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-resize-horizontal" style="color:AntiqueWhite2"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
-          global_j++ ;
+          abtx[j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-resize-horizontal" style="color:AntiqueWhite2"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
+          j++ ;
         } else if (global_myaccount == web3.eth.getTransaction(block.transactions[k]).from ) {
           var d = new Date(block.timestamp*1000) ;
           var t = d.toGMTString() ;
-          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-right" style="color:orange"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " </br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
-          global_j++ ;
+          abtx[j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-right" style="color:orange"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).to+"@@" + " </br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
+          j++ ;
         } else if (global_myaccount == web3.eth.getTransaction(block.transactions[k]).to ) {
           var d = new Date(block.timestamp*1000) ;
           var t = d.toGMTString() ;
-          abtx[global_j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-left" style="color:green"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).from+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
-          global_j++ ;
+          abtx[j] = ["Tx: " + "@@"+web3.eth.getTransaction(block.transactions[k]).hash+"@@", '<span class="glyphicon glyphicon-arrow-left" style="color:green"></span> ' + "@@"+web3.eth.getTransaction(block.transactions[k]).from+"@@" + " <br>Value: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") + "<br>Gas: " + web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") + "<br>Time: " + t] ;
+          j++ ;
         }
-        if (global_j == 21) {
+        if (j == 21) {
             if(myFlag==0){
-		global_res.setHeader('Content-Type', 'application/json');
-		global_res.send(JSON.stringify(abtx, null, 3));
-		myFlag=1;
+		try {
+		    res.setHeader('Content-Type', 'application/json');
+		    res.send(JSON.stringify(abtx, null, 3));
+		    myFlag=1;
+		} catch (err) {
+		    //console.log(err)
+		}
+
 	    }
 	    return ; }
       }
     }
-    if (global_j == 21) {
+    if (j == 21) {
         if(myFlag==0){
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx, null, 3));
-	    myFlag=1;
+	    try {
+		res.setHeader('Content-Type', 'application/json');
+		res.send(JSON.stringify(abtx, null, 3));
+		myFlag=1;
+	    } catch (err) {
+		//console.log(err)
+	    }
 	}
 	return ; }
 
     if(number <= endBlockNumber) {
-        getBlockTx(number+1, endBlockNumber); //makes async call.
+        getBlockTx(number+1, endBlockNumber, myaccount, j, abtx, res);
     }
     else{
         if(myFlag==0){
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx, null, 3));
-	    myFlag=1;
+	    try {
+		res.setHeader('Content-Type', 'application/json'); //error my accour
+		res.send(JSON.stringify(abtx, null, 3));
+		myFlag=1;
+	    } catch (err) {
+		//console.log(err)
+	    }
+
 	}
 	return;
     }
@@ -240,20 +253,19 @@ function getBlockTx(number, endBlockNumber, myaccount)
   });
 }
 
-function getTransactionsByAccount(myaccount, howmany, res) {
+function getTransactionsByAccount(myaccount, howmany, res, abtx) {
   endBlockNumber   = web3.eth.blockNumber;
   //startBlockNumber = endBlockNumber - howmany ;
   startBlockNumber = endBlockNumber - 1000;
 
-  global_j = 0;   //global_j = abtx.length ;
-
+  j = 0; //abtx.length;
+  //console.log("-------------------" + abtx[0])
   global_myaccount = myaccount;
-  getBlockTx(startBlockNumber, endBlockNumber, myaccount);
-
+  getBlockTx(startBlockNumber, endBlockNumber, myaccount, j, abtx, res);
 }
 
 
-function getBlock(number, endBlockNumber, res)
+function getBlock(number, endBlockNumber, res, j, abtx)
 {
     web3.eth.getBlock(number, function(error, block) {
 
@@ -265,46 +277,61 @@ function getBlock(number, endBlockNumber, res)
           var t = d.toGMTString() ;
           var ehash = e.substring(0, 12) + "..." + e.slice(-12) ;
 	  //console.log( web3.eth.getTransaction(block.transactions[k]).from    ) ;
-          abtx[global_j] = ['<span class="glyphicon glyphicon-arrow-left" style="color:orange"></span> ' + strarep(web3.eth.getTransaction(block.transactions[k]).from,web3.eth.getTransaction(block.transactions[k]).from) + '<br><span class="glyphicon glyphicon-arrow-right" style="color:green"></span> ' + strarep(web3.eth.getTransaction(block.transactions[k]).to,web3.eth.getTransaction(block.transactions[k]).to), web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether"), '<span class="label label-info"> Tx </span>&nbsp;' + strarep(block.transactions[k], ehash) + ' <br>' + t   ]   ;
+          abtx[j] = ['<span class="glyphicon glyphicon-arrow-left" style="color:orange"></span> ' + strarep(web3.eth.getTransaction(block.transactions[k]).from,web3.eth.getTransaction(block.transactions[k]).from) + '<br><span class="glyphicon glyphicon-arrow-right" style="color:green"></span> ' + strarep(web3.eth.getTransaction(block.transactions[k]).to,web3.eth.getTransaction(block.transactions[k]).to), web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether"), '<span class="label label-info"> Tx </span>&nbsp;' + strarep(block.transactions[k], ehash) + ' <br>' + t   ]   ;
 
-	global_j++;
-        if (global_j == 21) {
+	j++;
+        if (j == 21) {
             if(myFlag==0){
-		global_res.setHeader('Content-Type', 'application/json');
-		global_res.send(JSON.stringify(abtx));
-		myFlag=1;
+		try {
+		    res.setHeader('Content-Type', 'application/json');
+		    res.send(JSON.stringify(abtx));
+		    myFlag=1;
+		} catch (err) {
+		    //console.log(err)
+		}
+
 	    }
 	    return ; }
       }
     }
-    if (global_j == 21) {
+    if (j == 21) {
         if(myFlag==0){
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx));
-	    myFlag=1;
+	    try {
+		res.setHeader('Content-Type', 'application/json');
+		res.send(JSON.stringify(abtx));
+		myFlag=1;
+	    } catch (err) {
+		//console.log(err)
+	    }
 	}
 	return ; }
     if(number <= endBlockNumber) {
-	getBlock(number+1, endBlockNumber); //makes async call.
+	getBlock(number+1, endBlockNumber, res, j, abtx);
     }
     else{
         if(myFlag==0){
-	    global_res.setHeader('Content-Type', 'application/json');
-	    global_res.send(JSON.stringify(abtx));
-	    myFlag=1;
+	    try {
+		res.setHeader('Content-Type', 'application/json');
+		res.send(JSON.stringify(abtx));
+		myFlag=1;
+	    } catch (err) {
+		//console.log(err)
+	    }
+
 	}
 	return;
     }
   });
 }
 
-function getLatestTransactions(howmany, res)
+function getLatestTransactions(howmany, res, abtx)
 {
     endBlockNumber   = web3.eth.blockNumber;
-    startBlockNumber = endBlockNumber - howmany ;
+    //startBlockNumber = endBlockNumber - howmany ;
+    startBlockNumber = endBlockNumber - 100 ;
 
-    global_j = 0;
-    getBlock(startBlockNumber, endBlockNumber, res);
+    j = 0;
+    getBlock(startBlockNumber, endBlockNumber, res, j, abtx);
 }
 
 // ----------------------------------------------------------------------------------
@@ -337,11 +364,10 @@ app.get('/btabl', function (req, res) {
 }) ;
 
 app.get('/txtabl', function (req, res) {
-     global_res = res;
+    //global_res = res;
      abtx = [] ;
-     getLatestTransactions(6, res) ;
+     getLatestTransactions(6, res, abtx) ;
 
-     //console.log("where----------------------------------------" + global_j + res)
      //res.setHeader('Content-Type', 'application/json');
      //res.send(JSON.stringify(abtx));
 }) ;
@@ -352,9 +378,9 @@ app.get('/stxtabl', function (req, res) {
 }) ;
 
 app.get('/stxtabl2', function (req, res) {
-     global_res = res;
+     //global_res = res;
      abtx = [] ;
-     getLatestTransactions(2)
+     getLatestTransactions(2, res, abtx)
      //res.setHeader('Content-Type', 'application/json');
      //res.send(JSON.stringify(abtx));
 }) ;
@@ -403,9 +429,10 @@ app.get('/search/*',function (req, res) {
   btx = [] ;
   abtx = [] ;
   if ( isAddress(req.params["0"]) ) {
-     global_res = res;
+     //global_res = res;
      abtx = retAddress(req.params["0"]);
-     getTransactionsByAccount(req.params["0"],200, res) ;
+    //console.log(abtx);
+     getTransactionsByAccount(req.params["0"], 200, res, abtx) ;
      //res.setHeader('Content-Type', 'application/json');
      //res.send(JSON.stringify(abtx, null, 3));
   }
