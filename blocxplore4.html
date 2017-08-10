@@ -230,7 +230,7 @@ $(document).ready(function() {
         <div class="input-group">
             <input type="text" class="form-control" placeholder="addr or tx or block" name="srch-term" id="srch-term">
             <div class="input-group-btn">
-                <button class="btn btn-default" type="submit" id="searchbutton"><i class="glyphicon glyphicon-search"></i></button>
+                <button class="btn btn-default" type="submit" id="searchbutton"><i class="glyphicon glyphicon-searsdch" background-color:#BCD4E6;  ></i></button>
             </div>
         </div>
         </form>
@@ -239,43 +239,29 @@ $(document).ready(function() {
     </div>
 </div>
 
-
 <div class="container">
-
-<div class="row">
-<div class="col-md-1"> </div>
-<div class="col-md-10">
-<form action="">
-<label for="usr">Search:</label>
-<input type="text" class="form-control" id="usr" placeholder="Enter address or transaction or block number or block hash">
-</form>
-</div>
+  <div class="row">
+    <form action="">
+      <!-- <label for="usr">Search:</label> -->
+      <input type="text" class="form-control" id="usr" placeholder="Search for Account, Tx Hash or Data">
+    </form>
+  </div>
 </div>
 
 <div class="container" id="coverpage">
   <div class="row">
-    <div class="col-md-1">  </div> 
-    <div class="col-md-10">
-     <table id="tableblock" class="display" width="100%" style="background-color:#BCD4E6"><caption><h3>Latest Blocks</h3></caption></table>
-    </div> 
-  </div> 
-  <div clas="row">
-    <div class="col-md-1"> </div>
-    <div class="col-md-10">
-       <table id="tabletxs" class="display" width="100%" style="background-color:#BCD4E6"><caption><h3>Latest Transactions</h3></caption></table> 
-    </div>  
+     <table id="tableblock" class="display" width="100%" style="background-color:#BCD4E6"><caption><h3 style="color:black;">Latest Blocks</h3></caption></table>
+
+      <table id="tabletxs" class="display" width="100%" style="background-color:#BCD4E6"><caption><h3 style="color:black;">Latest Transactions</h3></caption></table> 
   </div>
-</div>
 </div>
 
 <div class="container" id="searchpage">
   <div class="row">
-    <div class="col-md-1">  </div> 
-    <div class="col-md-10">
-     <table id="tableblock2" class="display" width="100%" style="background-color:#BCD4E6"><caption><h4 id="idthead"></h4></caption></table>
-    </div> 
-  </div> 
-</div>
+    <!-- <div class="col-md-1">  </div> -->
+    <!-- <div class="col-md-10"> -->
+    <table id="tableblock2" class="display" width="100%" style="background-color:black"><caption><h4 id="idthead"></h4></caption></table>
+  </div>
 </div>
 
 </body>
