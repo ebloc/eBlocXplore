@@ -16,13 +16,11 @@
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-
-
 <script>
 
 function replaceall(str) {
  var i = 0, length = str.length;
- 
+
  //for (i=0 ; i < length; i++) {
    str = str.replace(/(@@(.+)@@)/,'<a onClick="a_onClick(' + "'" + "$2" + "'" + ')">' + "$2" + '</a>') ;
  //}
@@ -32,26 +30,26 @@ function replaceall(str) {
 function isAddress(address) {
     if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address)) {
         return true;
-    } 
-    return false ; 
+    }
+    return false ;
 } ;
 
 function isHash(hash) {
     if (/^(0x)?[0-9a-f]{64}$/.test(hash) || /^(0x)?[0-9A-F]{64}$/.test(hash)) {
         return true;
-    } 
-    return false ; 
+    }
+    return false ;
 } ;
 
 function fillsearchtable(searchfor) {
-        $("#coverpage").hide(); 
+        $("#coverpage").hide();
         $.get("what/"+searchfor, function(result){
         if (result == "None") {
-            if (window.stablefirst) { return ; } 
+            if (window.stablefirst) { return ; }
             var oTable = $('#tableblock2').dataTable();
             oTable.fnClearTable();
             oTable.fnAddData(result) ;
-           return ; 
+           return ;
         }
 
         if (window.stablefirst) {
@@ -67,31 +65,31 @@ function fillsearchtable(searchfor) {
                   targets: [0,1],
                   render: function (data, type, row, meta ) {
                       if( type === 'display' ) {
-                          data = " " + data ; 
+                          data = " " + data ;
                           data = data.replace(/(@@(.+)@@)/,'<a onClick="a_onClick(' + "'" + "$2" + "'" + ')">' + "$2" + '</a>') ;
-                          // console.log(data) ; 
-                          // data = '<a onClick="a_onClick(' + "'" + encodeURIComponent(data) + "'" + ')">' + data + '</a>'; 
+                          // console.log(data) ;
+                          // data = '<a onClick="a_onClick(' + "'" + encodeURIComponent(data) + "'" + ')">' + data + '</a>';
                           // data = '<a  href="search/' + encodeURIComponent(data) + '" onClick="a_onClick()">' + data + '</a>';
                       }
                      return data ;
                   }
                }
-              ], 
+              ],
               columns: [
                 { title: "Field" },
                 { title: "Value (the last 25/200 Txs/blocks are shown)" }
               ]
             }) ;
             $("#searchpage").show();
-            
+
           }) ;
-          window.stablefirst = false ; 
+          window.stablefirst = false ;
         }
         else {
           $.get("search/"+searchfor, function(result){
              var oTable = $('#tableblock2').dataTable();
              oTable.fnClearTable();
-             oTable.fnAddData(result) ; 
+             oTable.fnAddData(result) ;
           }) ;
         } ;
         $("#idthead").text(result  + ": " + searchfor) ;
@@ -99,8 +97,8 @@ function fillsearchtable(searchfor) {
 }
 
 function a_onClick(searchfor){
-       fillsearchtable(searchfor) ; 
-} 
+       fillsearchtable(searchfor) ;
+}
 
 function repeatevery(secs) {
   var newtime = secs*1000 ;
@@ -113,13 +111,13 @@ $(document).ready(function(){
        event.preventDefault();
        var searchfor =  $("#usr").val() ;
        $("#usr").val("") ;
-       fillsearchtable(searchfor) ; 
+       fillsearchtable(searchfor) ;
     }) ;
 });
 
 </script>
 
-<script> 
+<script>
 $(document).ready(function() {
     $.get("btabl", function(result){
         $('#tableblock').DataTable( {
@@ -144,15 +142,15 @@ $(document).ready(function() {
                 }
             },
             {className: "dt-center", "targets": [0,1,2,3]}
-        ], 
+        ],
         columns: [
             { title: "Block No." },
             { title: "Miner" },
             { title: "Time" },
-            { title: "Txs" } 
+            { title: "Txs" }
          ]
         })
-    }) 
+    })
 } ) ;
 
 
@@ -180,27 +178,23 @@ $(document).ready(function() {
                 }
             },
             {className: "dt-center", "targets": [1,2]}
-        ],      
+        ],
         columns: [
             { title: "From/To" },
             { title: "Amount (Ether)" },
             { title: "Tx / Time"}
             //{ title: "To" },
-            //{ title: "Txs" }, 
+            //{ title: "Txs" },
             //{ title: "Time" }
          ]
         })
-    }) 
+    })
 } )  ;
-
-
 </script>
-  
 </head>
 <body>
 
 <div  class="navbar navbar-inverse navbar-static-top" role="navigation">
-
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
         <span class="sr-only">Toggle navigation</span>
@@ -208,58 +202,47 @@ $(document).ready(function() {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button>
-	<!--
-        <a class="navbar-brand" rel="home" href="/blocxplore4.html" title="eBloc Blockchain Explorer - Homepage">eBlocXplore</a> 
-	-->
-
-	<!-- 	alper_image_added.		-->
 	<a class="brand" href="/blocxplore4.html"><img src="images/zz.png" height="60px" width="auto" alt="eBlocXplore" /></a>
 
     </div>
 
     <div class="collapse navbar-collapse navbar-ex1-collapse">
-
         <ul class="nav navbar-nav">
             <li><a href="/stats"></a></li>
         </ul>
-
-
-        <!--
-        <div class="col-sm-3 col-md-3 pull-right">
-        <form class="navbar-form" role="search">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="addr or tx or block" name="srch-term" id="srch-term">
-            <div class="input-group-btn">
-                <button class="btn btn-default" type="submit" id="searchbutton"><i class="glyphicon glyphicon-searsdch" background-color:#BCD4E6;  ></i></button>
-            </div>
-        </div>
-        </form>
-        </div>
-        --> 
     </div>
 </div>
 
 <div class="container">
   <div class="row">
     <form action="">
-      <!-- <label for="usr">Search:</label> -->
       <input type="text" class="form-control" id="usr" placeholder="Search for Account, Tx Hash or Data">
     </form>
   </div>
 </div>
 
+<div class="container" id="searchpage">
+  <div class="row">
+    <table id="tableblock2" class="display" style="background-color:#BCD4E6;color:black;"><caption><h4 id="idthead"></h4></caption></table>
+  </div>
+</div>
 <div class="container" id="coverpage">
   <div class="row">
-     <table id="tableblock" class="display" width="100%" style="background-color:#BCD4E6"><caption><h3 style="color:black;">Latest Blocks</h3></caption></table>
+    <!-- <div class="col-md-6"> -->
+    <table id="tableblock" class="display" style="background-color:#BCD4E6"><caption><h3 style="color:black;">Latest Blocks</h3></caption>
+    </table>
+    <!-- </div> -->
 
-      <table id="tabletxs" class="display" width="100%" style="background-color:#BCD4E6"><caption><h3 style="color:black;">Latest Transactions</h3></caption></table> 
+    <!-- <div class="col-md-6"> -->
+    <table id="tabletxs" class="display" width="100%" style="background-color:#BCD4E6"><caption><h3 style="color:black;">Latest Transactions</h3></caption>
+    </table>
+    <!-- </div> -->
+
   </div>
 </div>
 
 <div class="container" id="searchpage">
   <div class="row">
-    <!-- <div class="col-md-1">  </div> -->
-    <!-- <div class="col-md-10"> -->
     <table id="tableblock2" class="display" width="100%" style="background-color:#BCD4E6;color:black;"><caption><h4 id="idthead"></h4></caption></table>
   </div>
 </div>
