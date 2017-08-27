@@ -1,39 +1,57 @@
-function retBtabl() {
-     var latbno = web3.eth.blockNumber ;
-     var  block ;
-     var  dat   ;
-     var  blockno ;
-     var  n ;
-     var  d ;
-     var   txcount ;
+//TODO: delete all commentes.
+var global_myaccount;
 
-     dat = [] ;
+function getBlockWhile(blockno, end, count, data, res) {
+    web3.eth.getBlock(blockno, function(error, block) {
+	if(error)
+            console.log(error);
+	else {
+	    var d = new Date(block.timestamp*1000);
+	    var n = d.toUTCString();
+            data[count] = ["@@"+blockno+"@@","@@"+block.miner+"@@",n,block.transactions.length] ;
+
+            if(blockno < end) {
+		count = count + 1;
+		getBlockWhile(blockno+1, end, count, data, res);
+            }
+	    else{
+		res.setHeader('Content-Type', 'application/json');
+		res.send(JSON.stringify( data ));
+	    }
+	}
+    });
+};
+
+
+function retBtabl(data, res) {
+     var latbno = web3.eth.blockNumber ;
+     var block ;
+     var blockno ;
+     var n ;
+     var d ;
+     var txcount ;
+
      count = 0 ;
      i = 0 ;
      latbno = web3.eth.blockNumber ;
-     while(count < 5) {
+     getBlockWhile(latbno - 100, latbno, count, data, res);
+
+  /*
+     while(count < 1) { //async yapmam gerekiyor.
         blockno = latbno - i ;
         block = web3.eth.getBlock(blockno) ;
         d = new Date(block.timestamp*1000);
         n = d.toUTCString();
         txcount = 0 ;
         if (block != null && block.transactions != null) {
-          //block.transactions.forEach( function(e) {
-          //   txcount++ ;
-          //}) ;
           dat[count] = ["@@"+blockno+"@@","@@"+block.miner+"@@",n,block.transactions.length] ;
           count++ ;
         }
         i++ ;
      }
-     return(dat) ;
+    return dat;
+*/
 }
-
-
-var dat ;
-//var abtx;
-//var global_res;
-var global_myaccount;
 
 function  strarep(str1,str2) {
   var str = '<a onClick="a_onClick(' + "'" + str1 + "'" + ')">' + str2 + '</a>' ;
@@ -213,8 +231,7 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res)
 		    res.setHeader('Content-Type', 'application/json');
 		    res.send(JSON.stringify(abtx, null, 3));
 		    myFlag=1;
-		} catch (err) {
-		    //console.log(err)
+		} catch (err) {//console.log(err)
 		}
 
 	    }
@@ -227,8 +244,7 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res)
 		res.setHeader('Content-Type', 'application/json');
 		res.send(JSON.stringify(abtx, null, 3));
 		myFlag=1;
-	    } catch (err) {
-		//console.log(err)
+	    } catch (err) {//console.log(err)
 	    }
 	}
 	return ; }
@@ -239,13 +255,11 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res)
     else{
         if(myFlag==0){
 	    try {
-		res.setHeader('Content-Type', 'application/json'); //error my accour
+		res.setHeader('Content-Type', 'application/json');
 		res.send(JSON.stringify(abtx, null, 3));
 		myFlag=1;
-	    } catch (err) {
-		//console.log(err)
+	    } catch (err) {//console.log(err)
 	    }
-
 	}
 	return;
     }
@@ -259,7 +273,6 @@ function getTransactionsByAccount(myaccount, howmany, res, abtx) {
   startBlockNumber = endBlockNumber - 1000;
 
   j = 0; //abtx.length;
-  //console.log("-------------------" + abtx[0])
   global_myaccount = myaccount;
   getBlockTx(startBlockNumber, endBlockNumber, myaccount, j, abtx, res);
 }
@@ -328,7 +341,7 @@ function getLatestTransactions(howmany, res, abtx)
 {
     endBlockNumber   = web3.eth.blockNumber;
     //startBlockNumber = endBlockNumber - howmany ;
-    startBlockNumber = endBlockNumber - 100 ;
+    startBlockNumber = endBlockNumber - 20 ;
 
     j = 0;
     getBlock(startBlockNumber, endBlockNumber, res, j, abtx);
@@ -359,8 +372,12 @@ app.use(express.static('.'));
 
 
 app.get('/btabl', function (req, res) {
-     res.setHeader('Content-Type', 'application/json');
-     res.send(JSON.stringify(retBtabl()));
+     dat = [];
+     retBtabl(dat, res);
+
+     //res.setHeader('Content-Type', 'application/json');
+     //res.send(JSON.stringify( dat ));
+     //res.send(JSON.stringify(retBtabl(dat)));
 }) ;
 
 app.get('/txtabl', function (req, res) {
@@ -381,6 +398,7 @@ app.get('/stxtabl2', function (req, res) {
      //global_res = res;
      abtx = [] ;
      getLatestTransactions(2, res, abtx)
+
      //res.setHeader('Content-Type', 'application/json');
      //res.send(JSON.stringify(abtx));
 }) ;
