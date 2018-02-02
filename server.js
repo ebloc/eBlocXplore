@@ -34,7 +34,7 @@ function retBtabl(data, res) {
      count = 0 ; 
      i = 0 ; 
      latbno = web3.eth.blockNumber ;
-     getBlockWhile(latbno - 100, latbno, count, data, res); 
+     getBlockWhile(latbno - 10, latbno, count, data, res); 
 }
 
 function  strarep(str1,str2) {
@@ -186,7 +186,7 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res) {
 function getTransactionsByAccount(myaccount, howmany, res, abtx) {
   endBlockNumber   = web3.eth.blockNumber;
   //startBlockNumber = endBlockNumber - howmany ;
-  startBlockNumber = endBlockNumber - 1000;
+  startBlockNumber = endBlockNumber - 5;
 
   j = 0; //abtx.length; 
   global_myaccount = myaccount;
@@ -256,7 +256,7 @@ function getLatestTransactions(howmany, res, abtx)
 {
     endBlockNumber   = web3.eth.blockNumber;
     //startBlockNumber = endBlockNumber - howmany ;
-    startBlockNumber = endBlockNumber - 20 ;
+    startBlockNumber = endBlockNumber - 5;
 
     j = 0;
     getBlock(startBlockNumber, endBlockNumber, res, j, abtx);
