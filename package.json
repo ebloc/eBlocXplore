@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   //"start": "http-server ./app -a 79.123.177.145 -p 8000 -c-1",
+    "start": "http-server ./app -a 79.123.177.145 -p 8000 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
