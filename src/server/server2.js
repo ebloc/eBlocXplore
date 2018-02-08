@@ -1,4 +1,5 @@
 //TODO: delete all commentes.
+var path = require("path");
 var global_myaccount;
 
 function getBlockWhile(blockno, end, count, data, res) {
@@ -359,7 +360,8 @@ reload(app);
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // app.use(bodyParser.json()) // @todo probable forgotten
-app.use(express.static("."));
+// console.log(`__dirname: `, __dirname);
+app.use(express.static(path.join(__dirname, "../client")));
 
 app.get("/btabl", function(req, res) {
   dat = [];

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "http-server ./app -a 79.123.177.145 -p 8000 -c-1",
-    "debug": "./node_modules/nodemon/bin/nodemon.js --inspect server2.js",
+    "debug": "./node_modules/nodemon/bin/nodemon.js --inspect src/server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
