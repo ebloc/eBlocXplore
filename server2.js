@@ -351,6 +351,9 @@ if (!web3.eth.net.isListening()) {
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+var reload = require("reload");
+
+reload(app);
 
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });

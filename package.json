@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "http-server ./app -a 79.123.177.145 -p 8000 -c-1",
+    "debug": "./node_modules/nodemon/bin/nodemon.js --inspect server2.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -19,5 +20,9 @@
     "mongodb": "~3.0.2",
     "multer": "~1.3.0",
     "web3": "~1.0.0-beta.29"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.12",
+    "reload": "^2.2.2"
   }
 }
