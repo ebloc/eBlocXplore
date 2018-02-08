@@ -1,6 +1,7 @@
 /* eslint-disable */
 //TODO: delete all commentes.
-var path = require("path");
+module.exports = function (web3, app) {
+
 var global_myaccount;
 
 function getBlockWhile(blockno, end, count, data, res) {
@@ -340,30 +341,6 @@ function getLatestTransactions(howmany, res, abtx) {
   })
 }
 
-// ----------------------------------------------------------------------------------
-var Web3 = require("web3");
-var web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
-
-if (!web3.eth.net.isListening()) {
-  console.log("not connected");
-} else {
-  console.log("connected");
-}
-
-var express = require("express");
-var app = express();
-var bodyParser = require("body-parser");
-var reload = require("reload");
-
-reload(app);
-
-// Create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-
-// app.use(bodyParser.json()) // @todo probable forgotten
-// console.log(`__dirname: `, __dirname);
-app.use(express.static(path.join(__dirname, "../client")));
-
 app.get("/btabl", function(req, res) {
   dat = [];
   retBtabl(dat, res);
@@ -460,8 +437,4 @@ app.get("/search/*", function(req, res) {
   }
 });
 
-var server = app.listen(8000, function() {
-  var host = "localhost";
-  var port = server.address().port;
-  console.log("Example app listening at http://%s:%s", host, port);
-});
+};
