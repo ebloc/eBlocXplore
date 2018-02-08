@@ -1,3 +1,4 @@
+/* eslint-disable */
 var mylib = require("/home/netlab/BLOCXPLORE/header.js");
 clusterOwner = "0x6af0204187a93710317542d383a1b547fa42e705";
 //Create Cluster:

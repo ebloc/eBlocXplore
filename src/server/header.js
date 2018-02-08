@@ -1,3 +1,4 @@
+/* eslint-disable */
 //Contract functions at blockchained stored.
 var web3_extended = require("web3_ipc");
 

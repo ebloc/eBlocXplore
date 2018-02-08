@@ -10,7 +10,7 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
-  <!-- Makes broswer refresh when server is restarted (@todo: remove it when NODE_ENV === 'production') -->
+  <!-- Makes broswer refresh when server is restarted (@TODO: remove it when NODE_ENV === 'production') -->
   <script src="/reload/reload.js"></script>
   <!-- Custom Fonts -->
   <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -19,6 +19,7 @@
   <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
   <script>
+  /* eslint-disable */// eslint-disable-line
   function replaceall(str) {
     var i = 0;
     var length = str.length;
@@ -115,6 +116,7 @@
   });
   </script>
   <script>
+  /* eslint-disable */// eslint-disable-line
   $(document).ready(function() {
     $.get("btabl", function(result) {
       $('#tableblock').DataTable({

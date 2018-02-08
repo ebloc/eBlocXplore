@@ -1,3 +1,4 @@
+/* eslint-disable */
 //TODO: delete all commentes.
 var path = require("path");
 var global_myaccount;
