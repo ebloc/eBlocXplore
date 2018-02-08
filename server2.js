@@ -2,37 +2,35 @@
 var global_myaccount;
 
 function getBlockWhile(blockno, end, count, data, res) {
-  web3.eth.getBlock(blockno, function(error, block) {
-    if (error) {
-      console.log(error);
-    } else {
-      var d = new Date(block.timestamp * 1000);
-      var n = d.toUTCString();
-      data[count] = ["@@" + blockno + "@@", "@@" + block.miner + "@@", n, block.transactions.length];
+  web3.eth.getBlock(blockno).then(function(block) {
+    var d = new Date(block.timestamp * 1000);
+    var n = d.toUTCString();
+    data[count] = ["@@" + blockno + "@@", "@@" + block.miner + "@@", n, block.transactions.length];
 
-      if (blockno < end) {
-        count = count + 1;
-        getBlockWhile(blockno + 1, end, count, data, res);
-      } else {
-        res.setHeader("Content-Type", "application/json");
-        res.send(JSON.stringify(data));
-      }
+    if (blockno < end) {
+      count = count + 1;
+      getBlockWhile(blockno + 1, end, count, data, res);
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      res.send(JSON.stringify(data));
     }
+  }).catch(function (err) {
+    console.error(err);
   });
 }
 
 function retBtabl(data, res) {
-  var latbno = web3.eth.blockNumber;
-  var block;
-  var blockno;
-  var n;
-  var d;
-  var txcount;
+  web3.eth.getBlockNumber().then(function (latbno) {
+    var block;
+    var blockno;
+    var n;
+    var d;
+    var txcount;
 
-  count = 0;
-  i = 0;
-  latbno = web3.eth.blockNumber;
-  getBlockWhile(latbno - 100, latbno, count, data, res);
+    count = 0;
+    i = 0;
+    getBlockWhile(latbno - 100, latbno, count, data, res);
+  })
 }
 
 function strarep(str1, str2) {
@@ -62,7 +60,7 @@ function isBlockno(blockno) {
 }
 
 function retAddress(addrhash) {
-  var balance = web3.fromWei(web3.eth.getBalance(addrhash));
+  var balance = web3.utils.fromWei(web3.eth.getBalance(addrhash));
   dat = [["Balance", balance]];
   return dat;
 }
@@ -136,9 +134,9 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res) {
               web3.eth.getTransaction(block.transactions[k]).to +
               "@@" +
               " <br>Value: " +
-              web3.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") +
+              web3.utils.fromWei(web3.eth.getTransaction(block.transactions[k]).value, "ether") +
               "<br>Gas: " +
-              web3.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") +
+              web3.utils.fromWei(web3.eth.getTransaction(block.transactions[k]).gas, "ether") +
               "<br>Time: " +
               t
           ];
@@ -156,12 +154,12 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res) {
               web3.eth.getTransaction(block.transactions[k]).to +
               "@@" +
               " </br>Value: " +
-              web3.fromWei(
+              web3.utils.fromWei(
                 web3.eth.getTransaction(block.transactions[k]).value,
                 "ether"
               ) +
               "<br>Gas: " +
-              web3.fromWei(
+              web3.utils.fromWei(
                 web3.eth.getTransaction(block.transactions[k]).gas,
                 "ether"
               ) +
@@ -182,12 +180,12 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res) {
               web3.eth.getTransaction(block.transactions[k]).from +
               "@@" +
               " <br>Value: " +
-              web3.fromWei(
+              web3.utils.fromWei(
                 web3.eth.getTransaction(block.transactions[k]).value,
                 "ether"
               ) +
               "<br>Gas: " +
-              web3.fromWei(
+              web3.utils.fromWei(
                 web3.eth.getTransaction(block.transactions[k]).gas,
                 "ether"
               ) +
@@ -242,7 +240,6 @@ function getBlockTx(number, endBlockNumber, myaccount, j, abtx, res) {
 
 function getTransactionsByAccount(myaccount, howmany, res, abtx) {
   endBlockNumber = web3.eth.blockNumber;
-  //startBlockNumber = endBlockNumber - howmany ;
   startBlockNumber = endBlockNumber - 1000;
 
   j = 0; //abtx.length;
@@ -251,7 +248,7 @@ function getTransactionsByAccount(myaccount, howmany, res, abtx) {
 }
 
 function getBlock(number, endBlockNumber, res, j, abtx) {
-  web3.eth.getBlock(number, function(error, block) {
+  web3.eth.getBlock(number).then(function(block) {
     var myFlag = 0;
     if (block != null && block.transactions != null) {
       for (var k = 0; k < block.transactions.length; k++) {
@@ -260,40 +257,42 @@ function getBlock(number, endBlockNumber, res, j, abtx) {
         var t = d.toGMTString();
         var ehash = e.substring(0, 12) + "..." + e.slice(-12);
         //console.log( web3.eth.getTransaction(block.transactions[k]).from    ) ;
-        abtx[j] = [
-          '<span class="glyphicon glyphicon-arrow-left" style="color:orange"></span> ' +
-            strarep(
-              web3.eth.getTransaction(block.transactions[k]).from,
-              web3.eth.getTransaction(block.transactions[k]).from
-            ) +
-            '<br><span class="glyphicon glyphicon-arrow-right" style="color:green"></span> ' +
-            strarep(
-              web3.eth.getTransaction(block.transactions[k]).to,
-              web3.eth.getTransaction(block.transactions[k]).to
+        web3.eth.getTransaction(block.transactions[k]).then(function (tx) {
+          abtx[j] = [
+            '<span class="glyphicon glyphicon-arrow-left" style="color:orange"></span> ' +
+              strarep(
+                tx.from,
+                tx.from
+              ) +
+              '<br><span class="glyphicon glyphicon-arrow-right" style="color:green"></span> ' +
+              strarep(
+                tx.to,
+                tx.to
+              ),
+            web3.utils.fromWei(
+              tx.value,
+              "ether"
             ),
-          web3.fromWei(
-            web3.eth.getTransaction(block.transactions[k]).value,
-            "ether"
-          ),
-          '<span class="label label-info"> Tx </span>&nbsp;' +
-            strarep(block.transactions[k], ehash) +
-            " <br>" +
-            t
-        ];
-
-        j++;
-        if (j == 21) {
-          if (myFlag == 0) {
-            try {
-              res.setHeader("Content-Type", "application/json");
-              res.send(JSON.stringify(abtx));
-              myFlag = 1;
-            } catch (err) {
-              //console.log(err)
+            '<span class="label label-info"> Tx </span>&nbsp;' +
+              strarep(block.transactions[k], ehash) +
+              " <br>" +
+              t
+          ];
+          j++;
+          if (j == 21) {
+            if (myFlag == 0) {
+              try {
+                res.setHeader("Content-Type", "application/json");
+                res.send(JSON.stringify(abtx));
+                myFlag = 1;
+              } catch (err) {
+                //console.log(err)
+              }
             }
+            return;
           }
-          return;
-        }
+        }).catch(console.error);
+
       }
     }
     if (j == 21) {
@@ -322,28 +321,28 @@ function getBlock(number, endBlockNumber, res, j, abtx) {
       }
       return;
     }
+  }).catch(function (err) {
+    console.error(err);
+    res.sendStatus(500);
   });
 }
 
 function getLatestTransactions(howmany, res, abtx) {
-  endBlockNumber = web3.eth.blockNumber;
-  //startBlockNumber = endBlockNumber - howmany ;
-  startBlockNumber = endBlockNumber - 20;
+  web3.eth.getBlockNumber().then(function (endBlockNumber) {
+    startBlockNumber = endBlockNumber - 20;
 
-  j = 0;
-  getBlock(startBlockNumber, endBlockNumber, res, j, abtx);
+    j = 0;
+    getBlock(startBlockNumber, endBlockNumber, res, j, abtx);
+  }).catch(function (err) {
+    console.error(err);
+  })
 }
 
 // ----------------------------------------------------------------------------------
-var Web3 = require("./node_modules/web3/index.js");
-var web3 = new Web3();
+var Web3 = require("web3");
+var web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
 
-//web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
-web3.setProvider(
-  new web3.providers.HttpProvider("http://localhost:8545/blocxplore4.html")
-);
-
-if (!web3.isConnected()) {
+if (!web3.eth.net.isListening()) {
   console.log("not connected");
 } else {
   console.log("connected");
@@ -356,6 +355,7 @@ var bodyParser = require("body-parser");
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+// app.use(bodyParser.json()) // @todo probable forgotten
 app.use(express.static("."));
 
 app.get("/btabl", function(req, res) {
