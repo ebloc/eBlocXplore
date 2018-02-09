@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config(); // collect environment variables from .env file
 
 const web3 = new Web3(Web3.givenProvider || process.env.WEB3_PROVIDER);
+global.web3 = web3;
 
 if (!web3.eth.net.isListening()) {
   console.error('Cannot connect to ethereum network'); // eslint-disable-line no-console
@@ -25,6 +26,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client')));
+
+app.use('/api', require('./apiRouter'));
 
 require('./server2.js')(web3, app); // @TODO: remove this after all functions are imported
 
