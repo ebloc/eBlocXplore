@@ -26,6 +26,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client')));
+// 3rd party libraries @TODO: use webpack
+app.use('/jquery', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
+app.use('/popper.js', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
+app.use('/bootstrap', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/')));
+app.use('/datatables.net', express.static(path.join(__dirname, '../../node_modules/datatables.net/js/')));
+app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_modules/datatables.net-bs4/')));
 
 app.use('/api', require('./apiRouter'));
 

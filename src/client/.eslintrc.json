@@ -1,0 +1,10 @@
+{
+  "globals": {
+    "$": true,
+    "document": true
+  },
+  "rules": {
+    "prefer-arrow-callback": "off",
+    "func-names": "off"
+  }
+}

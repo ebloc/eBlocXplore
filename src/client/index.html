@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>eBloc Blockchain Explorer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="datatables.net-bs4/css/dataTables.bootstrap4.css" />
+  <script src="/jquery/jquery.min.js"></script>
+  <script src="/popper.js/umd/popper.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/datatables.net/jquery.dataTables.js"></script>
+  <script src="/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+  <script src="/index.js"></script>
+  <!-- Makes broswer refresh when server is restarted (@TODO: remove it when NODE_ENV === 'production') -->
+  <script src="/reload/reload.js"></script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="col-12 col-lg-6">
+      <table id="recentBlocksTable" class="table table-sm">
+        <thead>
+          <tr>
+            <th>Block</th>
+            <th>Mined by</th>
+            <th>Time</th>
+            <th>TX count</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
