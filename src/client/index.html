@@ -5,8 +5,9 @@
   <title>eBloc Blockchain Explorer</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="datatables.net-bs4/css/dataTables.bootstrap4.css" />
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/datatables.net-bs4/css/dataTables.bootstrap4.css">
+  <link rel="stylesheet" href="/index.css">
   <script src="/jquery/jquery.min.js"></script>
   <script src="/popper.js/umd/popper.min.js"></script>
   <script src="/bootstrap/js/bootstrap.min.js"></script>
@@ -19,17 +20,9 @@
 
 <body>
   <div class="container-fluid">
-    <div class="col-12 col-lg-6">
-      <table id="recentBlocksTable" class="table table-sm">
-        <thead>
-          <tr>
-            <th>Block</th>
-            <th>Mined by</th>
-            <th>Time</th>
-            <th>TX count</th>
-          </tr>
-        </thead>
-      </table>
+    <!-- BLOCKS TABLE -->
+    <div class="col-12 table-responsive">
+      <table id="recentBlocksTable" class="table table-sm table-hover"></table>
     </div>
   </div>
 </body>
