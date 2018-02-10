@@ -1,15 +1,33 @@
+var blocksTable; // datatables object
+
+function blockClicked(blockNumber) { // eslint-disable-line no-unused-vars
+  var currentBlocks = blocksTable.ajax.json().data;
+  var block = currentBlocks.find(function (b) { return b.number === blockNumber; });
+  // @TODO: handle this
+  console.log('clicked block', block); // eslint-disable-line no-console
+  return block;
+}
+
+function addressClicked(address) { // eslint-disable-line no-unused-vars
+  // @TODO: handle this as well
+  console.log('address clicked', address); // eslint-disable-line no-console
+  return address;
+}
+
 function fillBlocksTable() {
-  $('#recentBlocksTable').DataTable({
+  blocksTable = $('#recentBlocksTable').DataTable({
     serverSide: true,
     ajax: '/api/datatableBlocks',
     searching: false,
     order: [0, 'desc'],
     columns: [
-      // block index
       {
         title: 'Block',
         data: 'number',
-        render: $.fn.dataTable.render.number(',', '.'),
+        render: function (data, type, row) {
+          var numString = $.fn.dataTable.render.number(',', '.').display(data, type, row);
+          return '<a href="javascript:void(0)" onclick="blockClicked(' + data + ')">' + numString + '</a>';
+        },
       }, {
         title: 'Time',
         data: 'timestamp',
@@ -26,6 +44,11 @@ function fillBlocksTable() {
         title: 'Miner',
         data: 'miner',
         orderable: false,
+        className: 'ellipsis',
+        render: function (data) {
+          var truncated = data.slice(0, 20) + '...';
+          return '<a href="javascript:void(0)" onclick="addressClicked(\'' + data + '\')">' + truncated + '</a>';
+        },
       }, {
         title: 'Gas used',
         data: 'gasUsed',
