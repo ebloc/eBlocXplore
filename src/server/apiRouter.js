@@ -45,7 +45,7 @@ router.get('/recentBlocks', async (req, res) => {
  *
  * query
  * - draw   {integer} chunk index (0)
- * - order  {array}   selected options for sorting, we only use block number at the moment ([{dir:'desc'}])
+ * - order  {array}   options for sorting, we only use block number at the moment ([{dir:'desc'}])
  * - start  {integer} starting block number (0)
  * - length {integer} size of the block chunk (25)
  */
