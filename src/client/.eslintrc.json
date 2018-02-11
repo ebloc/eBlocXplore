@@ -8,6 +8,8 @@
     "func-names": "off",
     "object-shorthand": "off",
     "no-var": "off",
-    "prefer-template": "off"
+    "vars-on-top": "off",
+    "prefer-template": "off",
+    "no-param-reassign": "off"
   }
 }

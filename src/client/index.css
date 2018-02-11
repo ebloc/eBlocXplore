@@ -7,10 +7,10 @@ html {
 
 /* CUSTOM (page specific) */
 
-#recentBlocksTable {
+#recentBlocksTable, #recentTxTable {
   border-collapse: collapse !important;
 }
-#recentBlocksTable td, #recentBlocksTable th {
+#recentBlocksTable td, #recentBlocksTable th, #recentTxTable td, #recentTxTable th {
   white-space: nowrap;
   padding: 0.5rem;
 }

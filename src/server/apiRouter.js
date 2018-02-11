@@ -77,4 +77,39 @@ router.get('/datatableBlocks', async (req, res) => {
   });
 });
 
+/**
+ * get last {length} transactions for datatables library
+ *
+ * query
+ * - length {integer} size of the block chunk (25)
+ */
+router.get('/datatableTx', async (req, res) => {
+  const totalBlockNumber = await web3.eth.getBlockNumber();
+  const txHashes = [];
+  const length = req.query.length || 25;
+  const blocks = {}; // {hash: block}, to be used for block assignment later
+
+  // get tx hashes from the latest blocks until length is completed
+  let nextBlockNum = totalBlockNumber;
+  while (txHashes.length < length) {
+    const nextBlock = await web3.eth.getBlock(nextBlockNum); // eslint-disable-line no-await-in-loop
+    blocks[nextBlock.hash] = nextBlock;
+    txHashes.push(...nextBlock.transactions);
+    nextBlockNum--;
+  }
+
+  // get all transactions in parallel
+  const txPromises = txHashes.slice(0, length).map(web3.eth.getTransaction);
+  const txs = await Promise.all(txPromises);
+
+  // assign timestamp property, convert wei to eth
+  txs.forEach((tx, index) => {
+    const block = blocks[tx.blockHash];
+    txs[index].blockTimestamp = block.timestamp;
+    txs[index].value = web3.utils.fromWei(tx.value, 'ether');
+  });
+
+  res.send({ data: txs });
+});
+
 module.exports = router;

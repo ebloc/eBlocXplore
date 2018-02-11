@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.use('/jquery', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
 app.use('/popper.js', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
 app.use('/bootstrap', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/')));
+app.use('/font-awesome', express.static(path.join(__dirname, '../../node_modules/font-awesome')));
 app.use('/datatables.net', express.static(path.join(__dirname, '../../node_modules/datatables.net/js/')));
 app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_modules/datatables.net-bs4/')));
 

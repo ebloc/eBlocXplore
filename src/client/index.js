@@ -1,4 +1,6 @@
-var blocksTable; // datatables object
+// datatable objects
+var blocksTable;
+var txTable; // eslint-disable-line no-unused-vars
 
 function blockClicked(blockNumber) { // eslint-disable-line no-unused-vars
   var currentBlocks = blocksTable.ajax.json().data;
@@ -12,6 +14,37 @@ function addressClicked(address) { // eslint-disable-line no-unused-vars
   // @TODO: handle this as well
   console.log('address clicked', address); // eslint-disable-line no-console
   return address;
+}
+
+function txClicked(hash) { // eslint-disable-line no-unused-vars
+  // @TODO: handle this as well
+  console.log('tx clicked', hash); // eslint-disable-line no-console
+  return hash;
+}
+
+/**
+ * get element HTML string for address
+ * @param  {string} address|
+ * @param  {number} truncatedLength do not truncate if undefined (undefined)
+ * @return {string}                 html string
+ */
+function getAddressLink(address, truncatedLength) {
+  if (!address) address = ''; // @TODO: handle when address is empty
+  var truncated = address;
+  if (truncatedLength) truncated = address.slice(0, truncatedLength) + '...';
+  return '<a href="javascript:void(0)" onclick="addressClicked(\'' + address + '\')">' + truncated + '</a>';
+}
+
+/**
+ * get element HTML string for tx
+ * @param  {string} address|
+ * @param  {number} truncatedLength do not truncate if undefined (undefined)
+ * @return {string}                 html string
+ */
+function getTxLink(hash, truncatedLength) {
+  var truncated = hash;
+  if (truncatedLength) truncated = hash.slice(0, truncatedLength) + '...';
+  return '<a href="javascript:void(0)" onclick="txClicked(\'' + hash + '\')">' + truncated + '</a>';
 }
 
 function fillBlocksTable() {
@@ -45,10 +78,7 @@ function fillBlocksTable() {
         data: 'miner',
         orderable: false,
         className: 'ellipsis',
-        render: function (data) {
-          var truncated = data.slice(0, 20) + '...';
-          return '<a href="javascript:void(0)" onclick="addressClicked(\'' + data + '\')">' + truncated + '</a>';
-        },
+        render: function (data) { return getAddressLink(data, 20); },
       }, {
         title: 'Gas used',
         data: 'gasUsed',
@@ -77,4 +107,52 @@ function fillBlocksTable() {
   });
 }
 
+function fillTxTable() {
+  txTable = $('#recentTxTable').DataTable({
+    ajax: '/api/datatableTx',
+    searching: false,
+    ordering: false,
+    paging: false,
+    columns: [
+      {
+        title: 'Tx Hash',
+        data: 'hash',
+        render: function (data) { return getTxLink(data, 20); },
+      }, {
+        title: 'From',
+        data: 'from',
+        render: function (data) { return getAddressLink(data, 20); },
+      }, {
+        // arrow
+        data: null,
+        className: '',
+        defaultContent: '<i class="fa fa-lg fa-long-arrow-right"></i>',
+      }, {
+        title: 'To',
+        data: 'to',
+        render: function (data) { return getAddressLink(data, 20); },
+      }, {
+        title: 'Amount (ETH)',
+        data: 'value',
+      },
+      // { data: null }, // @TODO: tx fee
+      {
+        title: 'Time',
+        data: 'blockTimestamp',
+        render: function (data) {
+          return (new Date(data * 1000)).toLocaleString();
+        },
+      }, {
+        title: 'Block',
+        data: 'blockNumber',
+        render: function (data, type, row) {
+          var numString = $.fn.dataTable.render.number(',', '.').display(data, type, row);
+          return '<a href="javascript:void(0)" onclick="blockClicked(' + data + ')">' + numString + '</a>';
+        },
+      },
+    ],
+  });
+}
+
 $(document).ready(fillBlocksTable);
+$(document).ready(fillTxTable);
