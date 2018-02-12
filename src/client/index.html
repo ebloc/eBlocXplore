@@ -114,5 +114,89 @@
     </div>
   </div>
 
+  <!-- SINGLE TX -->
+  <div id="txModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" data-header>Tx </div>
+        </div>
+        <div class="modal-body">
+          <table class="table table-sm table-responsive no-wrap">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Block hash</td>
+                <td data-property="blockHash"></td>
+              </tr>
+              <tr>
+                <td>Block number</td>
+                <td data-property="blockNumberHTML"></td>
+              </tr>
+              <tr>
+                <td>Tx index</td>
+                <td data-property="transactionIndex"></td>
+              </tr>
+              <tr>
+                <td>Chain ID</td>
+                <td data-property="chainId"></td>
+              </tr>
+              <tr>
+                <td>From</td>
+                <td data-property="fromHTML"></td>
+              </tr>
+              <tr>
+                <td>To</td>
+                <td data-property="toHTML"></td>
+              </tr>
+              <tr>
+                <td>Value</td>
+                <td data-property="value"></td>
+              </tr>
+              <tr>
+                <td>Gas</td>
+                <td data-property="gas"></td>
+              </tr>
+              <tr>
+                <td>Gas price</td>
+                <td data-property="gasPrice"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SINGLE ADDRESS -->
+  <div id="addressModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" data-header></div>
+        </div>
+        <div class="modal-body">
+          <div>Balance: <span data-property="balance"></span></div>
+          <table class="table table-sm table-responsive no-wrap">
+            <thead>
+              <tr>
+                <th>Tx hash</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
