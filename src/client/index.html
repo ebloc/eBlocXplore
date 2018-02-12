@@ -23,13 +23,96 @@
   <div class="container-fluid">
     <!-- BLOCKS TABLE -->
     <div class="col-12 table-responsive">
-      <table id="recentBlocksTable" class="table table-sm table-hover"></table>
+      <table id="recentBlocksTable" class="table table-sm table-hover no-wrap"></table>
     </div>
     <!-- TRANSACTIONS TABLE -->
     <div class="col-12 table-responsive">
-      <table id="recentTxTable" class="table table-sm table-hover"></table>
+      <table id="recentTxTable" class="table table-sm table-hover no-wrap"></table>
     </div>
   </div>
-</body>
 
+  <!-- SINGLE BLOCK -->
+  <div id="blockModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" data-header>Block #</div>
+        </div>
+        <div class="modal-body">
+          <table class="table table-sm table-responsive no-wrap">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Block number</td>
+                <td data-property="number"></td>
+              </tr>
+              <tr>
+                <td>Difficulty</td>
+                <td data-property="difficulty"></td>
+              </tr>
+              <tr>
+                <td>Extra data</td>
+                <td data-property="extraData"></td>
+              </tr>
+              <tr>
+                <td>Gas limit</td>
+                <td data-property="gasLimit"></td>
+              </tr>
+              <tr>
+                <td>Gas used</td>
+                <td data-property="gasUsed"></td>
+              </tr>
+              <tr>
+                <td>Hash</td>
+                <td data-property="hash"></td>
+              </tr>
+              <tr>
+                <td>Miner</td>
+                <td data-property="minerHTML"></td>
+              </tr>
+              <tr>
+                <td>Nonce</td>
+                <td data-property="nonce"></td>
+              </tr>
+              <tr>
+                <td>Parent hash</td>
+                <td data-property="parentHashHTML"></td>
+              </tr>
+              <tr>
+                <td>Sha3 uncles</td>
+                <td data-property="sha3Uncles"></td>
+              </tr>
+              <tr>
+                <td>Size</td>
+                <td data-property="size"></td>
+              </tr>
+              <tr>
+                <td>State root</td>
+                <td data-property="stateRoot"></td>
+              </tr>
+              <tr>
+                <td>Time</td>
+                <td data-property="timestamp"></td>
+              </tr>
+              <tr>
+                <td>Total difficulty</td>
+                <td data-property="totalDifficulty"></td>
+              </tr>
+              <tr>
+                <td>Txs root</td>
+                <td data-property="transactionsRoot"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
 </html>

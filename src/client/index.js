@@ -2,26 +2,6 @@
 var blocksTable;
 var txTable; // eslint-disable-line no-unused-vars
 
-function blockClicked(blockNumber) { // eslint-disable-line no-unused-vars
-  var currentBlocks = blocksTable.ajax.json().data;
-  var block = currentBlocks.find(function (b) { return b.number === blockNumber; });
-  // @TODO: handle this
-  console.log('clicked block', block); // eslint-disable-line no-console
-  return block;
-}
-
-function addressClicked(address) { // eslint-disable-line no-unused-vars
-  // @TODO: handle this as well
-  console.log('address clicked', address); // eslint-disable-line no-console
-  return address;
-}
-
-function txClicked(hash) { // eslint-disable-line no-unused-vars
-  // @TODO: handle this as well
-  console.log('tx clicked', hash); // eslint-disable-line no-console
-  return hash;
-}
-
 /**
  * get element HTML string for address
  * @param  {string} address|
@@ -45,6 +25,44 @@ function getTxLink(hash, truncatedLength) {
   var truncated = hash;
   if (truncatedLength) truncated = hash.slice(0, truncatedLength) + '...';
   return '<a href="javascript:void(0)" onclick="txClicked(\'' + hash + '\')">' + truncated + '</a>';
+}
+
+function openBlockModal(block) {
+  // const visualBlock = JSON.parse(JSON.stringify(block));
+  block.time = (new Date(block.timestamp * 1000)).toLocaleString();
+  block.minerHTML = getAddressLink(block.miner);
+  block.parentHashHTML = getTxLink(block.parentHash);
+
+  $('#blockModal [data-header]')[0].insertAdjacentText('beforeend', block.number);
+  $('#blockModal td[data-property]').each(function (i, el) {
+    var property = el.getAttribute('data-property');
+    // var value = block[property];
+    el.insertAdjacentHTML('afterbegin', block[property]);
+    // console.log(`el: `, el);
+    // console.log(`el.getAttribute('data-property'): `, el.getAttribute('data-property'));
+    // console.log(`el.text(): `, el.text());
+  });
+  $('#blockModal').modal('show');
+}
+
+function blockClicked(blockNumber) { // eslint-disable-line no-unused-vars
+  var currentBlocks = blocksTable.ajax.json().data;
+  var block = currentBlocks.find(function (b) { return b.number === blockNumber; });
+  openBlockModal(block);
+  console.log('clicked block', block); // eslint-disable-line no-console
+  return block;
+}
+
+function addressClicked(address) { // eslint-disable-line no-unused-vars
+  // @TODO: handle this as well
+  console.log('address clicked', address); // eslint-disable-line no-console
+  return address;
+}
+
+function txClicked(hash) { // eslint-disable-line no-unused-vars
+  // @TODO: handle this as well
+  console.log('tx clicked', hash); // eslint-disable-line no-console
+  return hash;
 }
 
 function fillBlocksTable() {

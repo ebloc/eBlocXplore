@@ -10,7 +10,8 @@ html {
 #recentBlocksTable, #recentTxTable {
   border-collapse: collapse !important;
 }
-#recentBlocksTable td, #recentBlocksTable th, #recentTxTable td, #recentTxTable th {
+
+table.no-wrap td, table.no-wrap th {
   white-space: nowrap;
   padding: 0.5rem;
 }
