@@ -4,6 +4,26 @@ const router = express.Router();
 const { web3 } = global;
 
 /**
+ * surround a promise with try/catch block
+ * @param  {AsyncFunction} fn
+ * @return {AsyncFunction}
+ */
+function wrap(fn) {
+  return async (req, res) => {
+    try {
+      await fn(req, res);
+    } catch (err) {
+      console.error(err); // eslint-disable-line no-console
+      res.sendStatus(500);
+    }
+  };
+}
+
+const isHash = hash => /^(0x)?[0-9a-f]{64}$/.test(hash) || /^(0x)?[0-9A-F]{64}$/.test(hash);
+
+const isBlockNumber = blockNumber => /^\d{1,7}$/.test(blockNumber);
+
+/**
  * get all blocks between {start} and {start + length}
  * @param  {integer} start  first block
  * @param  {integer} length
@@ -17,6 +37,34 @@ async function getBlocks(start, length) {
   const blocks = await Promise.all(promises);
   // first block is the most recent one
   return blocks.sort((a, b) => b.number - a.number);
+}
+
+/**
+ * get at most 25 txs of an address on at most last 100 blocks
+ * @TODO: this is inefficent, use DB indices
+ * @param  {string} address
+ * @return {array}
+ */
+async function getTxsByAddress(address) {
+  const maxBlockNum = 100;
+  const maxTxNum = 25;
+  let nextBlockNum = await web3.eth.getBlockNumber();
+  const firstBlockNum = nextBlockNum - maxBlockNum;
+  const txs = [];
+
+  while (nextBlockNum > firstBlockNum && txs.length < maxTxNum) {
+    /* eslint-disable */
+    const txCount = await web3.eth.getBlockTransactionCount(nextBlockNum);
+    const promises = [...Array(txCount).keys()].map(i => web3.eth.getTransactionFromBlock(nextBlockNum, i));
+    const nextBlockTxs = await Promise.all(promises);
+    /* eslint-enable */
+    nextBlockTxs.forEach((tx) => {
+      if (tx.to === address || tx.from === address) txs.push(tx);
+    });
+    nextBlockNum--;
+  }
+
+  return txs;
 }
 
 /**
@@ -111,5 +159,56 @@ router.get('/datatableTx', async (req, res) => {
 
   res.send({ data: txs });
 });
+
+/**
+ * search for block|address|tx
+ *
+ * params
+ * - query {string} block number, address or hash
+ * result
+ * - type  {string} block|address|tx
+ * - data  {object}
+ */
+router.get('/search/:query', wrap(async (req, res) => {
+  const { query } = req.params;
+  let result;
+
+  if (web3.utils.isAddress(query)) {
+    result = {
+      type: 'address',
+      data: {
+        balance: web3.utils.fromWei(await web3.eth.getBalance(query), 'ether'),
+        txs: await getTxsByAddress(query),
+      },
+    };
+  } else if (isBlockNumber(query)) {
+    const block = await web3.eth.getBlock(query);
+    if (block) {
+      result = {
+        type: 'block',
+        data: block,
+      };
+    }
+  } else if (isHash(query)) {
+    const tx = await web3.eth.getTransaction(query);
+    if (tx) {
+      result = {
+        type: 'tx',
+        data: tx,
+      };
+    }
+
+    const block = await web3.eth.getBlock(query);
+    if (block) {
+      result = {
+        type: 'block',
+        data: block,
+      };
+    }
+  }
+
+  if (result) res.send(result);
+  else res.sendStatus(404);
+}));
 
 module.exports = router;
