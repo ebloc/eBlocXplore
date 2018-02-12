@@ -96,6 +96,28 @@ function txClicked(hash) { // eslint-disable-line no-unused-vars
   });
 }
 
+function initSearch() {
+  $('#searchForm').submit(function (e) {
+    e.preventDefault();
+    $('#notFound').addClass('d-none');
+    var query = $('#searchForm input[name="query"]').val();
+
+    $.get('/api/search/' + query, function (result) {
+      if (result.type === 'block') {
+        openBlockModal(result.data);
+      } else if (result.type === 'tx') {
+        openTxModal(result.data);
+      } else if (result.type === 'address') {
+        openAddressModal(result.type);
+      } else {
+        $('#notFound').removeClass('d-none');
+      }
+    }).fail(function () {
+      $('#notFound').removeClass('d-none');
+    });
+  });
+}
+
 function fillBlocksTable() {
   blocksTable = $('#recentBlocksTable').DataTable({
     serverSide: true,
@@ -205,3 +227,4 @@ function fillTxTable() {
 
 $(document).ready(fillBlocksTable);
 $(document).ready(fillTxTable);
+$(document).ready(initSearch);

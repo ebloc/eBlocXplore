@@ -21,6 +21,20 @@
 
 <body>
   <div class="container-fluid">
+    <!-- SEARCH BOX -->
+    <div class="col-12 col-lg-6 offset-lg-3 py-5">
+      <form id="searchForm" class="form form-row">
+        <div class="input-group">
+          <input type="text" name="query" class="form-control" placeholder="Search for account, tx hash or data">
+          <div class="input-group-append">
+            <input class="btn btn-outline-secondary" type="button" value="Search"/>
+          </div>
+        </div>
+      </form>
+      <div id="notFound" class="alert alert-danger d-none" role="alert">
+        No result
+      </div>
+    </div>
     <!-- BLOCKS TABLE -->
     <div class="col-12 table-responsive">
       <table id="recentBlocksTable" class="table table-sm table-hover no-wrap"></table>
