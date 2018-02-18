@@ -4,6 +4,9 @@
 
 **Installation**
 
+- Install [MongoDB](https://docs.mongodb.com/manual/installation/)
+
+
 - Navigate into downloaded folder and do: `npm install` 
 
 
@@ -18,3 +21,4 @@
 - Make sure you have __[ESLint](https://eslint.org/)__ integrated in your IDE
 - (Optional) Open __about:inspect__ or __chrome://inspect__ on a chromium browser (>57) and click __Open dedicated DevTools for Node__ in order to debug NodeJS in Chrome DevTools
 - `npm run debug`
+- By default, server starts to synchronize transactions into database, you can disable with `—no-cron` if it is not your concern (`npm run debug -- --no-cron`)

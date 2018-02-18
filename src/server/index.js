@@ -3,10 +3,16 @@ const Web3 = require('web3');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
+const yargs = require('yargs');
 
 const crons = require('./crons.js');
 
 require('dotenv').config(); // collect environment variables from .env file
+
+// command line arguments
+const args = yargs
+  .default('cron', true) // start cronjobs
+  .argv;
 
 const web3 = new Web3(Web3.givenProvider || process.env.WEB3_PROVIDER);
 global.web3 = web3;
@@ -48,8 +54,10 @@ app.use('/api', require('./apiRouter'));
     global.db = mongoConn.db('eblocxplore');
     console.log(`Connected to database ${process.env.MONGODB_URL}`); // eslint-disable-line no-console
 
-    crons.start();
-    console.log('Crons started'); // eslint-disable-line no-console
+    if (args.cron) {
+      crons.start();
+      console.log('Crons started'); // eslint-disable-line no-console
+    }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
   }
