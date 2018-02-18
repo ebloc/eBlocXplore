@@ -2,6 +2,9 @@ const path = require('path');
 const Web3 = require('web3');
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongodb = require('mongodb');
+
+const crons = require('./crons.js');
 
 require('dotenv').config(); // collect environment variables from .env file
 
@@ -36,8 +39,18 @@ app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_m
 
 app.use('/api', require('./apiRouter'));
 
-require('./server2.js')(web3, app); // @TODO: remove this after all functions are imported
+(async () => {
+  try {
+    await app.listen(process.env.PORT);
+    console.log(`App listening at http://localhost:${process.env.PORT}`); // eslint-disable-line no-console
 
-app.listen(process.env.PORT, () => {
-  console.log(`App listening at http://localhost:${process.env.PORT}`); // eslint-disable-line no-console
-});
+    const mongoConn = await mongodb.MongoClient.connect(process.env.MONGODB_URL);
+    global.db = mongoConn.db('eblocxplore');
+    console.log(`Connected to database ${process.env.MONGODB_URL}`); // eslint-disable-line no-console
+
+    crons.start();
+    console.log('Crons started'); // eslint-disable-line no-console
+  } catch (err) {
+    console.error(err); // eslint-disable-line no-console
+  }
+})();
