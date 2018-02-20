@@ -14,6 +14,12 @@ const startSyncingTxsCron = async () => {
  * then start a cronjob to fetch txs per minute,
  * else call self recursively after all blocks are synchronized
  *
+ * to restart process use this in mongo shell
+ * db.txs.remove({});db.settings.updateOne({ collection: 'txs' }, { $set: { lastSyncingBlock: 0 } })
+ *
+ * @TODO: unify 'txs' and 'settings' collection operations in bulkWrite,
+ * possible errors when server stopped between them
+ *
  * @param {integer} chunkSize # of blocks to sync
  * @return {@TODO}
  */

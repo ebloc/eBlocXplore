@@ -40,6 +40,41 @@ async function getBlocks(start, length) {
 }
 
 /**
+ * get all txs between {start} and {start + length}
+ * @param  {integer} start  first tx index
+ * @param  {integer} length
+ * @return {array}          blocks in descending order
+ */
+async function getTxs(start, length) {
+  const txDocs = await global.db.collection('txs')
+    .find({})
+    .skip(start)
+    .limit(length)
+    .toArray();
+
+  const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
+  const txs = await Promise.all(promises);
+
+  // get block numbers and remove duplicates
+  const blockNumbers = txs
+    .map(tx => tx.blockNumber)
+    .filter((blockNum, i, arr) => arr.indexOf(blockNum) === i);
+
+  // get globks and transform into object as { blockNumber: block }
+  const blockArr = await Promise.all(blockNumbers.map(web3.eth.getBlock));
+  const blockObj = {};
+  for (const block of blockArr) {
+    blockObj[block.number] = block;
+  }
+
+  for (const tx of txs) {
+    tx.blockTimestamp = blockObj[tx.blockNumber].timestamp;
+    tx.value = web3.utils.fromWei(tx.value);
+  }
+  return txs;
+}
+
+/**
  * get at most 25 txs of an address on at most last 100 blocks
  * @TODO: this is inefficent, use DB indices
  * @param  {string} address
@@ -129,36 +164,34 @@ router.get('/datatableBlocks', async (req, res) => {
  * get last {length} transactions for datatables library
  *
  * query
- * - length {integer} size of the block chunk (25)
+ * - draw   {integer} chunk index (0)
+ * - start  {integer} starting tx number (0)
+ * - length {integer} size of the tx chunk (25)
  */
-router.get('/datatableTx', async (req, res) => {
-  const totalBlockNumber = await web3.eth.getBlockNumber();
-  const txHashes = [];
-  const length = req.query.length || 25;
-  const blocks = {}; // {hash: block}, to be used for block assignment later
+router.get('/datatableTx', wrap(async (req, res) => {
+  const totalTxNumber = await global.db.collection('txs').find({}).count();
 
-  // get tx hashes from the latest blocks until length is completed
-  let nextBlockNum = totalBlockNumber;
-  while (txHashes.length < length) {
-    const nextBlock = await web3.eth.getBlock(nextBlockNum); // eslint-disable-line no-await-in-loop
-    blocks[nextBlock.hash] = nextBlock;
-    txHashes.push(...nextBlock.transactions);
-    nextBlockNum--;
+  const draw = Number(req.query.draw) || 0;
+  let start = Number(req.query.start) || 0;
+  let length = Number(req.query.length) || 25;
+
+  start = totalTxNumber - start - length;
+  // trim out-of-range indices
+  if (start < 0) {
+    length += start;
+    start = 0;
   }
+  length = Math.min(length, totalTxNumber - start);
 
-  // get all transactions in parallel
-  const txPromises = txHashes.slice(0, length).map(web3.eth.getTransaction);
-  const txs = await Promise.all(txPromises);
+  const txs = (await getTxs(start, length)).reverse();
 
-  // assign timestamp property, convert wei to eth
-  txs.forEach((tx, index) => {
-    const block = blocks[tx.blockHash];
-    txs[index].blockTimestamp = block.timestamp;
-    txs[index].value = web3.utils.fromWei(tx.value, 'ether');
+  res.send({
+    draw,
+    recordsTotal: totalTxNumber,
+    recordsFiltered: totalTxNumber,
+    data: txs,
   });
-
-  res.send({ data: txs });
-});
+}));
 
 /**
  * search for block|address|tx

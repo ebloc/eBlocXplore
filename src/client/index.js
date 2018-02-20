@@ -180,10 +180,10 @@ function fillBlocksTable() {
 
 function fillTxTable() {
   txTable = $('#recentTxTable').DataTable({
+    serverSide: true,
     ajax: '/api/datatableTx',
     searching: false,
     ordering: false,
-    paging: false,
     columns: [
       {
         title: 'Tx Hash',
