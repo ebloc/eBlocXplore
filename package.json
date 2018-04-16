@@ -2,7 +2,7 @@
   "name": "BLOCXPLORE",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server/index.js",
   "scripts": {
     "start": "http-server ./app -a 79.123.177.145 -p 8000 -c-1",
     "debug": "./node_modules/nodemon/bin/nodemon.js --inspect src/server",

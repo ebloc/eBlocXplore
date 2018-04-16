@@ -43,7 +43,7 @@ app.use('/font-awesome', express.static(path.join(__dirname, '../../node_modules
 app.use('/datatables.net', express.static(path.join(__dirname, '../../node_modules/datatables.net/js/')));
 app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_modules/datatables.net-bs4/')));
 
-app.use('/api', require('./apiRouter'));
+app.use('/api', require('./api-router'));
 
 (async () => {
   try {
