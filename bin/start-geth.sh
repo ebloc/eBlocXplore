@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# @todo get NETWORK from environment variable $NETWORK_NAME
 # start an ethereum with given network
 NETWORK=$1
 
