@@ -1,5 +1,7 @@
 // @todo set password config variable
 const Web3 = require('web3');
+const solc = require('solc');
+const fs = require('fs');
 const net = require('net');
 const path = require('path');
 
@@ -70,18 +72,81 @@ const showBalances = async () => {
   });
 };
 
+const deployTestContract = async () => {
+  console.log('deploying test contracts'); // eslint-disable-line no-console
+  const input = {
+    sources: {
+      test: fs.readFileSync(path.join(__dirname, './contracts/Test.sol'), 'utf8'),
+    },
+  };
+  const output = solc.compile(input);
+  const abi = JSON.parse(output.contracts['test:Test'].interface);
+  const bytecode = `0x${output.contracts['test:Test'].bytecode}`;
+
+  let contract = new web3.eth.Contract(abi);
+  const tx = await contract.deploy({ data: bytecode, from: web3.eth.defaultAccount });
+  contract = await tx.send({
+    from: web3.eth.defaultAccount,
+    gas: await tx.estimateGas(),
+  });
+
+  return contract.options.address;
+};
+
+/**
+ * compile test contract, get Contract instance from the ABI and address
+ * @param {string} address
+ * @return {Contract}
+ */
+const getDeployedTestContract = (address) => {
+  const input = {
+    sources: {
+      test: fs.readFileSync(path.join(__dirname, './contracts/Test.sol'), 'utf8'),
+    },
+  };
+  const output = solc.compile(input);
+  const abi = JSON.parse(output.contracts['test:Test'].interface);
+  return new web3.eth.Contract(abi, address);
+};
+
+/**
+ * run defined functions in the test contract
+ * @param {Contract} contract
+ */
+const executeTestTxs = async (contract) => {
+  const accounts = await web3.eth.getAccounts();
+
+  await contract.methods.deposit().send({
+    from: web3.eth.defaultAccount,
+    value: web3.utils.toWei('1.5', 'ether'),
+  });
+  await contract.methods.withdraw(web3.utils.toWei('1', 'ether')).send({
+    from: web3.eth.defaultAccount,
+  });
+  await contract.methods.testTransfer(accounts[1]).send({
+    from: web3.eth.defaultAccount,
+    value: web3.utils.toWei('0.5', 'ether'),
+  });
+};
+
 /**
  * create 20 accounts and send eth to all of them
  */
 const run = async () => {
+  [web3.eth.defaultAccount] = await web3.eth.getAccounts();
+  await web3.eth.personal.unlockAccount(web3.eth.defaultAccount, '1123', 0);
+
   try {
     // if accounts are not already created
     if ((await web3.eth.getAccounts()).length <= 1) {
       await createAccounts();
       await unlockAccounts();
       await distributeMoney();
+      await showBalances();
+      const address = await deployTestContract();
+      const contract = getDeployedTestContract(address);
+      await executeTestTxs(contract);
     }
-    await showBalances();
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
   }
