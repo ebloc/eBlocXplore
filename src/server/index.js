@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 const yargs = require('yargs');
 
-const crons = require('./crons.js');
-
 require('dotenv').config(); // collect environment variables from .env file
 
 // command line arguments
@@ -51,13 +49,13 @@ app.use('/api', require('./api-router'));
     console.log(`App listening at http://localhost:${process.env.PORT}`); // eslint-disable-line no-console
 
     const mongoConn = await mongodb.MongoClient.connect(process.env.MONGODB_URL);
-    global.db = mongoConn.db('eblocxplore');
+    global.db = mongoConn.db(process.env.NETWORK_NAME);
     console.log(`Connected to database ${process.env.MONGODB_URL}`); // eslint-disable-line no-console
 
-    if (args.cron) {
-      crons.start();
-      console.log('Crons started'); // eslint-disable-line no-console
-    }
+    // if (args.cron) {
+    //   crons.start();
+    //   console.log('Crons started'); // eslint-disable-line no-console
+    // }
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
   }
