@@ -76,28 +76,20 @@ async function getTxs(start, length) {
 
 /**
  * get at most 25 txs of an address on at most last 100 blocks
- * @TODO: this is inefficent, use DB indices
  * @param  {string} address
- * @return {array}
+ * @return {[Transaction]}
  */
 async function getTxsByAddress(address) {
-  const maxBlockNum = 100;
-  const maxTxNum = 25;
-  let nextBlockNum = await web3.eth.getBlockNumber();
-  const firstBlockNum = nextBlockNum - maxBlockNum;
-  const txs = [];
+  const query = {
+    $or: [
+      { from: address },
+      { to: address },
+    ],
+  };
+  const txDocs = await global.db.collection('txs').find(query).toArray();
 
-  while (nextBlockNum > firstBlockNum && txs.length < maxTxNum) {
-    /* eslint-disable */
-    const txCount = await web3.eth.getBlockTransactionCount(nextBlockNum);
-    const promises = [...Array(txCount).keys()].map(i => web3.eth.getTransactionFromBlock(nextBlockNum, i));
-    const nextBlockTxs = await Promise.all(promises);
-    /* eslint-enable */
-    nextBlockTxs.forEach((tx) => {
-      if (tx.to === address || tx.from === address) txs.push(tx);
-    });
-    nextBlockNum--;
-  }
+  const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
+  const txs = await Promise.all(promises);
 
   return txs;
 }

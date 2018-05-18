@@ -3,14 +3,14 @@ const Web3 = require('web3');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
-const yargs = require('yargs');
+// const yargs = require('yargs');
 
 require('dotenv').config(); // collect environment variables from .env file
 
 // command line arguments
-const args = yargs
-  .default('cron', true) // start cronjobs
-  .argv;
+// const args = yargs
+//   .default('cron', true) // start cronjobs
+//   .argv;
 
 const web3 = new Web3(Web3.givenProvider || process.env.WEB3_PROVIDER);
 global.web3 = web3;
