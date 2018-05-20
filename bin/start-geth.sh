@@ -38,7 +38,7 @@ if [[ ! -d ${DATADIR} && (${NETWORK} == 'ebloc-poa' || ${NETWORK} == 'local') ]]
 fi
 
 # @TODO create log folder
-nohup geth --datadir ${DATADIR} --port ${PORT} --networkid ${NETWORKID} --cache 1024 --mine=${MINE} --etherbase=0x2e72489335d90514e5e0f6b12a15661556b2c414 --rpc --rpcaddr ${RPCADDR} --rpcport ${RPCPORT} &> ${LOGPATH} & # --rpccorsdomain="*" --rpcapi eth,net,web3,personal,admin &
+nohup geth --datadir ${DATADIR} --port ${PORT} --networkid ${NETWORKID} --syncmode=full --gcmode=archive --cache 1024 --mine=${MINE} --etherbase=0x2e72489335d90514e5e0f6b12a15661556b2c414 --rpc --rpcaddr ${RPCADDR} --rpcport ${RPCPORT} &> ${LOGPATH} & # --rpccorsdomain="*" --rpcapi eth,net,web3,personal,admin &
 # ex: geth --datadir blockchain/local --networkid 5192851 --cache 2048 --pprof --mine --etherbase=0x2e72489335d90514e5e0f6b12a15661556b2c414
 
 # add peers to private networks

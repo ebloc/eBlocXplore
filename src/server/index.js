@@ -14,8 +14,6 @@ require('dotenv').config(); // collect environment variables from .env file
 //   .argv;
 
 const ipcFile = path.join(__dirname, `../../blockchain/${process.env.NETWORK_NAME}/geth.ipc`);
-// const web3 = new Web3(Web3.givenProvider || process.env.WEB3_PROVIDER);
-Web3.providers.IpcProvider.prototype.sendAsync = Web3.providers.IpcProvider.prototype.send;
 const web3 = new Web3(ipcFile, net);
 global.web3 = web3;
 
