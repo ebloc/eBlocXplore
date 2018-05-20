@@ -3,6 +3,7 @@ const Web3 = require('web3');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
+const net = require('net');
 // const yargs = require('yargs');
 
 require('dotenv').config(); // collect environment variables from .env file
@@ -12,8 +13,22 @@ require('dotenv').config(); // collect environment variables from .env file
 //   .default('cron', true) // start cronjobs
 //   .argv;
 
-const web3 = new Web3(Web3.givenProvider || process.env.WEB3_PROVIDER);
+const ipcFile = path.join(__dirname, `../../blockchain/${process.env.NETWORK_NAME}/geth.ipc`);
+// const web3 = new Web3(Web3.givenProvider || process.env.WEB3_PROVIDER);
+Web3.providers.IpcProvider.prototype.sendAsync = Web3.providers.IpcProvider.prototype.send;
+const web3 = new Web3(ipcFile, net);
 global.web3 = web3;
+
+// in order to debug transactions
+web3.extend({
+  property: 'debug',
+  methods: [{
+    name: 'traceTransaction',
+    call: 'debug_traceTransaction',
+    params: 2,
+    inputFormatter: [web3.extend.inputTransactionFormatter, null],
+  }],
+});
 
 if (!web3.eth.net.isListening()) {
   console.error('Cannot connect to ethereum network'); // eslint-disable-line no-console
