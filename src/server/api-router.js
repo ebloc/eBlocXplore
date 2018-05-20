@@ -23,6 +23,12 @@ const isHash = hash => /^(0x)?[0-9a-f]{64}$/.test(hash) || /^(0x)?[0-9A-F]{64}$/
 
 const isBlockNumber = blockNumber => /^\d{1,7}$/.test(blockNumber);
 
+const isContract = async (address) => {
+  if (!web3.utils.isAddress(address)) return false;
+  const bytecode = await web3.eth.getCode(address);
+  return bytecode !== '0x';
+};
+
 /**
  * get all blocks between {start} and {start + length}
  * @param  {integer} start  first block
@@ -75,7 +81,8 @@ async function getTxs(start, length) {
 }
 
 /**
- * get at most 25 txs of an address on at most last 100 blocks
+ * get txs of an address
+ * @TODO: pagination
  * @param  {string} address
  * @return {[Transaction]}
  */
@@ -90,6 +97,28 @@ async function getTxsByAddress(address) {
 
   const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
   const txs = await Promise.all(promises);
+
+  return txs;
+}
+
+/**
+ * get txs of an address together with contract internal txs
+ * @param  {string} address
+ * @return {mixed}
+ */
+async function getTxsWithInternals(address) {
+  const txs = await getTxsByAddress(address);
+  const promises = txs.map(tx => web3.debug.traceTransaction(tx.hash, { tracer: 'callTracer' }));
+  const traces = await Promise.all(promises);
+
+  // assign logs to the relevant tx
+  traces.forEach((trace, i) => {
+    if (trace.calls) {
+      // remove non-transaction calls like events
+      trace.calls = trace.calls.filter(call => call.value !== '0x0');
+      txs[i].calls = trace.calls;
+    }
+  });
 
   return txs;
 }
@@ -235,6 +264,12 @@ router.get('/search/:query', wrap(async (req, res) => {
 
   if (result) res.send(result);
   else res.sendStatus(404);
+}));
+
+router.get('/internal-txs/:address', wrap(async (req, res) => {
+  if (!await isContract(req.params.address)) return res.sendStatus(400);
+  const txs = await getTxsWithInternals(req.params.address);
+  res.send(txs);
 }));
 
 module.exports = router;
