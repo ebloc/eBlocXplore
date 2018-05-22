@@ -69,7 +69,7 @@ function showInternalTxs(address) {
 
         if (tx.calls) {
           acc += tx.calls.reduce(function (callsAcc, call) {
-            callsAcc += '<tr><td>' + call.type + '</td>';
+            callsAcc += '<tr class="bg-grey"><td>' + call.type + '</td>';
             callsAcc += '<td>' + getAddressLink(call.from, 20, call.from === address) + '</td>';
             callsAcc += '<td>' + getAddressLink(call.to, 20, call.to === address) + '</td>';
             callsAcc += '<td>' + call.value + '</td></tr>';

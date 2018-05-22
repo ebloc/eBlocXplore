@@ -98,6 +98,10 @@ async function getTxsByAddress(address) {
   const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
   const txs = await Promise.all(promises);
 
+  for (const tx of txs) {
+    tx.value = web3.utils.fromWei(tx.value);
+  }
+
   return txs;
 }
 
@@ -115,7 +119,11 @@ async function getTxsWithInternals(address) {
   traces.forEach((trace, i) => {
     if (trace.calls) {
       // remove non-transaction calls like events
-      trace.calls = trace.calls.filter(call => call.value !== '0x0');
+      trace.calls = trace.calls.filter((call) => {
+        call.value = web3.utils.fromWei(web3.utils.toBN(call.value));
+        return call.value !== '0x0' || call.value !== '0x';
+      });
+
       txs[i].calls = trace.calls;
     }
   });
