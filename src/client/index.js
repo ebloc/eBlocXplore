@@ -6,14 +6,15 @@ var txTable; // eslint-disable-line no-unused-vars
  * get element HTML string for address
  * @param  {string} address|
  * @param  {number} truncatedLength do not truncate if undefined (undefined)
- * @param  {number} noLink          do not cover with link
+ * @param  {adddress} noLink do not cover with link if addresses are same
  * @return {string}                 html string
  */
-function getAddressLink(address, truncatedLength, noLink) {
+function getAddressLink(address, truncatedLength, noLinkAddress) {
   if (!address) address = ''; // @TODO: handle when address is empty
   var truncated = address;
   if (truncatedLength) truncated = address.slice(0, truncatedLength) + '...';
 
+  const noLink = noLinkAddress && address.toLowerCase() === noLinkAddress.toLowerCase();
   if (noLink) return '<a data-address="' + address + '">' + truncated + '</a>';
   return '<a href="javascript:void(0)" onclick="addressClicked(\'' + address + '\')">' + truncated + '</a>';
 }
@@ -58,20 +59,20 @@ function openTxModal(tx) {
   $('#txModal').modal('show');
 }
 
-function showInternalTxs(address) {
+function showInternalTxs(address) { // eslint-disable-line no-unused-vars
   $.get('/api/internal-txs/' + address, function (result) {
     if (result) {
       var html = result.reduce(function (acc, tx) {
         acc += '<tr><td>' + getTxLink(tx.hash, 20) + '</td>';
-        acc += '<td>' + getAddressLink(tx.from, 20, tx.from === address) + '</td>';
-        acc += '<td>' + getAddressLink(tx.to, 20, tx.to === address) + '</td>';
+        acc += '<td>' + getAddressLink(tx.from, 20, address) + '</td>';
+        acc += '<td>' + getAddressLink(tx.to, 20, address) + '</td>';
         acc += '<td>' + tx.value + '</td></tr>';
 
         if (tx.calls) {
           acc += tx.calls.reduce(function (callsAcc, call) {
             callsAcc += '<tr class="bg-grey"><td>' + call.type + '</td>';
-            callsAcc += '<td>' + getAddressLink(call.from, 20, call.from === address) + '</td>';
-            callsAcc += '<td>' + getAddressLink(call.to, 20, call.to === address) + '</td>';
+            callsAcc += '<td>' + getAddressLink(call.from, 20, address) + '</td>';
+            callsAcc += '<td>' + getAddressLink(call.to, 20, address) + '</td>';
             callsAcc += '<td>' + call.value + '</td></tr>';
             return callsAcc;
           }, '');
@@ -95,8 +96,8 @@ function openAddressModal(data) {
   $('#addressModal [data-property="balance"]')[0].innerHTML = data.balance + ' ETH';
   var html = data.txs.reduce(function (acc, tx) {
     acc += '<tr><td>' + getTxLink(tx.hash, 20) + '</td>';
-    acc += '<td>' + getAddressLink(tx.from, 20, tx.from === data.address) + '</td>';
-    acc += '<td>' + getAddressLink(tx.to, 20, tx.to === data.address) + '</td>';
+    acc += '<td>' + getAddressLink(tx.from, 20, data.address) + '</td>';
+    acc += '<td>' + getAddressLink(tx.to, 20, data.address) + '</td>';
     acc += '<td>' + tx.value + '</td></tr>';
     return acc;
   }, '');
