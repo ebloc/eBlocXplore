@@ -32,7 +32,8 @@ function getTxLink(hash, truncatedLength) {
 }
 
 function openBlockModal(block) {
-  $('.modal').modal('hide');
+  $('#addressModal').modal('hide');
+  $('#txModal').modal('hide');
   block.time = (new Date(block.timestamp * 1000)).toLocaleString();
   block.minerHTML = getAddressLink(block.miner);
   block.parentHashHTML = getTxLink(block.parentHash);
@@ -46,7 +47,8 @@ function openBlockModal(block) {
 }
 
 function openTxModal(tx) {
-  $('.modal').modal('hide');
+  $('#blockModal').modal('hide');
+  $('#addressModal').modal('hide');
   tx.blockNumberHTML = '<a href="javascript:void(0)" onclick="blockClicked(' + tx.blockNumber + ')">' + tx.blockNumber + '</a>';
   tx.fromHTML = getAddressLink(tx.from);
   tx.toHTML = getAddressLink(tx.to);
@@ -85,7 +87,8 @@ function showInternalTxs(address) { // eslint-disable-line no-unused-vars
 }
 
 function openAddressModal(data) {
-  $('.modal').modal('hide');
+  $('#blockModal').modal('hide');
+  $('#txModal').modal('hide');
   $('#addressModal [data-header]')[0].innerHTML = 'Address: ' + data.address;
   if (data.isContract) {
     $('#addressModal [data-header]')[0].innerHTML += ' (Contract)';
