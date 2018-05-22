@@ -62,7 +62,9 @@ function openTxModal(tx) {
 }
 
 function showInternalTxs(address) { // eslint-disable-line no-unused-vars
+  $('#addressModal [data-show-internal-txs]').html('Loading...');
   $.get('/api/internal-txs/' + address, function (result) {
+    $('#addressModal [data-show-internal-txs]').html('');
     if (result) {
       var html = result.reduce(function (acc, tx) {
         acc += '<tr><td>' + getTxLink(tx.hash, 20) + '</td>';
