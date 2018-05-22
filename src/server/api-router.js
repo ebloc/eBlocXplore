@@ -255,6 +255,7 @@ router.get('/search/:query', wrap(async (req, res) => {
     }
   } else if (isHash(query)) {
     const tx = await web3.eth.getTransaction(query);
+    tx.value = web3.utils.fromWei(tx.value);
     if (tx) {
       result = {
         type: 'tx',

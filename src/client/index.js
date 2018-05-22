@@ -106,10 +106,9 @@ function openAddressModal(data) {
 }
 
 function blockClicked(blockNumber) { // eslint-disable-line no-unused-vars
-  var currentBlocks = blocksTable.ajax.json().data;
-  var block = currentBlocks.find(function (b) { return b.number === blockNumber; });
-  openBlockModal(block);
-  return block;
+  $.get('/api/search/' + blockNumber, function (block) {
+    openBlockModal(block.data);
+  });
 }
 
 function addressClicked(address) { // eslint-disable-line no-unused-vars
