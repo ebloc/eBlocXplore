@@ -58,10 +58,41 @@ function openTxModal(tx) {
   $('#txModal').modal('show');
 }
 
+function showInternalTxs(address) {
+  $.get('/api/internal-txs/' + address, function (result) {
+    if (result) {
+      var html = result.reduce(function (acc, tx) {
+        acc += '<tr><td>' + getTxLink(tx.hash, 20) + '</td>';
+        acc += '<td>' + getAddressLink(tx.from, 20, tx.from === address) + '</td>';
+        acc += '<td>' + getAddressLink(tx.to, 20, tx.to === address) + '</td>';
+        acc += '<td>' + tx.value + '</td></tr>';
+
+        if (tx.calls) {
+          acc += tx.calls.reduce(function (callsAcc, call) {
+            callsAcc += '<tr><td>' + call.type + '</td>';
+            callsAcc += '<td>' + getAddressLink(call.from, 20, call.from === address) + '</td>';
+            callsAcc += '<td>' + getAddressLink(call.to, 20, call.to === address) + '</td>';
+            callsAcc += '<td>' + call.value + '</td></tr>';
+            return callsAcc;
+          }, '');
+        }
+        return acc;
+      }, '');
+      $('#addressModal tbody')[0].innerHTML = html;
+    }
+  });
+}
+
 function openAddressModal(data) {
   $('.modal').modal('hide');
-  $('#addressModal [data-header]')[0].innerHTML = 'Address ' + data.address;
-  $('#addressModal [data-property="balance"]')[0].innerHTML = data.balance;
+  $('#addressModal [data-header]')[0].innerHTML = 'Address: ' + data.address;
+  if (data.isContract) {
+    $('#addressModal [data-header]')[0].innerHTML += ' (Contract)';
+    $('#addressModal [data-show-internal-txs]')[0].innerHTML = '<a href="javascript:void(0)" onclick="showInternalTxs(\'' + data.address + '\')">Show internal transactions</a>';
+  } else {
+    $('#addressModal [data-show-internal-txs]')[0].innerHTML = '';
+  }
+  $('#addressModal [data-property="balance"]')[0].innerHTML = data.balance + ' ETH';
   var html = data.txs.reduce(function (acc, tx) {
     acc += '<tr><td>' + getTxLink(tx.hash, 20) + '</td>';
     acc += '<td>' + getAddressLink(tx.from, 20, tx.from === data.address) + '</td>';
@@ -108,7 +139,7 @@ function initSearch() {
       } else if (result.type === 'tx') {
         openTxModal(result.data);
       } else if (result.type === 'address') {
-        openAddressModal(result.type);
+        openAddressModal(result.data);
       } else {
         $('#notFound').removeClass('d-none');
       }

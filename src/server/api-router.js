@@ -232,6 +232,7 @@ router.get('/search/:query', wrap(async (req, res) => {
       type: 'address',
       data: {
         address: query,
+        isContract: await isContract(query),
         balance: web3.utils.fromWei(await web3.eth.getBalance(query), 'ether'),
         txs: await getTxsByAddress(query),
       },
