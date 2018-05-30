@@ -6,14 +6,15 @@ var txTable; // eslint-disable-line no-unused-vars
  * get element HTML string for address
  * @param  {string} address|
  * @param  {number} truncatedLength do not truncate if undefined (undefined)
- * @param  {number} noLink          do not cover with link
+ * @param  {adddress} noLink do not cover with link if addresses are same
  * @return {string}                 html string
  */
-function getAddressLink(address, truncatedLength, noLink) {
+function getAddressLink(address, truncatedLength, noLinkAddress) {
   if (!address) address = ''; // @TODO: handle when address is empty
   var truncated = address;
   if (truncatedLength) truncated = address.slice(0, truncatedLength) + '...';
 
+  const noLink = noLinkAddress && address.toLowerCase() === noLinkAddress.toLowerCase();
   if (noLink) return '<a data-address="' + address + '">' + truncated + '</a>';
   return '<a href="javascript:void(0)" onclick="addressClicked(\'' + address + '\')">' + truncated + '</a>';
 }
@@ -31,7 +32,8 @@ function getTxLink(hash, truncatedLength) {
 }
 
 function openBlockModal(block) {
-  $('.modal').modal('hide');
+  $('#addressModal').modal('hide');
+  $('#txModal').modal('hide');
   block.time = (new Date(block.timestamp * 1000)).toLocaleString();
   block.minerHTML = getAddressLink(block.miner);
   block.parentHashHTML = getTxLink(block.parentHash);
@@ -45,7 +47,8 @@ function openBlockModal(block) {
 }
 
 function openTxModal(tx) {
-  $('.modal').modal('hide');
+  $('#blockModal').modal('hide');
+  $('#addressModal').modal('hide');
   tx.blockNumberHTML = '<a href="javascript:void(0)" onclick="blockClicked(' + tx.blockNumber + ')">' + tx.blockNumber + '</a>';
   tx.fromHTML = getAddressLink(tx.from);
   tx.toHTML = getAddressLink(tx.to);
@@ -58,14 +61,48 @@ function openTxModal(tx) {
   $('#txModal').modal('show');
 }
 
+function showInternalTxs(address) { // eslint-disable-line no-unused-vars
+  $('#addressModal [data-show-internal-txs]').html('Loading...');
+  $.get('/api/internal-txs/' + address, function (result) {
+    $('#addressModal [data-show-internal-txs]').html('');
+    if (result) {
+      var html = result.reduce(function (acc, tx) {
+        acc += '<tr><td>' + getTxLink(tx.hash, 20) + '</td>';
+        acc += '<td>' + getAddressLink(tx.from, 20, address) + '</td>';
+        acc += '<td>' + getAddressLink(tx.to, 20, address) + '</td>';
+        acc += '<td>' + tx.value + '</td></tr>';
+
+        if (tx.calls) {
+          acc += tx.calls.reduce(function (callsAcc, call) {
+            callsAcc += '<tr class="bg-grey"><td>' + call.type + '</td>';
+            callsAcc += '<td>' + getAddressLink(call.from, 20, address) + '</td>';
+            callsAcc += '<td>' + getAddressLink(call.to, 20, address) + '</td>';
+            callsAcc += '<td>' + call.value + '</td></tr>';
+            return callsAcc;
+          }, '');
+        }
+        return acc;
+      }, '');
+      $('#addressModal tbody')[0].innerHTML = html;
+    }
+  });
+}
+
 function openAddressModal(data) {
-  $('.modal').modal('hide');
-  $('#addressModal [data-header]')[0].innerHTML = 'Address ' + data.address;
-  $('#addressModal [data-property="balance"]')[0].innerHTML = data.balance;
+  $('#blockModal').modal('hide');
+  $('#txModal').modal('hide');
+  $('#addressModal [data-header]')[0].innerHTML = 'Address: ' + data.address;
+  if (data.isContract) {
+    $('#addressModal [data-header]')[0].innerHTML += ' (Contract)';
+    $('#addressModal [data-show-internal-txs]')[0].innerHTML = '<a href="javascript:void(0)" onclick="showInternalTxs(\'' + data.address + '\')">Show internal transactions</a>';
+  } else {
+    $('#addressModal [data-show-internal-txs]')[0].innerHTML = '';
+  }
+  $('#addressModal [data-property="balance"]')[0].innerHTML = data.balance + ' ETH';
   var html = data.txs.reduce(function (acc, tx) {
     acc += '<tr><td>' + getTxLink(tx.hash, 20) + '</td>';
-    acc += '<td>' + getAddressLink(tx.from, 20, tx.from === data.address) + '</td>';
-    acc += '<td>' + getAddressLink(tx.to, 20, tx.to === data.address) + '</td>';
+    acc += '<td>' + getAddressLink(tx.from, 20, data.address) + '</td>';
+    acc += '<td>' + getAddressLink(tx.to, 20, data.address) + '</td>';
     acc += '<td>' + tx.value + '</td></tr>';
     return acc;
   }, '');
@@ -74,10 +111,9 @@ function openAddressModal(data) {
 }
 
 function blockClicked(blockNumber) { // eslint-disable-line no-unused-vars
-  var currentBlocks = blocksTable.ajax.json().data;
-  var block = currentBlocks.find(function (b) { return b.number === blockNumber; });
-  openBlockModal(block);
-  return block;
+  $.get('/api/search/' + blockNumber, function (block) {
+    openBlockModal(block.data);
+  });
 }
 
 function addressClicked(address) { // eslint-disable-line no-unused-vars
@@ -108,7 +144,7 @@ function initSearch() {
       } else if (result.type === 'tx') {
         openTxModal(result.data);
       } else if (result.type === 'address') {
-        openAddressModal(result.type);
+        openAddressModal(result.data);
       } else {
         $('#notFound').removeClass('d-none');
       }

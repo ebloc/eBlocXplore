@@ -3,6 +3,8 @@
   "rules": {
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "consistent-return": "off",
+    "no-param-reassign": ["error", { "props": false }]
   }
 }

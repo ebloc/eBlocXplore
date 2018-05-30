@@ -15,3 +15,7 @@ table.no-wrap td, table.no-wrap th {
   white-space: nowrap;
   padding: 0.5rem;
 }
+
+tr.bg-grey {
+  background-color: #eee;
+}
