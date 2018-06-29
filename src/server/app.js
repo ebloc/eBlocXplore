@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 const net = require('net');
+const apiRouter = require('./api-router');
 
 let app; // express application
 let server; // http server
@@ -67,14 +68,14 @@ exports.start = async () => {
   app.use(bodyParser.json());
   app.use(express.static(path.join(__dirname, '../client')));
   // 3rd party libraries @TODO: use webpack
-  app.use('/jquery', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
-  app.use('/popper.js', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
-  app.use('/bootstrap', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/')));
-  app.use('/font-awesome', express.static(path.join(__dirname, '../../node_modules/font-awesome')));
-  app.use('/datatables.net', express.static(path.join(__dirname, '../../node_modules/datatables.net/js/')));
-  app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_modules/datatables.net-bs4/')));
+  // app.use('/jquery', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
+  // app.use('/popper.js', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
+  // app.use('/bootstrap', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/')));
+  // app.use('/font-awesome', express.static(path.join(__dirname, '../../node_modules/font-awesome')));
+  // app.use('/datatables.net', express.static(path.join(__dirname, '../../node_modules/datatables.net/js/')));
+  // app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_modules/datatables.net-bs4/')));
 
-  app.use('/api', require('./api-router'));
+  app.use('/api', apiRouter);
 
   server = app.listen(process.env.PORT);
   server.on('error', (err) => {
@@ -93,6 +94,3 @@ exports.restart = async () => {
   server.close();
   await exports.start();
 };
-
-
-
