@@ -29,6 +29,7 @@ module.exports = {
     publicPath: 'http://localhost:8080/', // for HMR
     hotOnly: true,
   },
+  devtool: 'inline-source-map',
   plugins: [new webpack.HotModuleReplacementPlugin()],
   mode: 'development',
 };

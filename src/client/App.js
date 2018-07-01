@@ -1,19 +1,23 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 
-export default class App extends React.Component {
+import Blocks from "./components/Blocks";
+
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      network: 'ebloc-poa'
+      network: 'ebloc-poaasd'
     }
   }
 
   render() {
     return (
-      <div style={{background: 'yellow'}}>
-        <h2>Deneme1</h2>
-        <p>Network name: {this.state.network}</p>
+      <div className="container">
+        <Blocks/>
       </div>
     )
   }
 }
+
+export default hot(module)(App);
