@@ -1,17 +1,51 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class App extends React.Component {
+import Block from './Block';
+
+class Blocks extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      blocks: props.blocks,
+      lastChecked: new Date(),
+    };
+  }
+
+  componentDidMount() {
+    this.newBlocksTimer = setInterval(() => {
+      this.checkNewBlocks();
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.newBlocksTimer);
+  }
+
+  checkNewBlocks() {
+    this.setState({
+      lastChecked: new Date(),
+    });
   }
 
   render() {
+    const { blocks, lastChecked } = this.state;
+    const blockNodes = blocks.map(block => <Block key={block.number} block={block} />);
     return (
       <div>
-        <h2>Deneme1</h2>
-        <p>Network name: a</p>
+        <div>Last checked: {lastChecked.toString()}</div>
+        { blockNodes }
       </div>
-    )
+    );
   }
 }
+
+Blocks.propTypes = {
+  blocks: PropTypes.array,
+};
+
+Blocks.defaultProps = {
+  blocks: [],
+};
+
+export default Blocks;

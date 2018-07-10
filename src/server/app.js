@@ -22,7 +22,6 @@ exports.initGlobals = () => {
 exports.initBlockchain = async () => {
   const ipcFile = path.join(__dirname, `../../blockchain/${process.env.NETWORK_NAME}/geth.ipc`);
   const web3 = new Web3(ipcFile, net);
-  global.web3 = web3;
 
   // in order to debug transactions
   web3.extend({
@@ -49,8 +48,9 @@ exports.initBlockchain = async () => {
  */
 exports.initDB = async () => {
   const mongoConn = await mongodb.MongoClient.connect(process.env.MONGODB_URL);
-  global.db = mongoConn.db(process.env.NETWORK_NAME);
+  db = mongoConn.db(process.env.NETWORK_NAME);
   console.log(`Connected to database ${process.env.MONGODB_URL}`); // eslint-disable-line no-console
+  return db;
 };
 
 exports.start = async () => {

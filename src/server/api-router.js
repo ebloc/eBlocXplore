@@ -1,7 +1,6 @@
 const express = require('express');
 
 const router = express.Router();
-const { web3 } = global;
 
 /**
  * surround a promise with try/catch block
@@ -198,7 +197,7 @@ router.get('/datatableBlocks', async (req, res) => {
  * - length {integer} size of the tx chunk (25)
  */
 router.get('/datatableTx', wrap(async (req, res) => {
-  const totalTxNumber = await global.db.collection('txs').find({}).count();
+  const totalTxNumber = await db.collection('txs').find({}).count();
 
   const draw = Number(req.query.draw) || 0;
   let start = Number(req.query.start) || 0;

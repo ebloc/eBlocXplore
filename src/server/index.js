@@ -7,8 +7,8 @@ const watcher = chokidar.watch(__dirname);
 async function start() {
   try {
     await app.initGlobals();
-    await app.initBlockchain();
-    await app.initDB();
+    global.web3 = await app.initBlockchain();
+    global.db = await app.initDB();
 
     await app.start();
 

@@ -5,6 +5,11 @@ html {
   font-size: 87.5%;
 }
 
+/* padding does not affect the final computed width of an element */
+.selector-for-some-widget {
+  box-sizing: content-box;
+}
+
 /* CUSTOM (page specific) */
 
 #recentBlocksTable, #recentTxTable {
