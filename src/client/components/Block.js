@@ -1,12 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import utils from '../utils/index';
 
 class Block extends React.Component {
-  /**
-   * @param {int} props.block
-   */
   constructor(props) {
     super(props);
     this.state = {};
@@ -19,7 +17,7 @@ class Block extends React.Component {
       <div className="Block card">
         <div className="card-body">
           <div className="card-title">
-            <a href="/@todo"><h4>{block.number}</h4></a>
+            <Link to={`/blocks/${block.number}`}>{block.number}</Link>
           </div>
           <div><span>Miner:</span>{utils.addressLink(block.miner)}</div>
           <div><span>Time:</span>{dateString}</div>

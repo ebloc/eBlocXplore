@@ -1,13 +1,22 @@
 /* eslint-disable max-len */
 import React from 'react';
 import ReactDom from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min';
 
 import App from './App';
 
-ReactDom.render(<App />, document.getElementById('app'));
+// ReactDom.render(<App />, document.getElementById('app'));
+
+const routes = (
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+
+ReactDom.render(routes, document.getElementById('app'));
 
 // // datatable objects
 // var blocksTable;

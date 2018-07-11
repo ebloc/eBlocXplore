@@ -6,6 +6,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -28,6 +29,9 @@ module.exports = {
     contentBase: [path.resolve(__dirname, 'dist'), path.resolve(__dirname, 'src/client/public')],
     publicPath: 'http://localhost:8080/', // for HMR
     hotOnly: true,
+    historyApiFallback: {
+      index: 'index.html',
+    },
   },
   devtool: 'inline-source-map',
   plugins: [new webpack.HotModuleReplacementPlugin()],

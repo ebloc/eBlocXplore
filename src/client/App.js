@@ -1,279 +1,34 @@
 import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 
+import HomePage from './components/HomePage';
+import BlockPage from './components/BlockPage';
+import TxPage from './components/TxPage';
+import About from './components/About';
 import Nav from './components/Nav';
-import SearchForm from './components/SearchForm';
-import Blocks from './components/Blocks';
-import Txs from './components/Txs';
-
-const mockBlocks = [
-  {
-    number: 788343,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442657,
-    txCount: 0,
-  },
-  {
-    number: 788342,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442642,
-    txCount: 0,
-  },
-  {
-    number: 788341,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442627,
-    txCount: 0,
-  },
-  {
-    number: 788340,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442612,
-    txCount: 0,
-  },
-  {
-    number: 788339,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442597,
-    txCount: 0,
-  },
-  {
-    number: 788338,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442582,
-    txCount: 0,
-  },
-  {
-    number: 788337,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442567,
-    txCount: 0,
-  },
-  {
-    number: 788336,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442552,
-    txCount: 0,
-  },
-  {
-    number: 788335,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442537,
-    txCount: 0,
-  },
-  {
-    number: 788334,
-    miner: '0x0000000000000000000000000000000000000000',
-    timestamp: 1530442522,
-    txCount: 0,
-  },
-];
-
-const mockTxs = [
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143410,
-    gasPrice: '18000000000',
-    hash: '0x81d750998d147fa03c396a3651deb97755e9dfa103831895bf02f774e9a74a8e',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c080484b44000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f9865e1f',
-    nonce: 22462,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 19,
-    value: '0',
-    v: '0xb720',
-    r: '0x4249584f68483f0dea6f1019fa9aa81dd98c905743021960c0f1d9b20c70492',
-    s: '0x94db8b056dc11130bd83389e2061613f544373bf8d666170764f9b2fa911514',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143346,
-    gasPrice: '18000000000',
-    hash: '0xd0b3309fcbd715b456bb51145c6ef76dfebdca4b13d54790bc4e7a31fd91da7d',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c080434e59000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001a3b64a00',
-    nonce: 22461,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 18,
-    value: '0',
-    v: '0xb720',
-    r: '0x3500adc1694caa754e9a45ca7288908bdf188150b2f7418410461f801bb1ed5c',
-    s: '0x2221a8bd328c3329c1dca94aa63d6641186e18344b07974ab90b30e8876e0a95',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143346,
-    gasPrice: '18000000000',
-    hash: '0x65e1ab0c1df1cb04ddcffb92183ec95f7c6768125a8109bd1723db5bdaf71bfb',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c0804341440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005850f2a0',
-    nonce: 22460,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 17,
-    value: '0',
-    v: '0xb71f',
-    r: '0x9207dde43825c771d229661966e3c2e6ba2c0a57cfde93a7b0fcd7362fcc4f94',
-    s: '0x35dd77d03d816e95a4945c4f3f92e76a13655af6ccbb19ec054c2d5048c37a5e',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143346,
-    gasPrice: '18000000000',
-    hash: '0xa51e92d10b96c4ef47982db1bca39d3109fb8c87a208d264cff0090670acb120',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c08042524c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f56f1da0',
-    nonce: 22459,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 16,
-    value: '0',
-    v: '0xb71f',
-    r: '0x2dd7a503d3c6de1a6b52bb0aace28bde25d97deef7fc7f1e2ea0138dd80787af',
-    s: '0x26343a2c27e24b4fcbf927b6790279e46f515e4b52faef56f827152d42e43f8e',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143282,
-    gasPrice: '18000000000',
-    hash: '0x06241379bc10db7248ea0293a4d08206014db098d77541ace04d7719640359b7',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c08041554400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000059682f00',
-    nonce: 22458,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 15,
-    value: '0',
-    v: '0xb71f',
-    r: '0x45895a6ba4524623b7cc7a9d96ca17acb90f2fbb07666c13d0057e87676bb6e7',
-    s: '0x6b6851f4f84240df30c2939ff01256439557168ab80d8c46715beb643d14d8b',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143346,
-    gasPrice: '18000000000',
-    hash: '0xcf88da790400641502bfd2ae69e053dbcec1ce2db46bf9ecfdf1855e87c85a8b',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c080545259000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000be609280',
-    nonce: 22457,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 14,
-    value: '0',
-    v: '0xb720',
-    r: '0xf54fe21cc9076069bf3ba174293ab26d66c32a64bfafcddf58c6f80bdabc14d7',
-    s: '0x32d7f693e8219a44d1faa1a44818ddfbe0469e74c61e0e5e1dafc556ad1e026a',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143410,
-    gasPrice: '18000000000',
-    hash: '0x66fdb5db39aefb83cf0a22e3c56e216e526a951b2cea34d35ce7ed975cfad91f',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c0805255420000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000118d813820',
-    nonce: 22456,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 13,
-    value: '0',
-    v: '0xb71f',
-    r: '0x2b6d35b0fabe5ef97f08dde036e3f846b299011b254da77406dcbdf75567467f',
-    s: '0x6ec9018e46f0228f4f7d832fff6cde646ce477afdbffe070fdde03150d63aea0',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143410,
-    gasPrice: '18000000000',
-    hash: '0x7d037780142842346c413872ec5b19a79756e7ee950538ef5c084f4f0ff926cf',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c08048524b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c6b94d40',
-    nonce: 22455,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 12,
-    value: '0',
-    v: '0xb71f',
-    r: '0x79f230b4fd641bc054c9000644fd413a6fa6fe3c1a6b12441db90a1f29567c19',
-    s: '0x77a16aa59ae67d306f42444e0bb8e52bc4f22d3788f63fff45b14585ffb04550',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143410,
-    gasPrice: '18000000000',
-    hash: '0x2b2fd4ffe34262ccfaed5cf1a255ac963abc7d06584ab64f41df730b4c5600f0',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c0804e4f4b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002327d3140',
-    nonce: 22454,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 11,
-    value: '0',
-    v: '0xb720',
-    r: '0x233ca7478ba81eb9ace3c2db58782ae68366112a2b75a88a85151953bf4f3a52',
-    s: '0x231487e0f05650bfae6b8f93dd0b314e21bf76db85c4ab4e152fff259163ca4',
-    blockTimestamp: 1527703038,
-  },
-  {
-    blockHash: '0x276683649a559ba024952474c0c40560cbd86623c6fb6e89ecb2e68378d700fc',
-    blockNumber: 681888,
-    from: '0x42B085Db58Fd54176CFE935dc52e782A8B36DA05',
-    gas: 143346,
-    gasPrice: '18000000000',
-    hash: '0xc1a4aab8fe99775782f5636be57dd3f1d16fa5e22cc64e3149383c8071d5d642',
-    input: '0x99a9f93f000000000000000000000000000000000000000000000000000000005668c0804348460000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004068a5c0',
-    nonce: 22453,
-    to: '0xDEb602db8577Bfc7E02866574339072d06C48396',
-    transactionIndex: 10,
-    value: '0',
-    v: '0xb720',
-    r: '0xa175a97d4309b5020a5796ae58ff299bee2117ae6639af0a2f482821643277bc',
-    s: '0x74677d416cda54ada7aafdc8f315e0f64f6701b2dee0b5884aa1dce3e224124',
-    blockTimestamp: 1527703038,
-  },
-];
+import NotFoundPage from './components/NotFoundPage';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    console.log('blocks', mockBlocks);
-    console.log('txs', mockTxs);
     this.state = {
       // network: 'ebloc',
-      blocks: mockBlocks,
-      txs: mockTxs,
     };
   }
 
   render() {
-    const { blocks, txs } = this.state;
     return (
       <div>
         <Nav />
-        <div className="container">
-          <div className="row text-center">
-            <div className="col-10 offset-1 col-lg-6 offset-lg-3">
-              <SearchForm />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <Blocks blocks={blocks} />
-            </div>
-            <div className="col">
-              <Txs txs={txs} />
-            </div>
-          </div>
-        </div>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/blocks" component={BlockPage} />
+          <Route exact path="/blocks/:id" component={BlockPage} />
+          <Route exact path="/tx/:hash" component={TxPage} />
+          <Route exact path="/about" component={About} />
+          <Route component={NotFoundPage} />
+        </Switch>
       </div>
     );
   }
