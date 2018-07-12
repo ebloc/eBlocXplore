@@ -17,7 +17,7 @@ async function start() {
       watcher.on('change', async (path) => {
         console.log('File changed: ', path);
         delete require.cache[path];
-        await app.restart();
+        await require('./app').restart();
       });
     });
 
@@ -30,5 +30,15 @@ async function start() {
     console.error(err);
   }
 }
+
+process.on('uncaughtException', function(err) {
+  // handle the error safely
+  console.error('uncaughtException', err)
+})
+
+process.on('unhandledRejection', error => {
+  // Will print "unhandledRejection err is not defined"
+  console.error('unhandledRejection', error);
+});
 
 start();

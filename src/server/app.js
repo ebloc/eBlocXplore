@@ -5,7 +5,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 const net = require('net');
-const apiRouter = require('./api-router');
 
 let app; // express application
 let server; // http server
@@ -55,14 +54,14 @@ exports.initDB = async () => {
 
 exports.start = async () => {
   app = express();
+  const router = require('./router');
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }));
   // parse application/json
   app.use(bodyParser.json());
-  app.use(express.static(path.join(__dirname, '../client')));
 
-  app.use('/api', apiRouter);
+  app.use(router);
 
   server = app.listen(process.env.PORT);
   server.on('error', (err) => {
@@ -78,6 +77,6 @@ exports.start = async () => {
 
 exports.restart = async () => {
   console.log('Restarting app');
-  server.close();
+  await server.close();
   await exports.start();
 };
