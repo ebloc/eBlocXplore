@@ -5,22 +5,12 @@ html {
   font-size: 87.5%;
 }
 
-/* padding does not affect the final computed width of an element */
-.selector-for-some-widget {
-  box-sizing: content-box;
+.Blocks {
+  height: 80vh;
+  overflow: scroll;
 }
 
-/* CUSTOM (page specific) */
-
-#recentBlocksTable, #recentTxTable {
-  border-collapse: collapse !important;
-}
-
-table.no-wrap td, table.no-wrap th {
-  white-space: nowrap;
-  padding: 0.5rem;
-}
-
-tr.bg-grey {
-  background-color: #eee;
+.Txs {
+  height: 80vh;
+  overflow: scroll;
 }

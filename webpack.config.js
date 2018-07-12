@@ -2,10 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './src/client/index.js',
+  entry: ['babel-polyfill', './src/client/index.js'],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -13,9 +14,6 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        options: {
-          presets: ['env'],
-        },
       },
       {
         test: /\.css$/,
@@ -28,6 +26,9 @@ module.exports = {
     contentBase: [path.resolve(__dirname, 'dist'), path.resolve(__dirname, 'src/client/public')],
     publicPath: 'http://localhost:8080/', // for HMR
     hotOnly: true,
+    historyApiFallback: {
+      index: 'index.html',
+    },
   },
   devtool: 'inline-source-map',
   plugins: [new webpack.HotModuleReplacementPlugin()],

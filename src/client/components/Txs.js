@@ -1,6 +1,6 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 
+import api from '../utils/apiMock';
 import utils from '../utils/index';
 
 function txClicked(e, hash) {
@@ -11,14 +11,32 @@ export default class Txs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      txs: props.txs,
+      txs: [],
     };
   }
 
+  async componentDidMount() {
+    this.setState({ loading: true });
+    try {
+      const txs = await api.getTxs();
+      this.setState({
+        txs,
+        loading: false,
+      });
+    } catch (error) {
+      this.setState({
+        error,
+        loading: false,
+      });
+    }
+  }
+
   render() {
-    const { txs } = this.state;
+    const { txs, loading, error } = this.state;
     return (
-      <div>
+      <div className="Txs">
+        { loading && 'loading...' }
+        { error && 'error...' }
         {
           txs.map(tx => (
             <div key={tx.hash} className="card">
@@ -39,7 +57,3 @@ export default class Txs extends React.Component {
     );
   }
 }
-
-Txs.propTypes = {
-  txs: PropTypes.array.isRequired,
-};

@@ -1,7 +1,10 @@
 {
   "extends": "airbnb",
+  "parser": "babel-eslint",
   "globals": {
+    "window": true,
     "document": true,
+    "fetch": true,
     "web3": true,
     "db": true
   },
@@ -13,6 +16,7 @@
     "no-param-reassign": [2, { "props": false }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-one-expression-per-line": 0,
-    "react/forbid-prop-types": [2, { "forbid": ["any"]}]
+    "react/forbid-prop-types": [2, { "forbid": ["any"]}],
+    "react/destructuring-assignment": 0
   }
 }
