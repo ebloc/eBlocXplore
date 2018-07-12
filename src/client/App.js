@@ -19,7 +19,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <Nav />
         <Switch>
           <Route exact path="/" component={HomePage} />
@@ -29,7 +29,7 @@ class App extends React.Component {
           <Route exact path="/about" component={About} />
           <Route component={NotFoundPage} />
         </Switch>
-      </div>
+      </React.Fragment>
     );
   }
 }

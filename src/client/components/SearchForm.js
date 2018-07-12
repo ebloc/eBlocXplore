@@ -19,7 +19,7 @@ export default class SearchForm extends React.Component {
     });
   }
 
-  setContractType(type) {
+  setContractType(e, type) {
     console.log('type', type);
     this.setState({
       contractType: type,
