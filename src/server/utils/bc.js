@@ -109,3 +109,21 @@ exports.getTxsWithInternals = async (address) => {
 
   return txs;
 }
+
+
+exports.getTxsByBlocks = async (startBlock, length) => {
+  const promises = [];
+  for (let i = startBlock; i < startBlock + length; i++) {
+    promises.push(web3.eth.getBlock(i, true));
+  }
+
+  const blocks = await Promise.all(promises);
+  const blocksWithTx = blocks.filter(block => block.transactions.length);
+
+  const txs = blocksWithTx.reduce((acc, block) => {
+    acc.push(...block.transactions);
+    return acc;
+  }, []);
+
+  return txs;
+}
