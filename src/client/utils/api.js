@@ -1,4 +1,4 @@
-const ENDPOINT = 'http://localhost:8000'; // @todo get from environment
+const ENDPOINT = 'http://localhost:8000'; /** @todo get from environment */
 
 module.exports = {
   getBlocks: async (start, count) => {

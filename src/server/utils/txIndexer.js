@@ -83,7 +83,7 @@ const readStream = new Readable({
 
     }).catch(err => {
       console.error(err); // eslint-disable-line no-console
-    })
+    });
   }
 });
 
@@ -105,13 +105,10 @@ const initDB = async () => {
   }
 };
 
-const resetDB = async () => {
-  await db.collection('settings').findOneAndDelete({ collection: 'txs' });
-  await db.dropCollection('txs');
-}
-
+/**
+ * setup db and continue indexing txs
+ */
 exports.start = async () => {
-  // await resetDB();
   await initDB();
   const currentBlock = (await db.collection('settings').findOne({ collection: 'txs' })).currentBlock;
   debugRead(`starting to index txs from ${currentBlock}`)
@@ -119,13 +116,10 @@ exports.start = async () => {
   readStream.pipe(writeStream);
 }
 
-// exports.restart = async () => {
-//   readStream.unpipe(writeStream);
-//   console.log('restarting tx indexer');
-//   await exports.start();
-// }
-
-exports.stop = async () => {
-  writeStream.end()
-  readStream.push(null);
+/**
+ * reset performed process to initial state
+ */
+exports.reset = async () => {
+  await db.collection('settings').findOneAndDelete({ collection: 'txs' });
+  await db.dropCollection('txs');
 }

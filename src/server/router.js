@@ -7,12 +7,13 @@ const { bc } = utils;
 /**
  * returns requested blocks
  * if starting block is not specified returns the last {length} blocks
- * @param {integer} start starting block number
- * @param {integer} length @default 10
+ * @param {number} start starting block number
+ * @param {number} length @default 25
+ * @return {[Block]} blocks
  */
 router.get('/blocks', async (req, res) => {
   const lastBlockNum = await web3.eth.getBlockNumber();
-  let length = Number(req.query.length) || 10;
+  let length = Number(req.query.length) || 25;
   let start = Number(req.query.start) || (lastBlockNum - length);
 
   // range validations
@@ -25,12 +26,39 @@ router.get('/blocks', async (req, res) => {
 });
 
 /**
+ * returns requested txs
+ * if starting txs is not specified returns the last {length} txs
+ * @param {number} start starting tx index
+ * @param {number} length @default 25
+ * @return {number} result.start
+ * @return {number} result.length
+ * @return {[Tx]} result.data tx array
+ */
+router.get('/txs', async (req, res) => {
+  const lastTxNum = await bc.getLastTxNumber();
+  let length = Number(req.query.length) || 25;
+  let start =  Number(req.query.start) || (lastTxNum - length);
+
+  // range validations
+  if (length > 100) length = 100;
+  if (start < 0) start = 0;
+  if (start + length > lastTxNum) length = lastTxNum - start;
+
+  const txs = await bc.getTxs(start, length);
+  res.send({
+    start,
+    length,
+    data: txs
+  });
+})
+
+/**
  * get last {length} transactions for datatables library
  *
  * query
- * - draw   {integer} chunk index (0)
- * - start  {integer} starting tx number (0)
- * - length {integer} size of the tx chunk (25)
+ * - draw   {number} chunk index (0)
+ * - start  {number} starting tx number (0)
+ * - length {number} size of the tx chunk (25)
  */
 router.get('/datatableTx', async (req, res) => {
   const totalTxNumber = await db.collection('txs').find({}).count();

@@ -10,8 +10,8 @@ exports.isContract = async (address) => {
 
 /**
  * get all blocks between {start} and {start + length}
- * @param  {integer} start  first block
- * @param  {integer} length
+ * @param  {number} start  first block
+ * @param  {number} length
  * @return {array}          blocks in descending order
  */
 exports.getBlocks = async (start, length) => {
@@ -26,9 +26,9 @@ exports.getBlocks = async (start, length) => {
 
 /**
  * get all txs between {start} and {start + length}
- * @param  {integer} start  first tx index
- * @param  {integer} length
- * @return {array}          blocks in descending order
+ * @param  {number} start  first tx index
+ * @param  {number} length
+ * @return {array}  blocks in descending order
  */
 exports.getTxs = async (start, length) => {
   const txDocs = await db.collection('txs')
@@ -40,28 +40,29 @@ exports.getTxs = async (start, length) => {
   const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
   const txs = await Promise.all(promises);
 
+  /** @todo handle this */
   // get block numbers and remove duplicates
-  const blockNumbers = txs
-    .map(tx => tx.blockNumber)
-    .filter((blockNum, i, arr) => arr.indexOf(blockNum) === i);
+  // const blockNumbers = txs
+  //   .map(tx => tx.blockNumber)
+  //   .filter((blockNum, i, arr) => arr.indexOf(blockNum) === i);
 
   // get globks and transform into object as { blockNumber: block }
-  const blockArr = await Promise.all(blockNumbers.map(web3.eth.getBlock));
-  const blockObj = {};
-  for (const block of blockArr) {
-    blockObj[block.number] = block;
-  }
+  // const blockArr = await Promise.all(blockNumbers.map(web3.eth.getBlock));
+  // const blockObj = {};
+  // for (const block of blockArr) {
+  //   blockObj[block.number] = block;
+  // }
 
-  for (const tx of txs) {
-    tx.blockTimestamp = blockObj[tx.blockNumber].timestamp;
-    tx.value = web3.utils.fromWei(tx.value);
-  }
+  // for (const tx of txs) {
+  //   tx.blockTimestamp = blockObj[tx.blockNumber].timestamp;
+  //   tx.value = web3.utils.fromWei(tx.value);
+  // }
   return txs;
 }
 
 /**
  * get txs of an address
- * @TODO: pagination
+ * @todo pagination
  * @param  {string} address
  * @return {[Transaction]}
  */
@@ -110,7 +111,11 @@ exports.getTxsWithInternals = async (address) => {
   return txs;
 }
 
-
+/**
+ * get txs within gien blocks by order
+ * @param {number} startBlock
+ * @param {number} length
+ */
 exports.getTxsByBlocks = async (startBlock, length) => {
   const promises = [];
   for (let i = startBlock; i < startBlock + length; i++) {
@@ -126,4 +131,12 @@ exports.getTxsByBlocks = async (startBlock, length) => {
   }, []);
 
   return txs;
+}
+
+/**
+ * @return {number}
+ */
+exports.getLastTxNumber = async () => {
+  const count = (await db.collection('txs').count());
+  return count - 1;
 }
