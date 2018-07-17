@@ -5,7 +5,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 const net = require('net');
-const apiRouter = require('./api-router');
 
 let app; // express application
 let server; // http server
@@ -55,27 +54,14 @@ exports.initDB = async () => {
 
 exports.start = async () => {
   app = express();
-
-  // @todo delete probably
-  // if (process.env.NODE_ENV !== 'production') {
-  //   // refresh browser
-  //   require('reload')(app);
-  // }
+  const router = require('./router');
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }));
   // parse application/json
   app.use(bodyParser.json());
-  app.use(express.static(path.join(__dirname, '../client')));
-  // 3rd party libraries @TODO: use webpack
-  // app.use('/jquery', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
-  // app.use('/popper.js', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
-  // app.use('/bootstrap', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/')));
-  // app.use('/font-awesome', express.static(path.join(__dirname, '../../node_modules/font-awesome')));
-  // app.use('/datatables.net', express.static(path.join(__dirname, '../../node_modules/datatables.net/js/')));
-  // app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_modules/datatables.net-bs4/')));
 
-  app.use('/api', apiRouter);
+  app.use(router);
 
   server = app.listen(process.env.PORT);
   server.on('error', (err) => {
@@ -91,6 +77,6 @@ exports.start = async () => {
 
 exports.restart = async () => {
   console.log('Restarting app');
-  server.close();
+  await server.close();
   await exports.start();
 };
