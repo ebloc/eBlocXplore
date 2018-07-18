@@ -1,11 +1,14 @@
-import React from 'react';
+import api from './apiMock';
 
-function addressClicked(address) {
-  console.log('address clicked: ', address);
-}
+/**
+ * @param {string} account
+ * @param {object} accountsMap
+ */
+exports.getAccountText = (account, accountsMap) => {
+  if (accountsMap[account]) {
+    return accountsMap[account];
+  }
+  return `${account.slice(20)}...`;
+};
 
-exports.addressLink = (address) => {
-  return (
-    <a href="#" onClick={addressClicked}>{address.slice(0,20)}...</a>
-  )
-}
+exports.api = api;

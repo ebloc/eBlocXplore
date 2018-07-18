@@ -1,24 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class BlockPage extends React.Component {
+import api from '../utils/apiMock'
+
+export default class BlockPage extends React.Component {
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loading: true
+    };
+  }
+
+  async componentDidMount() {
+    const block = await api.getBlock(this.props.match.params.number);
+    this.setState({
+      loading: false,
+      block
+    });
   }
 
   render() {
-    const { id } = this.props.match.params;
+    if (this.state.loading) {
+      return <div className="container">Loading</div>
+    }
     return (
-      <div>
-        Single block for block#{id}
+      <div className="container">
+        {this.state.block.number}
       </div>
     );
   }
 }
-
-BlockPage.propTypes = {
-  match: PropTypes.object.isRequired,
-};
-
-export default BlockPage;

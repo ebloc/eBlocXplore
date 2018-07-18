@@ -13,14 +13,12 @@ export default class SearchForm extends React.Component {
   }
 
   setQuery(e) {
-    console.log('query', e.target.value);
     this.setState({
       query: e.target.value,
     });
   }
 
   setContractType(e, type) {
-    console.log('type', type);
     this.setState({
       contractType: type,
     });
@@ -28,7 +26,6 @@ export default class SearchForm extends React.Component {
 
   submit(e) {
     e.preventDefault();
-    console.log('search state', this.state);
   }
 
   render() {

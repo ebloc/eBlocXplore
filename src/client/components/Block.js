@@ -2,9 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import utils from '../utils/index';
+import utils from '../utils';
 
-class Block extends React.Component {
+export default class Block extends React.Component {
+  static propTypes = {
+    block: PropTypes.object.isRequired,
+    accountsMap: PropTypes.objectOf(PropTypes.string)
+  }
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -19,7 +24,7 @@ class Block extends React.Component {
           <div className="card-title">
             <Link to={`/blocks/${block.number}`}>{block.number}</Link>
           </div>
-          <div><span>Miner:</span>{utils.addressLink(block.miner)}</div>
+          <div><span>Miner:</span><Link to={`/accounts/${block.miner}`}>{utils.getAccountText(block.miner, this.props.accountsMap)}...</Link></div>
           <div><span>Time:</span>{dateString}</div>
           <div><span>Txs:</span>{block.txCount}</div>
         </div>
@@ -27,9 +32,3 @@ class Block extends React.Component {
     );
   }
 }
-
-Block.propTypes = {
-  block: PropTypes.object.isRequired,
-};
-
-export default Block;

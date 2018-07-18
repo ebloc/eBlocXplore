@@ -14,3 +14,19 @@ html {
   height: 80vh;
   overflow: scroll;
 }
+
+.Nav {
+  background-color: #ff2;
+  z-index: 1000;
+}
+
+.MyAccounts {
+  position: fixed;
+  max-width: 250px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: #ccc;
+  bottom: 0;
+  height: 100%;
+  padding-top: 50px;
+}
