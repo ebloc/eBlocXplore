@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import api from '../utils/apiMock';
-import utils from '../utils/index';
-
-function txClicked(e, hash) {
-  console.log('clicked tx hash', hash);
-}
+import Tx from './Tx';
+import { api } from '../utils';
 
 export default class Txs extends React.Component {
+  static propTypes = {
+    accountsMap: PropTypes.objectOf(PropTypes.string)
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -37,22 +38,7 @@ export default class Txs extends React.Component {
       <div className="Txs">
         { loading && 'loading...' }
         { error && 'error...' }
-        {
-          txs.map(tx => (
-            <div key={tx.hash} className="card">
-              <div className="card-body">
-                <div className="card-title">
-                  <a href="#@todo" onClick={e => txClicked(e, tx.hash)}><h4>{tx.hash.slice(0, 20)}...</h4></a>
-                </div>
-                <div><span>From:</span>{utils.addressLink(tx.from)}</div>
-                <div><span>To:</span>{utils.addressLink(tx.to)}</div>
-                <div>
-                  { Number(tx.value) ? <span> Value: {tx.value}</span> : <span>No value</span> }
-                </div>
-              </div>
-            </div>
-          ))
-        }
+        { txs.map(tx => <Tx key={tx.hash} tx={tx} accountsMap={this.props.accountsMap}/>) }
       </div>
     );
   }

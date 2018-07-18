@@ -1,11 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Block from './Block';
-import api from '../utils/apiMock';
+import { api } from '../utils';
 
 const BLOCK_CHUNK_SIZE = 10; // fetch 10 blocks per load
 
 class Blocks extends React.Component {
+  static propTypes = {
+    accountsMap: PropTypes.objectOf(PropTypes.string)
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -54,7 +59,7 @@ class Blocks extends React.Component {
 
   render() {
     const { blocks, loading, error } = this.state;
-    const blockNodes = blocks.map(block => <Block key={block.number} block={block} />);
+    const blockNodes = blocks.map(block => <Block accountsMap={this.props.accountsMap} key={block.number} block={block} />);
     return (
       <div className="Blocks" onScroll={this.scrolled}>
         { blockNodes }

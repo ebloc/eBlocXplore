@@ -1,6 +1,6 @@
 import React from 'react';
 
-class TxPage extends React.Component {
+export default class NotFound extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -8,11 +8,7 @@ class TxPage extends React.Component {
 
   render() {
     return (
-      <div>
-        Single tx
-      </div>
+      <div>page not found</div>
     );
   }
 }
-
-export default TxPage;
