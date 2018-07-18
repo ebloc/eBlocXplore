@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SearchForm from './SearchForm';
-import Blocks from './Blocks';
-import Txs from './Txs';
+import SearchForm from '../components/SearchForm';
+import Blocks from '../components/Blocks';
+import Txs from '../components/Txs';
 
-export default class HomePage extends React.Component {
+export default class Home extends React.Component {
   static propTypes = {
     accountsMap: PropTypes.objectOf(PropTypes.string)
   }

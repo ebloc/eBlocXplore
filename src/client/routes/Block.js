@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import api from '../utils/apiMock'
 
-export default class BlockPage extends React.Component {
+export default class Block extends React.Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
   };

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Tx from './Tx';
+import Tx from '../components/Tx';
 import utils, { api } from '../utils';
 
 export default class AccountPage extends React.Component {

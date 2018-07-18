@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../utils/apiMock';
 
-export default class TxPage extends React.Component {
+export default class Tx extends React.Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
     accountsMap: PropTypes.objectOf(PropTypes.string)
