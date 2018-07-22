@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 const net = require('net');
 
+const router = require('./router');
+const routerMock = require('./router-mock');
+
 let app; // express application
 let server; // http server
 
@@ -54,7 +57,6 @@ exports.initDB = async () => {
 
 exports.start = async () => {
   app = express();
-  const router = require('./router');
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -67,6 +69,7 @@ exports.start = async () => {
   });
 
   app.use(router);
+  app.use('/mock', routerMock);
 
   server = app.listen(process.env.PORT);
   server.on('error', (err) => {
