@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import debug from 'debug';
 
 import Block from './Block';
 import { api } from '../utils';
 
+const log = debug('log:block');
 const BLOCK_CHUNK_SIZE = 10; // fetch 10 blocks per load
 
 class Blocks extends React.Component {
@@ -22,7 +24,8 @@ class Blocks extends React.Component {
   async componentDidMount() {
     this.setState({ loading: true });
     try {
-      const blocks = await api.getBlocks(0, BLOCK_CHUNK_SIZE);
+      log('Fetching last blocks');
+      const blocks = (await api.getBlocks(0, BLOCK_CHUNK_SIZE)).reverse();
       this.setState({
         blocks,
         loading: false,
@@ -35,14 +38,15 @@ class Blocks extends React.Component {
     }
   }
 
-  getLastBlockNumber = () => this.state.blocks[this.state.blocks.length - 1]
+  getNewStartingBlockNum = () => this.state.blocks[this.state.blocks.length - 1].number - BLOCK_CHUNK_SIZE
 
   getNewBlocks = async () => {
     this.setState({
       loading: true,
     });
-    const newBlocksStart = this.getLastBlockNumber() - BLOCK_CHUNK_SIZE;
-    const newBlocks = await api.getBlocks(newBlocksStart, BLOCK_CHUNK_SIZE);
+    const newBlocksStart = this.getNewStartingBlockNum();
+    log(`Fetching new ${BLOCK_CHUNK_SIZE} blocks from ${newBlocksStart}`)
+    const newBlocks = (await api.getBlocks(newBlocksStart, BLOCK_CHUNK_SIZE)).reverse();
     this.setState(prevState => ({
       blocks: prevState.blocks.concat(newBlocks),
       loading: false,
@@ -50,8 +54,8 @@ class Blocks extends React.Component {
   }
 
   // if user reached the bottom then make api call to fetch remaining blocks
-  scrolled = async (e) => {
-    const atBottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+  scrolled = (e) => {
+    const atBottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight <= 1;
     if (atBottom && !this.state.loading) {
       this.getNewBlocks();
     }

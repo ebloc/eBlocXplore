@@ -16,12 +16,12 @@ exports.isContract = async (address) => {
  */
 exports.getBlocks = async (start, length) => {
   const promises = [];
-  for (let i = start; i <= start + length; i++) {
+  for (let i = start; i < start + length; i++) {
     promises.push(web3.eth.getBlock(i));
   }
   const blocks = await Promise.all(promises);
   // first block is the most recent one
-  return blocks.sort((a, b) => b.number - a.number);
+  return blocks;
 }
 
 /**
@@ -61,19 +61,41 @@ exports.getTxs = async (start, length) => {
 }
 
 /**
- * get txs of an address
- * @todo pagination
- * @param  {string} address
+ * get number of txs of an account
+ * @param  {string} account
  * @return {[Transaction]}
  */
-exports.getTxsByAddress = async (address) => {
+exports.getTxCountByAccount = async (account) => {
   const query = {
     $or: [
-      { from: address },
-      { to: address },
+      { from: account },
+      { to: account },
     ],
   };
-  const txDocs = await db.collection('txs').find(query).toArray();
+  const count = await db.collection('txs').find(query).count();
+
+  return count;
+}
+
+/**
+ * get txs of an account
+ * @param  {string} account
+ * @param  {number} start
+ * @param  {number} length
+ * @return {[Transaction]}
+ */
+exports.getTxsByAccount = async (account, start, length=100) => {
+  const query = {
+    $or: [
+      { from: account },
+      { to: account },
+    ],
+  };
+  const txDocs = await db.collection('txs')
+    .find(query)
+    .skip(start)
+    .limit(length)
+    .toArray();
 
   const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
   const txs = await Promise.all(promises);

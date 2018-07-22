@@ -30,7 +30,7 @@ module.exports = {
       index: 'index.html',
     },
   },
-  devtool: 'inline-source-map',
+  devtool: 'cheap-module-source-map',
   plugins: [new webpack.HotModuleReplacementPlugin()],
   mode: 'development',
 };

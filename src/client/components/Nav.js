@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import SearchForm from './SearchForm';
+
 export default class Nav extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +15,7 @@ export default class Nav extends React.Component {
         <span>Explorer</span>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
+        <SearchForm />
       </nav>
     );
   }
