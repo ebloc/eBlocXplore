@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import api from '../utils/apiMock';
+import { api } from '../utils';
 
 export default class Tx extends React.Component {
   static propTypes = {

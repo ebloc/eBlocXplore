@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Tx from '../components/Tx';
 import utils, { api } from '../utils';
 
+const TX_CHUNK_SIZE = 25;
+
 export default class AccountPage extends React.Component {
   static propTypes = {
     accountsMap: PropTypes.objectOf(PropTypes.string),
@@ -31,7 +33,9 @@ export default class AccountPage extends React.Component {
     }
 
     this.account = account;
-    const { balance, txs } = await api.getAccountData(this.account);
+    const balance = await api.getAccountBalance(this.account);
+    const { total, start, txs } = await api.getTxsByAccount(this.account, 'last', TX_CHUNK_SIZE);
+
     // if this account belongs to "My accounts"
     const saved = Boolean(this.props.accountsMap[this.account]);
 
@@ -40,7 +44,11 @@ export default class AccountPage extends React.Component {
       saving: false,
       saved,
       balance,
-      txs
+      txHistory: {
+        total,
+        start,
+        txs: txs.reverse()
+      }
     });
   }
 
@@ -97,6 +105,35 @@ export default class AccountPage extends React.Component {
     this.props.setAccountsMap(newAccontsMap);
   }
 
+  loadMoreTxs = async () => {
+    const { txHistory } =  this.state;
+    const newStart = txHistory.start - txHistory.txs.length;
+    const { total, txs } = await api.getTxsByAccount(this.account, newStart, TX_CHUNK_SIZE);
+    this.setState(prevState => ({
+      txHistory: {
+        total: total,
+        start: newStart,
+        txs: prevState.txHistory.txs.concat(txs.reverse())
+      }
+    }));
+  }
+
+  renderTxHistory = () => {
+    if (this.state.loading) return <div>loading tx history</div>
+
+    const { total, start, txs } = this.state.txHistory;
+    const allLoaded = txs.length === this.total;
+    return (
+      <div>
+        <div>Showing {txs.length} txs from {start} to {start + txs.length} out of {total}</div>
+        <ul>
+          { txs.map(tx => <Tx key={tx.hash} tx={tx} accountsMap={this.props.accountsMap}/>) }
+        </ul>
+        { !allLoaded && <button className="btn btn-default" onClick={() => this.loadMoreTxs()}>Show more</button> }
+      </div>
+    )
+  }
+
   render() {
     const saveAccountForm = (
       <form onSubmit={this.saveAccount}>
@@ -130,9 +167,7 @@ export default class AccountPage extends React.Component {
             : (this.state.saved ? editAccountButtons : saveAccountButton )
           }
         </div>
-        <ul>
-          { this.state.txs.map(tx => <Tx key={tx.hash} tx={tx} accountsMap={this.props.accountsMap}/>) }
-        </ul>
+        {this.renderTxHistory()}
       </div>
     );
   }

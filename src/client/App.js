@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
+import debug from 'debug';
 
 import HomePage from './routes/Home';
 import BlockPage from './routes/Block';
@@ -10,6 +11,8 @@ import AccountPage from './routes/Account';
 import About from './components/About';
 import Nav from './components/Nav';
 import MyAccounts from './components/MyAccounts';
+
+debug.log = console.log.bind(console); // eslint-disable-line no-console
 
 class App extends React.Component {
   constructor(props) {

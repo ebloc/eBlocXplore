@@ -30,9 +30,7 @@ router.get('/blocks', async (req, res) => {
  * if starting txs is not specified returns the last {length} txs
  * @param {number} start starting tx index
  * @param {number} length @default 25
- * @return {number} result.start
- * @return {number} result.length
- * @return {[Tx]} result.data tx array
+ * @return {object} {start: number, length: number, txs: [Tx]}
  */
 router.get('/txs', async (req, res) => {
   const lastTxNum = await bc.getLastTxNumber();
@@ -48,95 +46,105 @@ router.get('/txs', async (req, res) => {
   res.send({
     start,
     length,
-    data: txs
+    txs
   });
-})
+});
 
 /**
- * get last {length} transactions for datatables library
- *
- * query
- * - draw   {number} chunk index (0)
- * - start  {number} starting tx number (0)
- * - length {number} size of the tx chunk (25)
+ * @param {number} number block nunmber or hash
+ * @return {Block}
  */
-router.get('/datatableTx', async (req, res) => {
-  const totalTxNumber = await db.collection('txs').find({}).count();
-
-  const draw = Number(req.query.draw) || 0;
-  let start = Number(req.query.start) || 0;
-  let length = Number(req.query.length) || 25;
-
-  start = totalTxNumber - start - length;
-  // trim out-of-range indices
-  if (start < 0) {
-    length += start;
-    start = 0;
+router.get('/blocks/:number', async (req, res) => {
+  try {
+    const block = await web3.eth.getBlock(req.params.number, true);
+    res.send(block);
+  } catch (error) {
+    res.sendStatus(404);
   }
-  length = Math.min(length, totalTxNumber - start);
+});
 
-  const txs = (await bc.getTxs(start, length)).reverse();
+/**
+ * @param {hash} hash tx hash
+ * @return {Tx}
+ */
+router.get('/txs/:hash', async (req, res) => {
+  try {
+    const tx = await web3.eth.getTransaction(req.params.hash, true);
+    res.send(tx);
+  } catch (error) {
+    res.sendStatus(404);
+  }
+});
 
-  res.send({
-    draw,
-    recordsTotal: totalTxNumber,
-    recordsFiltered: totalTxNumber,
-    data: txs,
-  });
+/**
+ * get previous txs of an account, last 25 ones if options not specified
+ *
+ * @param {account} account tx hash
+ * @param {number} start @default 'last'
+ * @param {number} length @default 25
+ * @return {object} {total: number, start: number, length: number, txs: [Tx]}
+ */
+router.get('/accounts/:account/txs', async (req, res) => {
+  try {
+    const account = req.params.account;
+    const total = await bc.getTxCountByAccount(account);
+    let length = Number(req.query.length) || 25;
+    // by default get last {length} txs
+    let start = (!req.query.start || req.query.start === 'last')
+      ? total - length
+      : Number(req.query.start);
+
+    // range validations
+    if (length > 100) length = 100;
+    if (start < 0) start = 0;
+    if (start + length > total) length = total - start;
+
+    const txs = await bc.getTxsByAccount(account, start, length);
+    res.send({ total, start, length, txs });
+  } catch (error) {
+    res.sendStatus(404);
+  }
+});
+
+/**
+ * get balance of an account
+ *
+ * @param {account} account tx hash
+ * @return {number} in eth
+ */
+router.get('/accounts/:account/balance', async (req, res) => {
+  try {
+    const balance = await web3.eth.getBalance(req.params.account);
+    res.send(web3.utils.fromWei(balance, 'ether'));
+  } catch (error) {
+    res.sendStatus(404);
+  }
 });
 
 /**
  * search for block|address|tx
  *
- * params
- * - query {string} block number, address or hash
- * result
- * - type  {string} block|address|tx
- * - data  {object}
+ * @param {string} query block number, address or hash
+ * @return {string} search type
  */
 router.get('/search/:query', utils.wrap(async (req, res) => {
   const { query } = req.params;
-  let result;
+  let type;
 
   if (web3.utils.isAddress(query)) {
-    result = {
-      type: 'address',
-      data: {
-        address: query,
-        isContract: await bc.isContract(query),
-        balance: web3.utils.fromWei(await web3.eth.getBalance(query), 'ether'),
-        txs: await bc.getTxsByAddress(query),
-      },
-    };
+    type = 'account';
   } else if (bc.isBlockNumber(query)) {
-    const block = await web3.eth.getBlock(query);
-    if (block) {
-      result = {
-        type: 'block',
-        data: block,
-      };
-    }
+    type = `block`;
   } else if (bc.isHash(query)) {
-    const tx = await web3.eth.getTransaction(query);
-    tx.value = web3.utils.fromWei(tx.value);
-    if (tx) {
-      result = {
-        type: 'tx',
-        data: tx,
-      };
+    if (await web3.eth.getTransaction(query)) {
+      type = 'tx';
+    } else if (await web3.eth.getBlock(query)) {
+      type = 'block';
     }
-
-    const block = await web3.eth.getBlock(query);
-    if (block) {
-      result = {
-        type: 'block',
-        data: block,
-      };
-    }
+  } else {
+    return res.sendStatus(404);
   }
-
-  if (result) res.send(result);
-  else res.sendStatus(404);
+  res.send({ type });
 }));
 
 router.get('/internal-txs/:address', utils.wrap(async (req, res) => {

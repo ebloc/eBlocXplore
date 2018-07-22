@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import api from '../utils/apiMock'
+import { api } from '../utils';
 
 export default class Block extends React.Component {
   static propTypes = {
