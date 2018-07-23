@@ -3,9 +3,8 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.min';
-import './index.css';
+import 'bootstrap';
+import './index.scss';
 
 import App from './App';
 

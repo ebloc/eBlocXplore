@@ -1,8 +1,17 @@
+$enable-rounded: false;
+$enable-transitions: true;
+// $enable-gradients: true;
+$primary: #6b8e23;
+
+@import '~bootstrap/scss/bootstrap';
 /* DEFAULTS (override bootstrap styling) */
 
 html {
   /* 1rem is 14px instead of bootstrap default (16px) */
   font-size: 87.5%;
+  body {
+    padding-top: 60px;
+  }
 }
 
 .Blocks {
@@ -16,8 +25,16 @@ html {
 }
 
 .Nav {
-  background-color: #ff2;
-  z-index: 1000;
+  height: 60px;
+}
+
+.SearchForm {
+  form {
+    input[type="text"] {
+      width: 350px;
+      max-width: 400px;
+    }
+  }
 }
 
 .MyAccounts {

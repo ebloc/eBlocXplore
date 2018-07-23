@@ -11,11 +11,26 @@ export default class Nav extends React.Component {
 
   render() {
     return (
-      <nav className="Nav navbar navbar-expand-lg">
-        <span>Explorer</span>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/about">About</NavLink>
-        <SearchForm />
+      <nav className="Nav navbar navbar-expand-lg bg-primary fixed-top shadow d-flex">
+        <NavLink to="/" className="navbar-brand text-light">eBlocXplore</NavLink>
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <NavLink to="/about" className="nav-link text-light">About</NavLink>
+          </li>
+        </ul>
+        <div className="flex-grow-1 text-center d-inline-block">
+          <SearchForm/>
+        </div>
+        <div>
+          <div className="dropdown">
+            <button className="btn btn-light dropdown-toggle" data-toggle="dropdown">eBloc-POA</button>
+            <div className="dropdown-menu dropdown-menu-right">
+              <a href="#" className="dropdown-item active">eBloc-POA</a>
+              <a className="dropdown-item disabled">Main</a>
+              <a className="dropdown-item disabled">Ropsten</a>
+            </div>
+          </div>
+        </div>
       </nav>
     );
   }
