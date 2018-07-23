@@ -1,16 +1,42 @@
 $enable-rounded: false;
 $enable-transitions: true;
-// $enable-gradients: true;
-$primary: #6b8e23;
+$enable-gradients: false;
+
+/* DEFAULTS (override bootstrap styling) */
+$primary: #596C56;
 
 @import '~bootstrap/scss/bootstrap';
-/* DEFAULTS (override bootstrap styling) */
 
 html {
   /* 1rem is 14px instead of bootstrap default (16px) */
   font-size: 87.5%;
   body {
     padding-top: 60px;
+  }
+}
+
+// sidebar length
+$my-accounts-width: 350px;
+
+#Route {
+  transition: margin-left .25s;
+  &.my-accounts-active {
+    margin-left: $my-accounts-width;
+  }
+}
+
+#MyAccounts {
+  position: fixed;
+  max-width: $my-accounts-width;
+  margin-left: -$my-accounts-width;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  bottom: 0;
+  height: 100%;
+  padding-top: 60px;
+  transition: margin-left .25s;
+  &.active {
+    margin-left: 0;
   }
 }
 
@@ -35,15 +61,4 @@ html {
       max-width: 400px;
     }
   }
-}
-
-.MyAccounts {
-  position: fixed;
-  max-width: 250px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  background-color: #ccc;
-  bottom: 0;
-  height: 100%;
-  padding-top: 50px;
 }

@@ -12,8 +12,7 @@ class SearchForm extends React.Component {
   constructor() {
     super();
     this.state = {
-      contractType: null,
-      query: '',
+      query: ''
     };
   }
 
@@ -21,12 +20,6 @@ class SearchForm extends React.Component {
     this.setState({
       error: false,
       query: e.target.value,
-    });
-  }
-
-  setContractType = (e, type) => {
-    this.setState({
-      contractType: type,
     });
   }
 
@@ -49,7 +42,7 @@ class SearchForm extends React.Component {
       })
     } catch (error) {
       this.setState({
-        error: 'Not found'
+        error: 'No result!'
       });
     }
   }
@@ -60,7 +53,6 @@ class SearchForm extends React.Component {
   }
 
   render() {
-    const { contractType } = this.state;
     return (
       <div className="SearchForm d-inline-block">
         <form onSubmit={this.submit} className="form-inline mx-auto">

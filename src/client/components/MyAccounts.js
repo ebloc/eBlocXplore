@@ -15,7 +15,7 @@ export default class MyAccounts extends React.Component {
   render() {
     const accountsMap = this.props.accountsMap;
     return (
-      <div className="MyAccounts">
+      <div id="MyAccounts" className="active bg-light border-right">
         <ul>
           { Object.keys(accountsMap).map(account =>
             <li key={ account }>

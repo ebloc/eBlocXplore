@@ -36,22 +36,24 @@ class App extends React.Component {
       <React.Fragment>
         <Nav/>
         <MyAccounts accountsMap={this.state.accountsMap}/>
-        <Switch>
-          <Route exact path="/">
-            <HomePage accountsMap={this.state.accountsMap}/>
-          </Route>
-          <Route exact path="/blocks/:number"
-            render={props => <BlockPage {...props} accountsMap={this.state.accountsMap}/>}
-          />
-          <Route exact path="/txs/:hash"
-            render={props => <TxPage {...props} accountsMap={this.state.accountsMap}/>}
-          />
-          <Route exact path="/accounts/:account"
-            render={props => <AccountPage {...props} accountsMap={this.state.accountsMap} setAccountsMap={this.setAccountsMap} getAccountName={this.getAccountName}/>}
-          />
-          <Route exact path="/about" component={About}/>
-          <Route component={NotFoundPage}/>
-        </Switch>
+        <div id="Route" className="my-accounts-active">
+          <Switch>
+            <Route exact path="/">
+              <HomePage accountsMap={this.state.accountsMap}/>
+            </Route>
+            <Route exact path="/blocks/:number"
+              render={props => <BlockPage {...props} accountsMap={this.state.accountsMap}/>}
+              />
+            <Route exact path="/txs/:hash"
+              render={props => <TxPage {...props} accountsMap={this.state.accountsMap}/>}
+              />
+            <Route exact path="/accounts/:account"
+              render={props => <AccountPage {...props} accountsMap={this.state.accountsMap} setAccountsMap={this.setAccountsMap} getAccountName={this.getAccountName}/>}
+              />
+            <Route exact path="/about" component={About}/>
+            <Route component={NotFoundPage}/>
+          </Switch>
+        </div>
       </React.Fragment>
     );
   }

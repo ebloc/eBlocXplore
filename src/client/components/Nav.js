@@ -9,11 +9,20 @@ export default class Nav extends React.Component {
     this.state = {};
   }
 
+  toggleMyAccounts = e => {
+    e.preventDefault();
+    document.getElementById('MyAccounts').classList.toggle('active');
+    document.getElementById('Route').classList.toggle('my-accounts-active');
+  }
+
   render() {
     return (
       <nav className="Nav navbar navbar-expand-lg bg-primary fixed-top shadow d-flex">
         <NavLink to="/" className="navbar-brand text-light">eBlocXplore</NavLink>
         <ul className="navbar-nav">
+          <li className="nav-item">
+            <a href="#" onClick={this.toggleMyAccounts} className="nav-link text-light">My Accounts</a>
+          </li>
           <li className="nav-item">
             <NavLink to="/about" className="nav-link text-light">About</NavLink>
           </li>
