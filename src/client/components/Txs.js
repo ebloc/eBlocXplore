@@ -67,9 +67,13 @@ export default class Txs extends React.Component {
   render() {
     const { txs, loading, error } = this.state;
     return (
-      <div className="Txs" onScroll={this.scrolled}>
+      <div className="Txs border-top border-bottom" onScroll={this.scrolled}>
         { error && 'error...' }
-        { txs.map(tx => <Tx key={tx.hash} tx={tx} accountsMap={this.props.accountsMap}/>) }
+        { txs.map(tx =>
+          <div key="tx.hash" className="mb-3">
+            <Tx tx={tx} accountsMap={this.props.accountsMap}/>
+          </div>
+        )}
         { loading && 'loading...' }
       </div>
     );

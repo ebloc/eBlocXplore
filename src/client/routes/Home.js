@@ -18,10 +18,12 @@ export default class Home extends React.Component {
     return (
       <div className="HomePage container">
         <div className="row">
-          <div className="col">
+          <div className="col-6">
+            <h4 className="p-3 m-0">LAST BLOCKS</h4>
             <Blocks accountsMap={this.props.accountsMap}/>
           </div>
-          <div className="col">
+          <div className="col-6">
+            <h4 className="p-3 m-0">LAST TRANSACTIONS</h4>
             <Txs accountsMap={this.props.accountsMap}/>
           </div>
         </div>

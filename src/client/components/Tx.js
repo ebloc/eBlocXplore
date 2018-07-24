@@ -18,15 +18,45 @@ export default class Tx extends React.Component {
   render() {
     const { tx } = this.props;
     return (
-      <div className="Tx card">
-        <div className="card-body">
+      <div className="Tx card border-0">
+        <div className="card-body text-secondary">
           <div className="card-title">
-            <Link to={`/txs/${tx.hash}`}><h4>{tx.hash.slice(0, 20)}...</h4></Link>
+            <Link to={`/txs/${tx.hash}`}><h5 className="text-truncate">{tx.hash}</h5></Link>
           </div>
-          <div><span>From:</span><Link to={`/accounts/${tx.from}`}>{utils.getAccountText(tx.from, this.props.accountsMap)}</Link></div>
-          <div><span>To:</span><Link to={`/accounts/${tx.to}`}>{utils.getAccountText(tx.to, this.props.accountsMap)}</Link></div>
-          <div>
-            { Number(tx.value) ? <span> Value: {tx.value}</span> : <span>No value</span> }
+          <div className="d-flex">
+            <table className="mr-5">
+              <tr>
+                <td>From</td>
+                <td>:</td>
+                <td>
+                  <Link to={`/accounts/${tx.from}`}>{utils.getAccountText(tx.from, this.props.accountsMap)}</Link>
+                </td>
+              </tr>
+              <tr>
+                <td>To</td>
+                <td>:</td>
+                <td><Link to={`/accounts/${tx.to}`}>{utils.getAccountText(tx.to, this.props.accountsMap)}</Link></td>
+              </tr>
+              <tr>
+                <td>Value</td>
+                <td>:</td>
+                <td>{Number(tx.value)}</td>
+              </tr>
+            </table>
+            <table>
+              <tr>
+                <td>Block</td>
+                <td>:</td>
+                <td>
+                  <Link to={`/blocks/${tx.blockNumber}`}>{tx.blockNumber}</Link>
+                </td>
+              </tr>
+              <tr>
+                <td>Gas</td>
+                <td>:</td>
+                <td>{tx.gas}</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>

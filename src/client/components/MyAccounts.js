@@ -37,7 +37,7 @@ export default class MyAccounts extends React.Component {
               <li key={ account } className="list-group-item p-0 bg-transparent border-right-0 border-left-0 border-top-0">
                 <Link to={`/accounts/${account}`} className="d-block p-3 text-dark">
                   <div className="text-truncate">{ accountsMap[account] }</div>
-                  <div className="text-truncate font-weight-light">{ account }</div>
+                  <div className="text-truncate text-secondary font-weight-light">{ account }</div>
                 </Link>
               </li>
             )}

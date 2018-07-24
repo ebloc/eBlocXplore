@@ -16,6 +16,17 @@ html {
     min-width: map-get($grid-breakpoints, 'lg'); // 992px
     padding-top: 60px;
   }
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.Block, .Tx {
+  background-color: $light;
+  transition: background-color .25s;
+  &:hover {
+    background-color: $yellow;
+  }
 }
 
 // sidebar length

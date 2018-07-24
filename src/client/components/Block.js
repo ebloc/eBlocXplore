@@ -17,16 +17,37 @@ export default class Block extends React.Component {
 
   render() {
     const { block } = this.props;
-    const dateString = (new Date(block.timestamp * 1000)).toLocaleDateString();
+    const dateString = utils.formatDate(new Date(block.timestamp * 1000));
     return (
-      <div className="Block card">
-        <div className="card-body">
+      <div className="Block card border-0">
+        <div className="card-body text-secondary">
           <div className="card-title">
-            <Link to={`/blocks/${block.number}`}>{block.number}</Link>
+            <Link to={`/blocks/${block.number}`}>
+              <h5>{block.number}</h5>
+              <div className="text-secondary font-weight-light text-truncate">{block.hash}</div>
+            </Link>
           </div>
-          <div><span>Miner:</span><Link to={`/accounts/${block.miner}`}>{utils.getAccountText(block.miner, this.props.accountsMap)}...</Link></div>
-          <div><span>Time:</span>{dateString}</div>
-          <div><span>Txs:</span>{block.txCount}</div>
+          <table>
+            <tr>
+              <td>Miner</td>
+              <td>:</td>
+              <td>
+                <Link className="text-truncate" to={`/accounts/${block.miner}`}>
+                  {utils.getAccountText(block.miner, this.props.accountsMap)}
+                </Link>
+              </td>
+            </tr>
+            <tr>
+              <td>Time</td>
+              <td>:</td>
+              <td>{dateString}</td>
+            </tr>
+            <tr>
+              <td>Transactions</td>
+              <td>:</td>
+              <td>{block.transactions.length}</td>
+            </tr>
+          </table>
         </div>
       </div>
     );
