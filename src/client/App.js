@@ -3,11 +3,11 @@ import { Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 import debug from 'debug';
 
-import HomePage from './routes/Home';
-import BlockPage from './routes/Block';
-import TxPage from './routes/Tx';
-import NotFoundPage from './routes/NotFound';
-import AccountPage from './routes/Account';
+import HomePage from './routes/HomePage';
+import BlockPage from './routes/BlockPage';
+import TxPage from './routes/TxPage';
+import NotFoundPage from './routes/NotFoundPage';
+import AccountPage from './routes/AccountPage';
 import About from './components/About';
 import Nav from './components/Nav';
 import MyAccounts from './components/MyAccounts';
