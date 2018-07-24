@@ -72,6 +72,16 @@ $my-accounts-width: 350px;
   }
 }
 
+#TxPage {
+  font-size: 1.2rem;
+  table {
+    td:first-of-type {
+      padding: ($spacer * .25);
+      text-align: right;
+    }
+  }
+}
+
 .Blocks {
   height: 80vh;
   overflow: scroll;
