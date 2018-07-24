@@ -20,11 +20,14 @@ export default class Nav extends React.Component {
       <nav className="Nav navbar navbar-expand-lg bg-primary fixed-top shadow d-flex">
         <NavLink to="/" className="navbar-brand text-light d-none d-lg-block">eBlocXplore</NavLink>
         <ul className="navbar-nav">
-          <li className="nav-item">
-            <a href="#" onClick={this.toggleMyAccounts} className="nav-link text-light">My Accounts</a>
+          <li className="nav-item mx-2">
+            <NavLink to="/" className="nav-link text-light">HOME</NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink to="/about" className="nav-link text-light">About</NavLink>
+          <li className="nav-item mx-2">
+            <a href="#" onClick={this.toggleMyAccounts} className="nav-link text-light">MY ACCOUNTS</a>
+          </li>
+          <li className="nav-item mx-2">
+            <NavLink to="/about" className="nav-link text-light">ABOUT</NavLink>
           </li>
         </ul>
         <div className="flex-grow-1 text-center d-none d-lg-inline-block">

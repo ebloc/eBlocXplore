@@ -19,12 +19,25 @@ export default class Block extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  fetchBlock = async () => {
     const block = await api.getBlock(this.props.match.params.number);
     this.setState({
       loading: false,
       block
     });
+  }
+
+  async componentDidUpdate(prevProps) {
+    const blockNumber = this.props.match.params.number;
+    const prevBlockNumber = prevProps && prevProps.match.params.number;
+    if (blockNumber == prevBlockNumber) {
+      return;
+    }
+    await this.fetchBlock();
+  }
+
+  async componentDidMount() {
+    await this.componentDidUpdate();
   }
 
   render() {
@@ -39,7 +52,7 @@ export default class Block extends React.Component {
             <h1 className="font-weight-normal">Block #{block.number}</h1>
             <h4 className="text-secondary font-weight-light">{block.hash}</h4>
           </div>
-          <div>
+          <div className="d-flex">
             <Link to={`/blocks/${block.number - 1}`}><FontAwesomeIcon icon="chevron-circle-left" size="3x" className="mx-1"/></Link>
             <Link to={`/blocks/${block.number + 1}`}><FontAwesomeIcon icon="chevron-circle-right" size="3x" className="mx-1"/></Link>
           </div>
@@ -74,7 +87,7 @@ export default class Block extends React.Component {
             <div className="border-top border-bottom" style={{ maxHeight: '75vh', overflowY: 'scroll' }}>
               {
                 block.transactions.map(tx =>
-                  <div key="tx.hash" className="mb-3">
+                  <div key={tx.hash} className="mb-3">
                     <Tx tx={tx} accountsMap={this.props.accountsMap}/>
                   </div>
                 )

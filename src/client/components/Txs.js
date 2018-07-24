@@ -70,7 +70,7 @@ export default class Txs extends React.Component {
       <div className="Txs border-top border-bottom" onScroll={this.scrolled}>
         { error && 'error...' }
         { txs.map(tx =>
-          <div key="tx.hash" className="mb-3">
+          <div key={tx.hash} className="mb-3">
             <Tx tx={tx} accountsMap={this.props.accountsMap}/>
           </div>
         )}

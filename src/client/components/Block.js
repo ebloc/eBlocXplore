@@ -28,25 +28,27 @@ export default class Block extends React.Component {
             </Link>
           </div>
           <table>
-            <tr>
-              <td>Miner</td>
-              <td>:</td>
-              <td>
-                <Link className="text-truncate" to={`/accounts/${block.miner}`}>
-                  {utils.getAccountText(block.miner, this.props.accountsMap)}
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Time</td>
-              <td>:</td>
-              <td>{dateString}</td>
-            </tr>
-            <tr>
-              <td>Transactions</td>
-              <td>:</td>
-              <td>{block.transactions.length}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Miner</td>
+                <td>:</td>
+                <td>
+                  <Link className="text-truncate" to={`/accounts/${block.miner}`}>
+                    {utils.getAccountText(block.miner, this.props.accountsMap)}
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td>Time</td>
+                <td>:</td>
+                <td>{dateString}</td>
+              </tr>
+              <tr>
+                <td>Transactions</td>
+                <td>:</td>
+                <td>{block.transactions.length}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
