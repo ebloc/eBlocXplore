@@ -18,7 +18,7 @@ export default class Nav extends React.Component {
   render() {
     return (
       <nav className="Nav navbar navbar-expand-lg bg-primary fixed-top shadow d-flex">
-        <NavLink to="/" className="navbar-brand text-light">eBlocXplore</NavLink>
+        <NavLink to="/" className="navbar-brand text-light d-none d-lg-block">eBlocXplore</NavLink>
         <ul className="navbar-nav">
           <li className="nav-item">
             <a href="#" onClick={this.toggleMyAccounts} className="nav-link text-light">My Accounts</a>
@@ -27,10 +27,10 @@ export default class Nav extends React.Component {
             <NavLink to="/about" className="nav-link text-light">About</NavLink>
           </li>
         </ul>
-        <div className="flex-grow-1 text-center d-inline-block">
+        <div className="flex-grow-1 text-center d-none d-lg-inline-block">
           <SearchForm/>
         </div>
-        <div>
+        <div className="d-none d-lg-block">
           <div className="dropdown">
             <button className="btn btn-light dropdown-toggle" data-toggle="dropdown">eBloc-POA</button>
             <div className="dropdown-menu dropdown-menu-right">

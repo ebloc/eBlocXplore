@@ -3,7 +3,9 @@ $enable-transitions: true;
 $enable-gradients: false;
 
 /* DEFAULTS (override bootstrap styling) */
+// $body-color: yellow;
 $primary: #596C56;
+$yellow: #FFFFCC;
 
 @import '~bootstrap/scss/bootstrap';
 
@@ -11,6 +13,7 @@ html {
   /* 1rem is 14px instead of bootstrap default (16px) */
   font-size: 87.5%;
   body {
+    min-width: map-get($grid-breakpoints, 'lg'); // 992px
     padding-top: 60px;
   }
 }
@@ -27,16 +30,24 @@ $my-accounts-width: 350px;
 
 #MyAccounts {
   position: fixed;
-  max-width: $my-accounts-width;
+  bottom: 0;
+  width: $my-accounts-width;
+  height: 100%;
   margin-left: -$my-accounts-width;
+  padding-top: 60px;
+  z-index: 2;
   overflow-x: hidden;
   overflow-y: scroll;
-  bottom: 0;
-  height: 100%;
-  padding-top: 60px;
   transition: margin-left .25s;
   &.active {
     margin-left: 0;
+  }
+  .list-group-item > a {
+    transition: background-color .25s;
+    &:hover {
+      background-color: $yellow;
+      text-decoration: none;
+    }
   }
 }
 

@@ -1,8 +1,8 @@
 const API_ROOT = 'http://localhost:8000/'; /** @todo get from environment */
-// const MOCK_API_ROOT = 'http://localhost:8000/mock/';
+const MOCK_API_ROOT = 'http://localhost:8000/mock/';
 
 const get = async (path, options) => {
-  const res = await fetch(API_ROOT + path, options);
+  const res = await fetch(MOCK_API_ROOT + path, options);
   if (!res.ok) {
     throw Error(res.statusText);
   }
