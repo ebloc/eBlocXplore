@@ -140,6 +140,22 @@ $my-accounts-width: 350px;
     input[type="text"] {
       width: 350px;
       max-width: 400px;
+      background-color: transparent;
+      color: $light;
+      border: none;
+      border-bottom: 1px solid $light;
+      &::placeholder {
+        color: $gray-500;
+      }
+    }
+    button[type="submit"] {
+      color: $light;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid $light;
+      &:hover {
+        color: $gray-500;
+      }
     }
   }
 }

@@ -39,8 +39,9 @@ class SearchForm extends React.Component {
           break;
       }
       this.setState({
-        error: false
-      })
+        error: false,
+        query: ''
+      });
     } catch (error) {
       this.setState({
         error: 'No result!'
@@ -58,9 +59,9 @@ class SearchForm extends React.Component {
       <div className="SearchForm d-inline-block">
         <form onSubmit={this.submit} className="form-inline mx-auto">
           <div className="input-group">
-            <input type="text" className={`form-control border-tertiary ${ this.state.error ? 'is-invalid' : ''}`} onChange={this.setQuery} placeholder="Enter address, block, transaction number/hash" />
+            <input type="text" className={`px-2 ${ this.state.error ? 'is-invalid' : ''}`} value={this.state.query} onChange={this.setQuery} placeholder="Enter address, block, transaction number/hash" />
             <div className="input-group-append">
-              <button className="btn btn-light border-tertiary d-flex align-items-center" type="submit">
+              <button className="btn d-flex align-items-center" type="submit">
                 <FontAwesomeIcon icon="search" style={{fontSize:'1.25rem'}}/>
               </button>
             </div>
