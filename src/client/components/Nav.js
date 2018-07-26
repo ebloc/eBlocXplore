@@ -17,7 +17,7 @@ export default class Nav extends React.Component {
 
   render() {
     return (
-      <nav className="Nav navbar navbar-expand-lg bg-primary fixed-top shadow d-flex">
+      <nav className="Nav navbar navbar-expand-lg bg-tertiary fixed-top shadow d-flex">
         <NavLink to="/" className="navbar-brand text-light d-none d-lg-block">eBlocXplore</NavLink>
         <ul className="navbar-nav">
           <li className="nav-item mx-2">

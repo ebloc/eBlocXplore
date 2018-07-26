@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { api } from '../utils';
 
@@ -57,9 +58,11 @@ class SearchForm extends React.Component {
       <div className="SearchForm d-inline-block">
         <form onSubmit={this.submit} className="form-inline mx-auto">
           <div className="input-group">
-            <input type="text" className={`form-control border-primary ${ this.state.error ? 'is-invalid' : ''}`} onChange={this.setQuery} placeholder="Enter address, block, transaction number/hash" />
+            <input type="text" className={`form-control border-tertiary ${ this.state.error ? 'is-invalid' : ''}`} onChange={this.setQuery} placeholder="Enter address, block, transaction number/hash" />
             <div className="input-group-append">
-              <input className="btn btn-light border-primary" type="submit" value="Search"/>
+              <button className="btn btn-light border-tertiary d-flex align-items-center" type="submit">
+                <FontAwesomeIcon icon="search" style={{fontSize:'1.25rem'}}/>
+              </button>
             </div>
           </div>
           <div style={{ width: 100 }} className="ml-3 text-light d-inline-block">{ this.state.error }</div>

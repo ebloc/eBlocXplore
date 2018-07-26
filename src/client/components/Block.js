@@ -24,7 +24,7 @@ export default class Block extends React.Component {
           <div className="card-title">
             <Link to={`/blocks/${block.number}`}>
               <h5>{block.number}</h5>
-              <div className="text-secondary font-weight-light text-truncate">{block.hash}</div>
+              <div className="text-secondary text-truncate">{block.hash}</div>
             </Link>
           </div>
           <table>

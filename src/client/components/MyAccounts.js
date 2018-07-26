@@ -28,7 +28,7 @@ export default class MyAccounts extends React.Component {
       <div>
         <div className="d-flex justify-content-between align-items-center p-3">
           <h6 className="m-0 font-weight-light">MY ACCOUNTS</h6>
-          <a href="#" className="px-3" onClick={this.closeMyAccounts}><FontAwesomeIcon icon="chevron-left" size="2x"/></a>
+          <a href="#" className="px-3 text-tertiary" onClick={this.closeMyAccounts}><FontAwesomeIcon icon="chevron-left" size="2x"/></a>
         </div>
         {/* if user has account, show them in list, else show no account info */}
         { Object.keys(accountsMap).length ?

@@ -53,8 +53,12 @@ export default class Block extends React.Component {
             <h4 className="text-secondary font-weight-light">{block.hash}</h4>
           </div>
           <div className="d-flex">
-            <Link to={`/blocks/${block.number - 1}`}><FontAwesomeIcon icon="chevron-circle-left" size="3x" className="mx-1"/></Link>
-            <Link to={`/blocks/${block.number + 1}`}><FontAwesomeIcon icon="chevron-circle-right" size="3x" className="mx-1"/></Link>
+            <Link to={`/blocks/${block.number - 1}`} className="text-tertiary">
+              <FontAwesomeIcon icon="chevron-circle-left" size="3x" className="mx-1"/>
+            </Link>
+            <Link to={`/blocks/${block.number + 1}`} className="text-tertiary">
+              <FontAwesomeIcon icon="chevron-circle-right" size="3x" className="mx-1"/>
+            </Link>
           </div>
         </div>
         <hr/>

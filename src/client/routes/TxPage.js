@@ -46,7 +46,7 @@ export default class Tx extends React.Component {
     return (
       <div id="TxPage" className="container">
         <div className="mt-3">
-          <h1 className="font-weight-light text-truncate">{tx.hash}</h1>
+          <h1 className="text-truncate">{tx.hash}</h1>
         </div>
         <div className="d-flex justify-content-center bg-light text-secondary">
           <table className="w-auto table-responsive my-3">

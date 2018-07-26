@@ -3,9 +3,17 @@ $enable-transitions: true;
 $enable-gradients: false;
 
 /* DEFAULTS (override bootstrap styling) */
-// $body-color: yellow;
-$primary: #596C56;
 $yellow: #FFFFCC;
+$theme-colors: (
+  tertiary: #596c56,
+  primary: #5e82a8,
+  success: #BCED91,
+  danger: #f2a7a7,
+  gray: #495057 // $gray-500
+);
+$font-weight-normal: 300;
+$font-weight-bold: 400;
+$headings-font-weight: 400;
 
 @import '~bootstrap/scss/bootstrap';
 
@@ -19,6 +27,16 @@ html {
   a:hover {
     text-decoration: none;
   }
+}
+
+.bold {
+  font-weight: $font-weight-bold;
+}
+.white-space-nowrap {
+  white-space: nowrap;
+}
+.font-size-lg {
+  font-size: 1.25rem;
 }
 
 .Block, .Tx {
@@ -36,6 +54,22 @@ $my-accounts-width: 350px;
   transition: margin-left .25s;
   &.my-accounts-active {
     margin-left: $my-accounts-width;
+  }
+}
+
+#AccountPage {
+  table {
+    white-space: nowrap;
+    th {
+      border-width: 0;
+    }
+    td {
+      max-width: 20vh;
+      &, * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 }
 
