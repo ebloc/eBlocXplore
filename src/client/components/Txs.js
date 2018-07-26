@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ClipLoader } from 'react-spinners';
 import debug from 'debug';
 
 import Tx from './Tx';
@@ -67,10 +68,18 @@ export default class Txs extends React.Component {
   render() {
     const { txs, loading, error } = this.state;
     return (
-      <div className="Txs" onScroll={this.scrolled}>
+      <div className="Txs border-top border-bottom" onScroll={this.scrolled}>
         { error && 'error...' }
-        { txs.map(tx => <Tx key={tx.hash} tx={tx} accountsMap={this.props.accountsMap}/>) }
-        { loading && 'loading...' }
+        { txs.map(tx =>
+          <div key={tx.hash} className="mb-3">
+            <Tx tx={tx} accountsMap={this.props.accountsMap}/>
+          </div>
+        )}
+        { loading &&
+          <div className="d-flex justify-content-center py-5">
+            <ClipLoader loading={this.state.loading}/>
+          </div>
+        }
       </div>
     );
   }

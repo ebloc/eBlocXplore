@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ClipLoader } from 'react-spinners';
 import debug from 'debug';
 
 import Block from './Block';
@@ -63,11 +64,19 @@ class Blocks extends React.Component {
 
   render() {
     const { blocks, loading, error } = this.state;
-    const blockNodes = blocks.map(block => <Block accountsMap={this.props.accountsMap} key={block.number} block={block} />);
+    const blockNodes = blocks.map(block =>
+      <div key={block.number} className="mb-3">
+        <Block accountsMap={this.props.accountsMap} block={block}/>
+      </div>
+    );
     return (
-      <div className="Blocks" onScroll={this.scrolled}>
+      <div className="Blocks border-top border-bottom" onScroll={this.scrolled}>
         { blockNodes }
-        { loading && 'loading...' }
+        { loading &&
+          <div className="d-flex justify-content-center py-5">
+            <ClipLoader loading={this.state.loading}/>
+          </div>
+        }
         { error && 'error...' }
       </div>
     );
