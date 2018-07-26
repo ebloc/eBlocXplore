@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ClipLoader } from 'react-spinners';
 
 import utils, { api } from '../utils';
 
-const TX_CHUNK_SIZE = 100;
+const TX_CHUNK_SIZE = 10;
 
 export default class AccountPage extends React.Component {
   static propTypes = {
@@ -22,6 +23,7 @@ export default class AccountPage extends React.Component {
   }
 
   fetchData = async () => {
+    this.setState({ loading: true });
     this.account = this.props.match.params.account;
     const balance = await api.getAccountBalance(this.account);
     const { total, start, txs } = await api.getTxsByAccount(this.account, 'last', TX_CHUNK_SIZE);
@@ -108,6 +110,7 @@ export default class AccountPage extends React.Component {
   }
 
   loadMoreTxs = async () => {
+    this.setState({ txHistoryLoading: true });
     const { txHistory } =  this.state;
     let newStart = txHistory.start - txHistory.txs.length;
     let newChunkSize = TX_CHUNK_SIZE;
@@ -118,6 +121,7 @@ export default class AccountPage extends React.Component {
 
     const { total, txs } = await api.getTxsByAccount(this.account, newStart, newChunkSize);
     this.setState(prevState => ({
+      txHistoryLoading: false,
       txHistory: {
         total: total,
         start: newStart,
@@ -127,8 +131,6 @@ export default class AccountPage extends React.Component {
   }
 
   renderTxHistory = () => {
-    if (this.state.loading) return <div>loading tx history</div>
-
     const { total, txs } = this.state.txHistory;
     return (
       <div className="my-5">
@@ -177,10 +179,14 @@ export default class AccountPage extends React.Component {
               )
             }
           </tbody>
-          {/* { txs.map(tx => <Tx key={tx.hash} tx={tx} accountsMap={this.props.accountsMap}/>) } */}
         </table>
         <div>Showing {txs.length} txs out of {total}</div>
-        { txs.length < total &&
+        { this.state.txHistoryLoading &&
+          <div className="d-flex justify-content-center my-4">
+            <ClipLoader loading={true}/>
+          </div>
+        }
+        { txs.length < total && !this.state.txHistoryLoading &&
           <div className="d-flex justify-content-center mb-4">
             <button className="btn py-3 px-4 btn-outline-tertiary" onClick={() => this.loadMoreTxs()}>
               SHOW MORE
@@ -193,7 +199,11 @@ export default class AccountPage extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <div className="container">Loading</div>
+      return(
+        <div className="container d-flex justify-content-center align-items-center py-6">
+          <ClipLoader size="120" loading={this.state.loading}/>
+        </div>
+      );
     }
 
     return (

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ClipLoader } from 'react-spinners';
 import debug from 'debug';
 
 import Block from './Block';
@@ -71,7 +72,11 @@ class Blocks extends React.Component {
     return (
       <div className="Blocks border-top border-bottom" onScroll={this.scrolled}>
         { blockNodes }
-        { loading && 'loading...' }
+        { loading &&
+          <div className="d-flex justify-content-center py-5">
+            <ClipLoader loading={this.state.loading}/>
+          </div>
+        }
         { error && 'error...' }
       </div>
     );

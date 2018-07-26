@@ -12,17 +12,12 @@ export default class Tx extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true
-    };
+    this.state = {};
   }
 
   fetchTx = async () => {
     const tx = await api.getTx(this.props.match.params.hash);
-    this.setState({
-      loading: false,
-      tx
-    });
+    this.setState({ tx });
   }
 
   async componentDidUpdate(prevProps) {
@@ -39,10 +34,8 @@ export default class Tx extends React.Component {
   }
 
   render() {
-    const { tx, loading } = this.state;
-    if (loading) {
-      return <div className="container">Loading</div>
-    }
+    const { tx } = this.state;
+    if (!tx) return <div></div>;
     return (
       <div id="TxPage" className="container">
         <div className="mt-3">

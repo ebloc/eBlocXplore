@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ClipLoader } from 'react-spinners';
 import debug from 'debug';
 
 import Tx from './Tx';
@@ -74,7 +75,11 @@ export default class Txs extends React.Component {
             <Tx tx={tx} accountsMap={this.props.accountsMap}/>
           </div>
         )}
-        { loading && 'loading...' }
+        { loading &&
+          <div className="d-flex justify-content-center py-5">
+            <ClipLoader loading={this.state.loading}/>
+          </div>
+        }
       </div>
     );
   }

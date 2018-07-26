@@ -14,17 +14,12 @@ export default class Block extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true
-    };
+    this.state = {};
   }
 
   fetchBlock = async () => {
     const block = await api.getBlock(this.props.match.params.number);
-    this.setState({
-      loading: false,
-      block
-    });
+    this.setState({ block });
   }
 
   async componentDidUpdate(prevProps) {
@@ -42,9 +37,7 @@ export default class Block extends React.Component {
 
   render() {
     const { block } = this.state;
-    if (this.state.loading) {
-      return <div className="container">Loading</div>
-    }
+    if (!block) return <div></div>;
     return (
       <div id="BlockPage" className="container">
         <div className="mt-3 d-flex justify-content-between align-items-center">
