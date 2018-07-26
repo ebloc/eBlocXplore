@@ -6,7 +6,7 @@ import { ClipLoader } from 'react-spinners';
 
 import utils, { api } from '../utils';
 
-const TX_CHUNK_SIZE = 10;
+const TX_CHUNK_SIZE = 50;
 
 export default class AccountPage extends React.Component {
   static propTypes = {
@@ -201,7 +201,7 @@ export default class AccountPage extends React.Component {
     if (this.state.loading) {
       return(
         <div className="container d-flex justify-content-center align-items-center py-6">
-          <ClipLoader size="120" loading={this.state.loading}/>
+          <ClipLoader size={120} loading={this.state.loading}/>
         </div>
       );
     }
