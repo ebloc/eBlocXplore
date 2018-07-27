@@ -1,0 +1,161 @@
+$enable-rounded: false;
+$enable-transitions: true;
+$enable-gradients: false;
+
+/* DEFAULTS (override bootstrap styling) */
+$yellow: #FFFFCC;
+$theme-colors: (
+  tertiary: #596c56,
+  primary: #5e82a8,
+  success: #BCED91,
+  danger: #f2a7a7,
+  gray: #495057 // $gray-500
+);
+$font-weight-normal: 300;
+$font-weight-bold: 400;
+$headings-font-weight: 400;
+
+$spacer: 1rem;
+$spacers: (
+  6: ($spacer * 5)
+);
+
+@import '~bootstrap/scss/bootstrap';
+
+html {
+  /* 1rem is 14px instead of bootstrap default (16px) */
+  font-size: 87.5%;
+  body {
+    min-width: map-get($grid-breakpoints, 'lg'); // 992px
+    padding-top: 60px;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.bold {
+  font-weight: $font-weight-bold;
+}
+.white-space-nowrap {
+  white-space: nowrap;
+}
+.font-size-lg {
+  font-size: 1.25rem;
+}
+
+.Block, .Tx {
+  background-color: $light;
+  transition: background-color .25s;
+  &:hover {
+    background-color: $yellow;
+  }
+}
+
+// sidebar length
+$my-accounts-width: 350px;
+
+#Route {
+  transition: margin-left .25s;
+  &.my-accounts-active {
+    margin-left: $my-accounts-width;
+  }
+}
+
+#AccountPage {
+  table {
+    white-space: nowrap;
+    th {
+      border-width: 0;
+    }
+    td {
+      max-width: 20vh;
+      &, * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+#MyAccounts {
+  position: fixed;
+  bottom: 0;
+  width: $my-accounts-width;
+  height: 100%;
+  margin-left: -$my-accounts-width;
+  padding-top: 60px;
+  z-index: 2;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transition: margin-left .25s;
+  &.active {
+    margin-left: 0;
+  }
+  .list-group-item > a {
+    transition: background-color .25s;
+    &:hover {
+      background-color: $yellow;
+      text-decoration: none;
+    }
+  }
+}
+
+#BlockPage {
+  font-size: 1.2rem;
+  table {
+    td {
+      padding: ($spacer * .25);
+      white-space: nowrap;
+    }
+  }
+}
+
+#TxPage {
+  font-size: 1.2rem;
+  table {
+    td:first-of-type {
+      padding: ($spacer * .25);
+      text-align: right;
+    }
+  }
+}
+
+.Blocks {
+  height: 80vh;
+  overflow: scroll;
+}
+
+.Txs {
+  height: 80vh;
+  overflow: scroll;
+}
+
+.Nav {
+  height: 60px;
+}
+
+.SearchForm {
+  form {
+    input[type="text"] {
+      width: 350px;
+      max-width: 400px;
+      background-color: transparent;
+      color: $light;
+      border: none;
+      border-bottom: 1px solid $light;
+      &::placeholder {
+        color: $gray-500;
+      }
+    }
+    button[type="submit"] {
+      color: $light;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid $light;
+      &:hover {
+        color: $gray-500;
+      }
+    }
+  }
+}

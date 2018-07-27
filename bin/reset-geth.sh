@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # remove chain data and logs for given network
-NETWORK=$1
-
 ROOTDIR=$(dirname "$0")/.. # root directory of the application
-DATADIR=${ROOTDIR}/blockchain/${NETWORK}/ # blockchain path
-LOGPATH=${ROOTDIR}/logs/geth-${NETWORK}.out # log file path
+source ${ROOTDIR}/.env # get environment variables
+
+DATADIR=${ROOTDIR}/blockchain/${NETWORK_NAME}/ # blockchain path
+LOGPATH=${ROOTDIR}/logs/geth-${NETWORK_NAME}.log # log file path
 
 # do not let invalid networks
-if [[ $NETWORK != 'ebloc-poa' && $NETWORK != 'main' && $NETWORK != 'local' ]]; then
+if [[ $NETWORK_NAME != 'ebloc-poa' && $NETWORK_NAME != 'main' && $NETWORK_NAME != 'local' ]]; then
   echo 'Invalid network name'
   exit 1
 fi

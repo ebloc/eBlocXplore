@@ -1,4 +1,4 @@
-// @todo set password config variable
+/** @todo set password config variable */
 const Web3 = require('web3');
 const solc = require('solc');
 const fs = require('fs');
@@ -13,17 +13,18 @@ const web3 = new Web3(ipcFile, net);
 // const { BN } = web3.utils;
 
 /**
- * complete account numbers to 20
+ * complete account numbers to 10
  */
 const createAccounts = async () => {
   // calcaulate how many accounts needed
-  const accountsLength = 20 - (await web3.eth.getAccounts()).length;
-  if (accountsLength < 0) return;
-  // create them
-  const promises = Array(accountsLength).fill(async () => {
-    await web3.eth.personal.newAccount('1123');
-  });
-  await Promise.all(promises);
+  const accountsLength = 10 - (await web3.eth.getAccounts()).length;
+  if (accountsLength <= 0) return;
+
+  console.log(`creating ${accountsLength} new accounts`); // eslint-disable-line no-console
+
+  for (let i = 0; i < accountsLength; i++) {
+    await web3.eth.personal.newAccount('1123'); // eslint-disable-line no-await-in-loop
+  }
 };
 
 /**
@@ -138,7 +139,7 @@ const run = async () => {
 
   try {
     // if accounts are not already created
-    if ((await web3.eth.getAccounts()).length <= 1) {
+    if ((await web3.eth.getAccounts()).length <= 10) {
       await createAccounts();
       await unlockAccounts();
       await distributeMoney();

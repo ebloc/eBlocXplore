@@ -1,62 +1,50 @@
-const path = require('path');
-const Web3 = require('web3');
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongodb = require('mongodb');
-// const yargs = require('yargs');
+/* eslint-disable no-console */
+// const chokidar = require('chokidar');
 
-require('dotenv').config(); // collect environment variables from .env file
+const app = require('./app');
+const txIndexer = require('./utils/txIndexer');
 
-// command line arguments
-// const args = yargs
-//   .default('cron', true) // start cronjobs
-//   .argv;
+// const watcher = chokidar.watch(__dirname);
+const debug = require('debug');
 
-const web3 = new Web3(Web3.givenProvider || process.env.WEB3_PROVIDER);
-global.web3 = web3;
+debug.log = console.log.bind(console);
 
-if (!web3.eth.net.isListening()) {
-  console.error('Cannot connect to ethereum network'); // eslint-disable-line no-console
-} else {
-  console.log('Connected to ethereum network'); // eslint-disable-line no-console
-}
-
-const app = express();
-
-if (process.env.NODE_ENV !== 'production') {
-  // refresh browser
-  require('reload')(app); // eslint-disable-line import/no-extraneous-dependencies, global-require
-}
-
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../client')));
-// 3rd party libraries @TODO: use webpack
-app.use('/jquery', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
-app.use('/popper.js', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
-app.use('/bootstrap', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/')));
-app.use('/font-awesome', express.static(path.join(__dirname, '../../node_modules/font-awesome')));
-app.use('/datatables.net', express.static(path.join(__dirname, '../../node_modules/datatables.net/js/')));
-app.use('/datatables.net-bs4', express.static(path.join(__dirname, '../../node_modules/datatables.net-bs4/')));
-
-app.use('/api', require('./api-router'));
-
-(async () => {
+async function start() {
   try {
-    await app.listen(process.env.PORT);
-    console.log(`App listening at http://localhost:${process.env.PORT}`); // eslint-disable-line no-console
+    await app.initGlobals();
+    global.web3 = await app.initBlockchain();
+    global.db = await app.initDB();
 
-    const mongoConn = await mongodb.MongoClient.connect(process.env.MONGODB_URL);
-    global.db = mongoConn.db(process.env.NETWORK_NAME);
-    console.log(`Connected to database ${process.env.MONGODB_URL}`); // eslint-disable-line no-console
+    await app.start();
+    await txIndexer.start();
 
-    // if (args.cron) {
-    //   crons.start();
-    //   console.log('Crons started'); // eslint-disable-line no-console
-    // }
+    // restart module and http server when a file changed in server
+    // watcher.on('ready', () => {
+    //   watcher.on('change', async (path) => {
+    //     console.log('File changed: ', path);
+    //     delete require.cache[path];
+    //     await require('./app').restart();
+    //   });
+    // });
+
+    // command line arguments
+    // const args = yargs
+    //   .default('cron', true) // start cronjobs
+    //   .argv;
   } catch (err) {
-    console.error(err); // eslint-disable-line no-console
+    console.log('Errör');
+    console.error(err);
   }
-})();
+}
+
+// process.on('uncaughtException', function(err) {
+//   // handle the error safely
+//   console.error('UNCAUGHT EXCEPTION', err)
+// })
+
+// process.on('unhandledRejection', error => {
+//   // Will print "unhandledRejection err is not defined"
+//   console.error('UNHANDLED REJECTION', error);
+// });
+
+start();
