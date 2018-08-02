@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { api } from '../utils';
+import { api } from 'Utils';
 
 class SearchForm extends React.Component {
   static propTypes = {

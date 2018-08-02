@@ -1,22 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 
 import utils from 'Utils';
 
-export default class Tx extends React.Component {
+export default class TxList extends React.Component {
   static propTypes = {
-    tx: PropTypes.object.isRequired,
-    accountsMap: PropTypes.objectOf(PropTypes.string)
+    txs: PropTypes.array.isRequired,
+    loading: PropTypes.bool,
+    error: PropTypes.string,
+    onScrollEnd: PropTypes.func
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {};
+  scrolled = e => {
+    const atBottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight <= 1;
+    if (atBottom) {
+      this.props.onScrollEnd();
+    }
   }
 
-  render() {
-    const { tx } = this.props;
+  renderTx = tx => {
     return (
       <div className="Tx card border-0">
         <div className="card-body text-secondary">
@@ -30,13 +34,13 @@ export default class Tx extends React.Component {
                   <td>From</td>
                   <td>:</td>
                   <td className="text-truncate">
-                    <Link to={`/accounts/${tx.from}`}>{utils.getAccountText(tx.from, this.props.accountsMap)}</Link>
+                    <Link to={`/accounts/${tx.from}`}>{utils.getAccountText(tx.from)}</Link>
                   </td>
                 </tr>
                 <tr>
                   <td>To</td>
                   <td>:</td>
-                  <td><Link to={`/accounts/${tx.to}`}>{utils.getAccountText(tx.to, this.props.accountsMap)}</Link></td>
+                  <td><Link to={`/accounts/${tx.to}`}>{utils.getAccountText(tx.to)}</Link></td>
                 </tr>
                 <tr>
                   <td>Value</td>
@@ -63,6 +67,28 @@ export default class Tx extends React.Component {
             </table>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  render() {
+    const { txs, loading, error } = this.props;
+    return (
+      <div className="Txs border-top border-bottom" onScroll={this.scrolled}>
+        { error && 'error...' }
+        {
+          txs.map(tx =>
+            <div key={tx.hash} className="mb-3">
+              { this.renderTx(tx) }
+            </div>
+          )
+        }
+        {
+          loading &&
+          <div className="d-flex justify-content-center py-5">
+            <ClipLoader loading={loading}/>
+          </div>
+        }
       </div>
     );
   }
