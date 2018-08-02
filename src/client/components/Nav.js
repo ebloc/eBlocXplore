@@ -38,7 +38,7 @@ export default class Nav extends React.Component {
         </div>
         <div className="d-none d-lg-block">
           <div className="dropdown">
-            <button className="btn btn-light dropdown-toggle" data-toggle="dropdown">eBloc-POA</button>
+            <button className="btn btn-outline-light dropdown-toggle" data-toggle="dropdown">eBloc-POA</button>
             <div className="dropdown-menu dropdown-menu-right">
               <a href="#" className="dropdown-item active">eBloc-POA</a>
               <a className="dropdown-item disabled">Main</a>
