@@ -12,7 +12,6 @@ import TxPage from './routes/TxPage';
 import NotFoundPage from './routes/NotFoundPage';
 import AccountPage from './routes/AccountPage';
 
-import About from 'Components/About';
 import Nav from 'Components/Nav';
 import MyAccounts from 'Components/MyAccounts';
 
@@ -33,19 +32,10 @@ class App extends React.Component {
               <MyAccounts/>
               <div id="Route" className="my-accounts-active">
                 <Switch>
-                  <Route exact path="/">
-                    <HomePage/>
-                  </Route>
-                  <Route exact path="/blocks/:number"
-                    render={props => <BlockPage {...props}/>}
-                    />
-                  <Route exact path="/txs/:hash"
-                    render={props => <TxPage {...props}/>}
-                    />
-                  <Route exact path="/accounts/:account"
-                    render={props => <AccountPage {...props}/>}
-                    />
-                  <Route exact path="/about" component={About}/>
+                  <Route exact path="/"><HomePage/></Route>
+                  <Route exact path="/blocks/:number"><BlockPage/></Route>
+                  <Route exact path="/txs/:hash"><TxPage/></Route>
+                  <Route exact path="/accounts/:account"><AccountPage/></Route>
                   <Route component={NotFoundPage}/>
                 </Switch>
               </div>

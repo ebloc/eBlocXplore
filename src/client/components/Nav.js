@@ -27,7 +27,7 @@ export default class Nav extends React.Component {
             <a href="#" onClick={this.toggleMyAccounts} className="nav-link text-light">MY ACCOUNTS</a>
           </li>
           <li className="nav-item mx-2">
-            <NavLink to="/about" className="nav-link text-light">ABOUT</NavLink>
+            <a target="_blank" rel="noreferrer noopener" href="http://ebloc.cmpe.boun.edu.tr/" className="nav-link text-light">ABOUT</a>
           </li>
         </ul>
         <div className="flex-grow-1 text-center d-none d-lg-inline-block">
