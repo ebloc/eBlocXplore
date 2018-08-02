@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600');
+
 $enable-rounded: false;
 $enable-transitions: true;
 $enable-gradients: false;
@@ -11,6 +13,9 @@ $theme-colors: (
   danger: #f2a7a7,
   gray: #495057 // $gray-500
 );
+
+$font-size-base: .9rem;
+$font-family-base: 'Open Sans', sans-serif;
 $font-weight-normal: 300;
 $font-weight-bold: 400;
 $headings-font-weight: 400;
@@ -23,8 +28,6 @@ $spacers: (
 @import '~bootstrap/scss/bootstrap';
 
 html {
-  /* 1rem is 14px instead of bootstrap default (16px) */
-  font-size: 87.5%;
   body {
     min-width: map-get($grid-breakpoints, 'lg'); // 992px
     padding-top: 60px;
@@ -42,6 +45,9 @@ html {
 }
 .font-size-lg {
   font-size: 1.25rem;
+}
+.font-size-sm {
+  font-size: 0.75rem;
 }
 
 .Block, .Tx {

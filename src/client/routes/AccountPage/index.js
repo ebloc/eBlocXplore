@@ -51,7 +51,7 @@ class AccountPage extends React.Component {
     const { total, txs, loading, account } = this.props;
     return (
       <div className="my-5">
-        <h2 className="">Last Transactions</h2>
+        <h2 className="">LATEST TRANSACTIONS</h2>
         <div className="mb-4">Showing {txs.length} txs out of {total}</div>
         <TxTable currentAccount={account} txs={txs}/>
         <div>Showing {txs.length} txs out of {total}</div>

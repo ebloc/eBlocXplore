@@ -38,7 +38,7 @@ class MyAccounts extends React.Component {
               { Object.keys(accounts).map(account =>
                 <li key={ account } className="list-group-item p-0 bg-transparent border-right-0 border-left-0 border-top-0">
                   <Link to={`/accounts/${account}`} className="d-block p-3 text-dark">
-                    <div className="text-truncate">{ accounts[account] }</div>
+                    <div className="text-truncate mb-1">{ accounts[account] }</div>
                     <div className="text-truncate text-secondary font-weight-light">{ account }</div>
                   </Link>
                 </li>

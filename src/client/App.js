@@ -33,9 +33,9 @@ class App extends React.Component {
               <div id="Route" className="my-accounts-active">
                 <Switch>
                   <Route exact path="/"><HomePage/></Route>
-                  <Route exact path="/blocks/:number"><BlockPage/></Route>
-                  <Route exact path="/txs/:hash"><TxPage/></Route>
-                  <Route exact path="/accounts/:account"><AccountPage/></Route>
+                  <Route exact path="/blocks/:number" component={BlockPage}></Route>
+                  <Route exact path="/txs/:hash" component={TxPage}></Route>
+                  <Route exact path="/accounts/:account" component={AccountPage}></Route>
                   <Route component={NotFoundPage}/>
                 </Switch>
               </div>
