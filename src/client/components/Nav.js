@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import SearchForm from './SearchForm';
+import Logo from '../public/images/zz.png';
 
 export default class Nav extends React.Component {
   constructor(props) {
@@ -18,7 +19,9 @@ export default class Nav extends React.Component {
   render() {
     return (
       <nav className="Nav navbar navbar-expand-lg bg-tertiary fixed-top shadow d-flex">
-        <NavLink to="/" className="navbar-brand text-light d-none d-lg-block">eBlocXplore</NavLink>
+        <NavLink to="/" className="navbar-brand text-light d-none d-lg-block">
+          <img src={Logo} style={{ height: 60 }}/>
+        </NavLink>
         <ul className="navbar-nav">
           <li className="nav-item mx-2">
             <NavLink to="/" className="nav-link text-light">HOME</NavLink>
