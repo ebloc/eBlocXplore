@@ -40,7 +40,14 @@ module.exports = {
       }
     ],
   },
-  // resolve: { extensions: ['*', '.js', '.jsx'] },
+  resolve: {
+    extensions: ['*', '.js', '.jsx'],
+    alias: {
+      Utils: path.resolve(__dirname, 'src/client/utils'),
+      Components: path.resolve(__dirname, 'src/client/components'),
+      Actions: path.resolve(__dirname, 'src/client/state/actions')
+    }
+  },
   devServer: {
     contentBase: [path.resolve(__dirname, 'dist'), path.resolve(__dirname, 'src/client/public')],
     publicPath: 'http://localhost:8080/', // for HMR

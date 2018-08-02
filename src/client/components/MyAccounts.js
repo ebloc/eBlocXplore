@@ -1,16 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export default class MyAccounts extends React.Component {
-  static propTypes = {
-    accountsMap: PropTypes.object
-  }
+const mapStateToProps = (state) => {
+  return { accounts: state.accounts };
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {};
+class MyAccounts extends React.Component {
+  static propTypes = {
+    accounts: PropTypes.object,
   }
 
   // close sidebar
@@ -22,7 +22,7 @@ export default class MyAccounts extends React.Component {
 
   // render "My accounts" part inside
   renderAccounts = () => {
-    const accountsMap = this.props.accountsMap;
+    const { accounts } = this.props;
 
     return (
       <div>
@@ -31,19 +31,22 @@ export default class MyAccounts extends React.Component {
           <a href="#" className="px-3 text-tertiary" onClick={this.closeMyAccounts}><FontAwesomeIcon icon="chevron-left" size="2x"/></a>
         </div>
         {/* if user has account, show them in list, else show no account info */}
-        { Object.keys(accountsMap).length ?
-          <ul className="list-group">
-            { Object.keys(accountsMap).map(account =>
-              <li key={ account } className="list-group-item p-0 bg-transparent border-right-0 border-left-0 border-top-0">
-                <Link to={`/accounts/${account}`} className="d-block p-3 text-dark">
-                  <div className="text-truncate">{ accountsMap[account] }</div>
-                  <div className="text-truncate text-secondary font-weight-light">{ account }</div>
-                </Link>
-              </li>
-            )}
-          </ul>
-          :
-          <div className="p-2">You do not have any accounts</div>
+        {
+          Object.keys(accounts).length
+          ? (
+            <ul className="list-group">
+              { Object.keys(accounts).map(account =>
+                <li key={ account } className="list-group-item p-0 bg-transparent border-right-0 border-left-0 border-top-0">
+                  <Link to={`/accounts/${account}`} className="d-block p-3 text-dark">
+                    <div className="text-truncate">{ accounts[account] }</div>
+                    <div className="text-truncate text-secondary font-weight-light">{ account }</div>
+                  </Link>
+                </li>
+              )}
+            </ul>
+          ) : (
+            <div className="p-2">You do not have any accounts</div>
+          )
         }
       </div>
     );
@@ -57,3 +60,5 @@ export default class MyAccounts extends React.Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(MyAccounts);
