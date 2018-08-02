@@ -11,8 +11,8 @@ import { fetchAccountTxs, fetchAccountBalance } from 'Actions';
 const mapStateToProps = (state, ownProps) => {
   const account = ownProps.match.params.account;
   const name = state.accounts[account];
-  const { txs, start, total, loading, error, balance } = state.accountPage.txData;
-  return { txs, start, total, loading, error, account, name, balance };
+  const txData = state.accountPage.txData;
+  return { ...txData, account, name };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -29,7 +29,7 @@ class AccountPage extends React.Component {
     txs: PropTypes.array,
     start: PropTypes.number,
     loading: PropTypes.bool,
-    error: PropTypes.oneOfType(PropTypes.bool, PropTypes.string),
+    error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     account: PropTypes.string,
     name: PropTypes.string,
     balance: PropTypes.number
