@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import SearchForm from './SearchForm';
-import Logo from '../public/images/zz.png';
-
+import Logo from '../assets/images/zz.png';
 export default class Nav extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +36,10 @@ export default class Nav extends React.Component {
         <div className="flex-grow-1 text-center d-none d-lg-inline-block">
           <SearchForm/>
         </div>
-        <div className="d-none d-lg-block">
+        <div className="d-none d-lg-flex">
+          <a href="https://github.com/kagansari/eBlocXplore" target="_blank" rel="noreferrer noopener" className="mr-4 d-flex align-items-center text-light">
+            <FontAwesomeIcon icon={['fab', 'github']} size="2x"/>
+          </a>
           <div className="dropdown">
             <button className="btn btn-outline-light dropdown-toggle" data-toggle="dropdown">eBloc-POA</button>
             <div className="dropdown-menu dropdown-menu-right">
