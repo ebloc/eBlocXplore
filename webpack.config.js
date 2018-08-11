@@ -1,7 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
-module.exports = {
+const commonConfig = {
   entry: ['babel-polyfill', './src/client/index.js'],
   output: {
     filename: 'bundle.js',
@@ -56,15 +61,47 @@ module.exports = {
       Actions: path.resolve(__dirname, 'src/client/state/actions')
     }
   },
-  devServer: {
-    contentBase: [path.resolve(__dirname, 'dist'), path.resolve(__dirname, 'src/client/public')],
-    publicPath: 'http://localhost:8080/', // for HMR
-    hotOnly: true,
-    historyApiFallback: {
-      index: 'index.html',
-    },
-  },
-  devtool: 'cheap-module-source-map',
-  plugins: [new webpack.HotModuleReplacementPlugin()],
-  mode: 'development',
+  plugins: [
+    new CleanWebpackPlugin('dist'),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+      }
+    }),
+    new HtmlWebpackPlugin({
+      title: 'eBlocXplore',
+      meta: {
+        viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
+      }
+    }),
+    new FaviconsWebpackPlugin(path.resolve(__dirname, 'src/client/assets/favicon.ico')),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 };
+
+const envConfig = {
+  development: {
+    mode: 'development',
+    devServer: {
+      contentBase: [path.resolve(__dirname, 'dist')],
+      publicPath: 'http://localhost:8080/', // for HMR
+      hotOnly: true,
+      historyApiFallback: true
+    },
+    devtool: 'cheap-module-source-map'
+  },
+  production: {
+    mode: 'production',
+    devtool: 'sourcemap',
+    optimization: {
+      minimizer: [new UglifyJsPlugin({
+        sourceMap: true
+      })]
+    }
+  }
+};
+
+module.exports = webpackMerge(
+  commonConfig,
+  envConfig[process.env.NODE_ENV || 'development']
+)

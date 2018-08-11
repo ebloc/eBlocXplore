@@ -1,5 +1,14 @@
 {
-  "presets": ["env", "react"],
+  "presets": [
+    [
+      "env",
+      {
+        "browsers": ["last 2 versions", "IE >= 11"],
+        "useBuiltIns": true
+      }
+    ],
+    "react"
+  ],
   "plugins": [
     "react-hot-loader/babel",
     "transform-class-properties",

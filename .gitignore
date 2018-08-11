@@ -10,6 +10,7 @@ pids
 *.pid.lock
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
+dist
 build/Release
 
 # Dependency directories
