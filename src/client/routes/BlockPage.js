@@ -57,6 +57,7 @@ class Block extends React.Component {
         </div>
       )
     }
+    document.title = `Blocks - ${block.number}`;
     return (
       <div id="BlockPage" className="container">
         {/* title and left-right buttons */}

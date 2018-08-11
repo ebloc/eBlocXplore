@@ -75,6 +75,7 @@ class AccountPage extends React.Component {
 
   render() {
     const { account, name, balance } = this.props;
+    document.title = `Accounts - ${name || account}`;
     return (
       <div id="AccountPage" className="container mt-4">
         {/* TITLE PART */}

@@ -11,6 +11,7 @@ class Home extends React.Component {
   }
 
   render() {
+    document.title = 'eBlocXplore';
     return (
       <div className="HomePage container">
         <div className="row">

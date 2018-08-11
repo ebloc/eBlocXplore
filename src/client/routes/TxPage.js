@@ -55,8 +55,7 @@ class Tx extends React.Component {
       )
     }
 
-    // const { tx } = this.state;
-    // if (!tx) return <div></div>;
+    document.title = `Transactions - ${tx.hash}`;
     return (
       <div id="TxPage" className="container">
         <div className="mt-3">
