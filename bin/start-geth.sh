@@ -17,9 +17,9 @@ RPCPORT=8545
 NETWORKID=1
 MINE=false # only mine if local
 # set network ids
-if [[ ${NETWORK_NAME} == 'ebloc-poa' ]]; then
+if [ ${NETWORK_NAME} == 'ebloc-poa' ]; then
   NETWORKID=23422
-elif [[ ${NETWORK_NAME} == 'local' ]]; then
+elif [ ${NETWORK_NAME} == 'local' ]; then
   NETWORKID=5192851 # any random number
   MINE=true
 fi
