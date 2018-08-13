@@ -7,14 +7,17 @@ const { bc } = utils;
 /**
  * returns requested blocks
  * if starting block is not specified returns the last {length} blocks
- * @param {number} start starting block number
+ * @param {number} start starting block number @default 'last'
  * @param {number} length @default 25
  * @return {[Block]} blocks
  */
 router.get('/blocks', async (req, res) => {
   const lastBlockNum = await web3.eth.getBlockNumber();
   let length = Number(req.query.length) || 25;
-  let start = Number(req.query.start) || (lastBlockNum - length);
+  // by default get last {length} txs
+  let start = (!req.query.start || req.query.start === 'last')
+    ? lastBlockNum - length
+    : Number(req.query.start);
 
   // range validations
   if (length > 100) length = 100;
@@ -35,7 +38,9 @@ router.get('/blocks', async (req, res) => {
 router.get('/txs', async (req, res) => {
   const lastTxNum = await bc.getLastTxNumber();
   let length = Number(req.query.length) || 25;
-  let start =  Number(req.query.start) || (lastTxNum - length);
+  let start = (!req.query.start || req.query.start === 'last')
+    ? lastTxNum - length
+    : Number(req.query.start);
 
   // range validations
   if (length > 100) length = 100;
@@ -57,6 +62,7 @@ router.get('/txs', async (req, res) => {
 router.get('/blocks/:number', async (req, res) => {
   try {
     const block = await web3.eth.getBlock(req.params.number, true);
+    if  (!block) throw Error('Not found');
     res.send(block);
   } catch (error) {
     res.sendStatus(404);

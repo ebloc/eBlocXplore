@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import utils from '../utils';
+import utils from 'Utils';
 
 export default class Block extends React.Component {
   static propTypes = {

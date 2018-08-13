@@ -1,41 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 
-import utils, { api } from '../utils';
+import utils from 'Utils';
+import { fetchSingleTx } from 'Actions';
 
-export default class Tx extends React.Component {
+const mapStateToProps = state => ({
+  tx: state.txPage.tx,
+  loading: state.txPage.loading,
+  error: state.txPage.error
+})
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  fetchData: () => {
+    const hash = ownProps.match.params.hash;
+    dispatch(fetchSingleTx(hash));
+  }
+})
+
+class Tx extends React.Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
-    accountsMap: PropTypes.objectOf(PropTypes.string)
-  };
+    tx: PropTypes.object,
+    loading: PropTypes.bool,
+    error: PropTypes.string,
+    fetchData: PropTypes.func
+  }
+
+  componentDidMount() {
+    this.props.fetchData();
+  }
 
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  fetchTx = async () => {
-    const tx = await api.getTx(this.props.match.params.hash);
-    this.setState({ tx });
-  }
-
-  async componentDidUpdate(prevProps) {
-    const hash = this.props.match.params.hash;
-    const prevHash = prevProps && prevProps.match.params.hash;
-    if (hash == prevHash) {
-      return;
-    }
-    await this.fetchTx();
-  }
-
-  async componentDidMount() {
-    await this.componentDidUpdate();
-  }
-
   render() {
-    const { tx } = this.state;
-    if (!tx) return <div></div>;
+    const { tx, loading, error } = this.props;
+    if (error) {
+      return (
+        <div className="d-flex justify-content-center my-4">
+          <h2>Transaction not found</h2>
+        </div>
+      )
+    }
+    if (loading || !tx) {
+      return (
+        <div className="d-flex justify-content-center my-4">
+          <ClipLoader loading={true}/>
+        </div>
+      )
+    }
+
+    document.title = `Transactions - ${tx.hash}`;
     return (
       <div id="TxPage" className="container">
         <div className="mt-3">
@@ -49,7 +69,7 @@ export default class Tx extends React.Component {
                 <td>:</td>
                 <td>
                   <Link className="text-truncate" to={`/accounts/${tx.from}`}>
-                    {utils.getAccountText(tx.from, this.props.accountsMap)}
+                    {utils.getAccountText(tx.from)}
                   </Link>
                 </td>
               </tr>
@@ -58,7 +78,7 @@ export default class Tx extends React.Component {
                 <td>:</td>
                 <td>
                   <Link className="text-truncate" to={`/accounts/${tx.to}`}>
-                    {utils.getAccountText(tx.to, this.props.accountsMap)}
+                    {utils.getAccountText(tx.to)}
                   </Link>
                 </td>
               </tr>
@@ -99,3 +119,5 @@ export default class Tx extends React.Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tx)

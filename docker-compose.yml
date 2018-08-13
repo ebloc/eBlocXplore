@@ -1,0 +1,36 @@
+version: "3"
+volumes:
+  chaindata:
+  db:
+services:
+  geth:
+    container_name: "geth"
+    build:
+      context: .
+      dockerfile: docker-geth.Dockerfile
+    ports:
+      - "8545:8545"
+    volumes:
+      - chaindata:/usr/src/app/blockchain/ebloc-poa
+  app:
+    container_name: "app"
+    restart: "always"
+    environment:
+      MONGODB_URL: mongodb://mongo:27017
+      GETH_RPC: http://geth:8545
+      DEBUG: "worker:tx:read"
+    build:
+      context: .
+      dockerfile: docker-app.Dockerfile
+    ports:
+      - "80:8000"
+    links:
+      - geth
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - db:/data/db
+    ports:
+      - "27017:27017"

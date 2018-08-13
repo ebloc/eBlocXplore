@@ -1,4 +1,18 @@
 {
-  "presets": ["env", "react"],
-  "plugins": ["react-hot-loader/babel", "transform-class-properties", "emotion"]
+  "presets": [
+    [
+      "env",
+      {
+        "browsers": ["last 2 versions", "IE >= 11"],
+        "useBuiltIns": true
+      }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "react-hot-loader/babel",
+    "transform-class-properties",
+    "transform-object-rest-spread",
+    "emotion"
+  ]
 }

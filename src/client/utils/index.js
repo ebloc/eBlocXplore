@@ -4,12 +4,13 @@ import api from './api';
  * @param {string} account
  * @param {object} accountsMap
  */
-exports.getAccountText = (account, accountsMap) => {
+exports.getAccountText = (account) => {
+  const state = window.store.getState();
   if (!account) {
     return '-';
   }
-  if (accountsMap[account]) {
-    return accountsMap[account];
+  if (state.accounts[account]) {
+    return state.accounts[account];
   }
   return account;
 };

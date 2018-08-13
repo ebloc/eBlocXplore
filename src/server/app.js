@@ -22,10 +22,9 @@ exports.initGlobals = () => {
  * @return {Web3}
  */
 exports.initBlockchain = async () => {
-  const ipcFile = path.join(__dirname, `../../blockchain/${process.env.NETWORK_NAME}/geth.ipc`);
-  const web3 = new Web3(ipcFile, net);
+  let web3 = new Web3();
 
-  // in order to debug transactions
+  // // in order to debug transactions
   web3.extend({
     property: 'debug',
     methods: [{
@@ -36,11 +35,16 @@ exports.initBlockchain = async () => {
     }],
   });
 
-  if (!web3.eth.net.isListening()) {
-    console.error('Cannot connect to ethereum network'); // eslint-disable-line no-console
-  } else {
-    console.log('Connected to ethereum network'); // eslint-disable-line no-console
-  }
+  do {
+    try {
+      web3.setProvider(new Web3.providers.HttpProvider(process.env.GETH_RPC));
+      var isListening = await web3.eth.net.isListening();
+    } catch (err) {
+      console.error(err.message, ' Retrying again in 1 sec');
+      await new Promise(res => setTimeout(res, 1000));
+    }
+  } while (!isListening);
+  console.log('Connected to ethereum network');
 
   return web3;
 };
@@ -49,9 +53,18 @@ exports.initBlockchain = async () => {
  * init mongo db
  */
 exports.initDB = async () => {
-  const mongoConn = await mongodb.MongoClient.connect(process.env.MONGODB_URL);
-  db = mongoConn.db(process.env.NETWORK_NAME);
-  console.log(`Connected to database ${process.env.MONGODB_URL}`); // eslint-disable-line no-console
+  // await new Promise(res => setTimeout(res, 10000));
+  let db;
+  do {
+    try {
+      const mongoConn = await mongodb.MongoClient.connect(process.env.MONGODB_URL);
+      db = mongoConn.db(process.env.NETWORK_NAME);
+    } catch (err) {
+      console.error(err.message, ' Retrying again in 1 sec');
+      await new Promise(res => setTimeout(res, 1000));
+    }
+  } while (!db);
+  console.log(`Connected to database ${process.env.MONGODB_URL}`);
   return db;
 };
 
@@ -68,19 +81,17 @@ exports.start = async () => {
     next();
   });
 
-  app.use(router);
-  app.use('/mock', routerMock);
+  app.use(express.static(path.join(__dirname, '../../dist')));
+  app.use('/api', router);
+  app.use('/apiMock', routerMock);
+  app.use((req, res) => res.sendFile(path.join(__dirname, '../../dist/index.html')));
 
   server = app.listen(process.env.PORT);
   server.on('error', (err) => {
     console.error(err);
   });
 
-  console.log(`App listening at http://localhost:${process.env.PORT}`); // eslint-disable-line no-console
-  // if (args.cron) {
-  //   crons.start();
-  //   console.log('Crons started'); // eslint-disable-line no-console
-  // }
+  console.log(`App listening at http://localhost:${process.env.PORT}`);
 };
 
 exports.restart = async () => {
