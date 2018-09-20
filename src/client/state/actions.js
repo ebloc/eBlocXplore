@@ -27,7 +27,7 @@ const receiveBlocks = (blocks) => ({ type: 'HOME_FETCH_BLOCKS', status: 'success
 const failBlocks = (error) => ({ type: 'HOME_FETCH_BLOCKS', status: 'error', error });
 
 exports.fetchBlocks = () => {
-  const BLOCK_CHUNK_SIZE = 10;
+  const BLOCK_CHUNK_SIZE = 50;
 
   return (dispatch, getState) => {
     const { blocks, loading } = getState().home.blockData;
@@ -53,7 +53,7 @@ const receiveHomeTxs = (txs, start) => ({ type: 'HOME_FETCH_TXS', status: 'succe
 const failHomeTxs = (error) => ({ type: 'HOME_FETCH_TXS', status: 'error', error });
 
 exports.fetchHomeTxs = () => {
-  const TX_CHUNK_SIZE = 10;
+  const TX_CHUNK_SIZE = 50;
 
   return (dispatch, getState) => {
     const { start, loading } = getState().home.txData;
@@ -116,7 +116,7 @@ const receiveAccountTxs = (account, txs, start, total) => ({ type: 'ACCOUNT_FETC
 const failAccountTxs = (error) => ({ type: 'ACCOUNT_FETCH_TXS', status: 'error', error });
 
 exports.fetchAccountTxs = (nextAccount) => {
-  const TX_CHUNK_SIZE = 50;
+  const TX_CHUNK_SIZE = 100;
 
   return (dispatch, getState) => {
     const { account, start, loading } = getState().accountPage.txData;
