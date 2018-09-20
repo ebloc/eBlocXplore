@@ -14,6 +14,7 @@ export default class TxList extends React.Component {
   }
 
   scrolled = e => {
+    if (!this.props.onScrollEnd) return;
     const atBottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight <= 1;
     if (atBottom) {
       this.props.onScrollEnd();
@@ -45,7 +46,7 @@ export default class TxList extends React.Component {
                 <tr>
                   <td>Value</td>
                   <td>:</td>
-                  <td>{Number(tx.value)}</td>
+                  <td>{tx.valueInEth} ETH</td>
                 </tr>
               </tbody>
             </table>

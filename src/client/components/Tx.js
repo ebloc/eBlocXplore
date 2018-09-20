@@ -41,7 +41,7 @@ export default class Tx extends React.Component {
                 <tr>
                   <td>Value</td>
                   <td>:</td>
-                  <td>{Number(tx.value)}</td>
+                  <td>{tx.valueInEth}</td>
                 </tr>
               </tbody>
             </table>

@@ -9,6 +9,21 @@ exports.isContract = async (address) => {
 };
 
 /**
+ * @param {number|string} id number or hash
+ * @return {Block}
+ */
+const getBlock = async (id) => {
+  const block = await web3.eth.getBlock(id, true);
+  if (!block) return null;
+  for (const tx of block.transactions) {
+    tx.valueInEth = web3.utils.fromWei(tx.value);
+  }
+  return block;
+}
+
+exports.getBlock = getBlock;
+
+/**
  * get all blocks between {start} and {start + length}
  * @param  {number} start  first block
  * @param  {number} length
@@ -24,6 +39,15 @@ exports.getBlocks = async (start, length) => {
   return blocks;
 }
 
+const getTx = async (hash) => {
+  const tx = await web3.eth.getTransaction(hash);
+  if (!tx) return null;
+  tx.valueInEth = web3.utils.fromWei(tx.value);
+  return tx;
+}
+
+exports.getTx = getTx;
+
 /**
  * get all txs between {start} and {start + length}
  * @param  {number} start  first tx index
@@ -37,7 +61,7 @@ exports.getTxs = async (start, length) => {
     .limit(length)
     .toArray();
 
-  const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
+  const promises = txDocs.map(tx => getTx(tx._id));
   const txs = await Promise.all(promises);
 
   /** @todo handle this */
@@ -97,12 +121,8 @@ exports.getTxsByAccount = async (account, start, length=100) => {
     .limit(length)
     .toArray();
 
-  const promises = txDocs.map(tx => web3.eth.getTransaction(tx._id));
+  const promises = txDocs.map(tx => getTx(tx._id));
   const txs = await Promise.all(promises);
-
-  for (const tx of txs) {
-    tx.value = web3.utils.fromWei(tx.value);
-  }
 
   return txs;
 }
@@ -141,7 +161,7 @@ exports.getTxsWithInternals = async (address) => {
 exports.getTxsByBlocks = async (startBlock, length) => {
   const promises = [];
   for (let i = startBlock; i < startBlock + length; i++) {
-    promises.push(web3.eth.getBlock(i, true));
+    promises.push(getBlock(i));
   }
 
   const blocks = await Promise.all(promises);

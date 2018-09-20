@@ -49,7 +49,7 @@ export default class AccountPage extends React.Component {
                     )
                   }
                 </td>
-                <td>{tx.value}</td>
+                <td>{tx.valueInEth}</td>
                 <td><Link to={`/txs/${tx.hash}`} className="text-truncate">{tx.hash}</Link></td>
                 <td><Link to={`/blocks/${tx.blockNumber}`}>{tx.blockNumber}</Link></td>
                 <td>{tx.gas}</td>

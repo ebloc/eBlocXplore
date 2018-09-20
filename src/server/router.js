@@ -61,7 +61,7 @@ router.get('/txs', async (req, res) => {
  */
 router.get('/blocks/:number', async (req, res) => {
   try {
-    const block = await web3.eth.getBlock(req.params.number, true);
+    const block = await bc.getBlock(req.params.number);
     if  (!block) throw Error('Not found');
     res.send(block);
   } catch (error) {
@@ -75,7 +75,7 @@ router.get('/blocks/:number', async (req, res) => {
  */
 router.get('/txs/:hash', async (req, res) => {
   try {
-    const tx = await web3.eth.getTransaction(req.params.hash, true);
+    const tx = await bc.getTx(req.params.hash);
     res.send(tx);
   } catch (error) {
     res.sendStatus(404);
@@ -113,7 +113,7 @@ router.get('/accounts/:account/txs', async (req, res) => {
 });
 
 /**
- * get balance of an account
+ * get balance of an account in ETH
  *
  * @param {account} account tx hash
  * @return {number} in eth
@@ -142,9 +142,9 @@ router.get('/search/:query', utils.wrap(async (req, res) => {
   } else if (bc.isBlockNumber(query)) {
     type = `block`;
   } else if (bc.isHash(query)) {
-    if (await web3.eth.getTransaction(query)) {
+    if (await bc.getTx(query)) {
       type = 'tx';
-    } else if (await web3.eth.getBlock(query)) {
+    } else if (await bc.getBlock(query)) {
       type = 'block';
     }
   } else {

@@ -85,7 +85,7 @@ class Tx extends React.Component {
               <tr>
                 <td>Value</td>
                 <td>:</td>
-                <td>{tx.value} ETH</td>
+                <td>{tx.valueInEth} ETH</td>
               </tr>
               <tr>
                 <td>Block</td>
