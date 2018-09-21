@@ -6,6 +6,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
+require('dotenv').config(); // collect environment variables from .env file
+
 const commonConfig = {
   entry: ['babel-polyfill', './src/client/index.js'],
   output: {
@@ -65,7 +67,8 @@ const commonConfig = {
     new CleanWebpackPlugin('dist'),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        PORT: JSON.stringify(process.env.PORT || '8000')
       }
     }),
     new HtmlWebpackPlugin({
