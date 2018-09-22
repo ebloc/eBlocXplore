@@ -32,4 +32,8 @@ node_modules/
 blockchain
 
 # editor
+<<<<<<< HEAD
 .vscode
+=======
+.vscode
+>>>>>>> 50f67853ccaa50e9a618c25cb24d4d6e5e6c4239
