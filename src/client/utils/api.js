@@ -1,5 +1,5 @@
-const API_ROOT = `http://localhost:${process.env.PORT}/api/`; /** @todo get from environment */
-const MOCK_API_ROOT = `http://localhost:${process.env.PORT}/apiMock/`;
+const API_ROOT = `${process.env.API_ENDPOINT}:${process.env.PORT}/api/`; /** @todo get from environment */
+const MOCK_API_ROOT = `${process.env.API_ENDPOINT}:${process.env.PORT}/apiMock/`;
 
 const get = async (path, options) => {
   const res = await fetch(API_ROOT + path, options);

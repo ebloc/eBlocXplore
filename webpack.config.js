@@ -68,6 +68,7 @@ const commonConfig = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        API_ENDPOINT: JSON.stringify(process.env.API_ENDPOINT || 'http://localhost'),
         PORT: JSON.stringify(process.env.PORT || '8000')
       }
     }),
