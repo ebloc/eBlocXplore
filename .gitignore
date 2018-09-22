@@ -1,6 +1,35 @@
+# Logs
+logs
+*.log
+npm-debug.log*
 
-npm-debug\.log
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+dist
+build/Release
+
+# Dependency directories
 node_modules/
 
-images/\._zz\.png
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variables file
+.env
+
+# geth (blockchain) --datadir
+blockchain
+
+# editor
+.vscode
