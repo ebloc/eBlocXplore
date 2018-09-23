@@ -1,7 +1,7 @@
 
 # eBlocXplore
 
-## [Demo](http://35.227.120.240/)
+## [Website](http://ebloc.cmpe.boun.edu.tr:8000/)
 
 ## Run
 
