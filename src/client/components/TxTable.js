@@ -21,7 +21,7 @@ export default class AccountPage extends React.Component {
             <th></th>
             <th>To</th>
             <th>Value (ETH)</th>
-            <th>Hash</th>
+            <th>Tx_Hash</th>
             <th>Block</th>
             <th>Gas</th>
           </tr>
